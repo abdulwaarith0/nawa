@@ -27,6 +27,16 @@ def read_int_env(name: str, fallback: int) -> int:
         return fallback
 
 
+def read_float_env(name: str, fallback: float) -> float:
+    raw = os.environ.get(name)
+    if raw is None or raw.strip() == "":
+        return fallback
+    try:
+        return float(raw)
+    except ValueError:
+        return fallback
+
+
 @dataclass(frozen=True)
 class Settings:
     environment: str
@@ -46,6 +56,7 @@ class Settings:
     llm_default_provider: str
     embeddings_provider: str
     embeddings_dimension: int
+    ai_cycle_budget_usd: float
 
     access_ttl_seconds: int
     refresh_ttl_seconds: int
@@ -73,6 +84,7 @@ def get_settings() -> Settings:
         llm_default_provider=read_env("LLM_DEFAULT_PROVIDER", "anthropic"),
         embeddings_provider=read_env("EMBEDDINGS_PROVIDER", "openai"),
         embeddings_dimension=read_int_env("EMBEDDINGS_DIMENSION", 1536),
+        ai_cycle_budget_usd=read_float_env("AI_CYCLE_BUDGET_USD", 50.0),
         access_ttl_seconds=read_int_env("ACCESS_TTL_SECONDS", 900),
         refresh_ttl_seconds=read_int_env("REFRESH_TTL_SECONDS", 60 * 24 * 3600),
         session_ttl_seconds=read_int_env("SESSION_TTL_SECONDS", 7 * 24 * 3600),
