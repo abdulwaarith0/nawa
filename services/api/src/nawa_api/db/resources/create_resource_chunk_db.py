@@ -19,6 +19,7 @@ async def create_resource_chunk_db(
     heading_path: list[str] | None = None,
     embedding: list[float] | None = None,
     embedding_model: str | None = None,
+    metadata: dict | None = None,
     session: AsyncSession | None = None,
 ) -> ResourceChunk | None:
     with observe_db(
@@ -36,6 +37,7 @@ async def create_resource_chunk_db(
                     heading_path=heading_path or [],
                     embedding=embedding,
                     embedding_model=embedding_model,
+                    chunk_metadata=metadata or {},
                 )
                 s.add(row)
                 await s.flush()
