@@ -1,4 +1,4 @@
-"""intake.normalize (SMALL). Skeleton — behavior fleshed in 06-intake-copilot.md."""
+"""intake.normalize (SMALL) — 06-intake-copilot.md §2.2."""
 
 from pydantic import BaseModel, ConfigDict
 
@@ -6,9 +6,11 @@ from nawa_api.ai.prompts.base import PromptTemplate
 from nawa_api.ai.types import Tier
 
 SYSTEM = (
-    "You normalize a raw application into clean sections without changing meaning. The text "
-    "may be Arabic, English, or French. Preserve the source language verbatim — never "
-    "translate. Do not invent content that is not present."
+    "You produce a structured English projection of a raw application so it can be displayed and "
+    "embedded. The source text may be Arabic, English, or French. Do not invent content that is "
+    "not present; where a field is unknown, use an empty string. Return exactly the fields of the "
+    "schema. The applicant's verbatim submission is preserved separately and is never replaced by "
+    "this projection."
 )
 
 
@@ -19,7 +21,14 @@ class NormalizeApplicationInput(BaseModel):
 
 
 class NormalizeApplicationOutput(BaseModel):
-    normalized_text: str
+    title: str
+    summary: str
+    problem: str
+    solution: str
+    team: str
+    field: str
+    country: str
+    notable: str
 
 
 NORMALIZE_APPLICATION = PromptTemplate(
@@ -34,4 +43,5 @@ NORMALIZE_APPLICATION = PromptTemplate(
 )
 
 # CHANGELOG:
-# v1 (05-ai-infrastructure.md): initial skeleton — clean sectioning, no translation.
+# v1 (06-intake-copilot.md): structured EN projection —
+#     {title, summary, problem, solution, team, field, country, notable} (03's normalized shape).

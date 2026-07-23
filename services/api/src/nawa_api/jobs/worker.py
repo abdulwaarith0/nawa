@@ -5,6 +5,7 @@ from arq import cron
 from arq.connections import RedisSettings
 
 from nawa_api.jobs.embed_resource import embed_resource
+from nawa_api.jobs.normalize_applications import normalize_application
 from nawa_api.jobs.purge_audit_logs import purge_audit_logs
 from nawa_api.runtime.settings import get_settings
 
@@ -23,5 +24,5 @@ def _redis_settings() -> RedisSettings:
 class WorkerSettings:
     redis_settings = _redis_settings()
     queue_name = QUEUE_NAME
-    functions = [purge_audit_logs, embed_resource, _noop]
+    functions = [purge_audit_logs, embed_resource, normalize_application, _noop]
     cron_jobs = [cron(purge_audit_logs, hour=3, minute=0)]
