@@ -11,6 +11,11 @@ vi.mock("../../hooks/useSession", () => ({
   useSession: () => mockUseSession(),
 }));
 
+const logout = vi.fn().mockResolvedValue(undefined);
+vi.mock("../../lib/apiClient", () => ({
+  getApiClient: () => ({ auth: { logout } }),
+}));
+
 describe("LocaleSwitcher", () => {
   beforeEach(() => {
     // reset cookies
@@ -52,7 +57,7 @@ describe("TopNav", () => {
     expect(screen.getByText("NAWA")).toBeInTheDocument();
   });
 
-  it("shows the member avatar (not auth actions) when signed in", () => {
+  it("shows the member avatar + sign-out (not auth actions) when signed in", () => {
     mockUseSession.mockReturnValue({
       user: {
         id: "1",
@@ -68,6 +73,28 @@ describe("TopNav", () => {
     renderWithLocale(<TopNav />, "en");
     expect(screen.queryByRole("link", { name: "Sign in" })).not.toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Ahmed Al-Sayed" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument();
+  });
+
+  it("sign-out calls logout then navigates home", async () => {
+    mockUseSession.mockReturnValue({
+      user: {
+        id: "1",
+        username: "ahmed",
+        full_name: "Ahmed",
+        email: "a@x.com",
+        language: "en",
+        is_active: true,
+        effective: [],
+      },
+      isSignedIn: true,
+    });
+    const assign = vi.fn();
+    vi.stubGlobal("location", { pathname: "/", reload: vi.fn(), href: "", assign });
+    renderWithLocale(<TopNav />, "en");
+    await userEvent.click(screen.getByRole("button", { name: "Sign out" }));
+    expect(logout).toHaveBeenCalled();
+    expect(assign).toHaveBeenCalledWith("/");
   });
 
   it("locale switch triggers a reload after setting the cookie", async () => {
