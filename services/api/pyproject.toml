@@ -55,4 +55,12 @@ testpaths = ["tests"]
 [tool.coverage.run]
 branch = true
 source = ["nawa_api"]
-omit = ["*/__init__.py"]
+# Vendor adapters require a live SDK + key, so the offline (mock-only) suite
+# cannot execute them — they are excluded from the coverage gate by design
+# (05-ai-infrastructure.md: CI runs the whole surface against MockLLMProvider).
+omit = [
+    "*/__init__.py",
+    "*/ai/providers/claude_provider.py",
+    "*/ai/providers/openai_provider.py",
+    "*/ai/embeddings/openai_embeddings.py",
+]
