@@ -1,4 +1,7 @@
+import type { TLocale } from "@nawa/contracts";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { LocaleProvider } from "../src/i18n/LocaleProvider";
 import "../src/styles/tokens.css";
 import "../src/styles/base.css";
 
@@ -7,17 +10,20 @@ export const metadata: Metadata = {
   description: "The AI Operating System for Program's innovation-program ecosystem.",
 };
 
-// Arabic is the default locale for anonymous visitors (design-system §5.1);
-// RTL-first. Locale resolution proper arrives with the i18n layer.
-//
-// Fonts (IBM Plex Sans Arabic + Archivo) are wired via CSS variable fallbacks
-// in tokens.css so the app boots without a build-time font fetch; next/font
-// (or bundled woff2 via next/font/local) can define --font-plex-arabic /
-// --font-archivo later to swap in the exact faces.
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// Locale resolution: nw_locale cookie -> ar (the default for anonymous
+// visitors). Arabic is RTL-first. The switcher (LocaleSwitcher) sets the cookie.
+// Fonts are wired via CSS-variable fallbacks in tokens.css so the app boots
+// without a build-time font fetch.
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const locale: TLocale = cookieStore.get("nw_locale")?.value === "en" ? "en" : "ar";
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="ar" dir="rtl">
-      <body>{children}</body>
+    <html lang={locale} dir={dir}>
+      <body>
+        <LocaleProvider locale={locale}>{children}</LocaleProvider>
+      </body>
     </html>
   );
 }
