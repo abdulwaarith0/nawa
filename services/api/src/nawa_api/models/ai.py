@@ -4,8 +4,8 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import CheckConstraint, ForeignKey, Index, func, text
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import CheckConstraint, ForeignKey, Index, UniqueConstraint, func, text
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from nawa_api.models.base import Base
@@ -48,6 +48,27 @@ class AiCall(Base):
         CheckConstraint("status IN ('ok','error')", name="status"),
         Index("ix_ai_calls_task_created", "task", "created_at"),
         Index("ix_ai_calls_created", "created_at"),
+    )
+
+
+class PiiTokenMap(Base):
+    """Persisted pseudonymizer mapping (05-ai-infrastructure.md §5.2). The
+    mapping lives ONLY in Postgres — never Redis, never ai_calls, never logs —
+    so the services/pii layer is deliberately uncached."""
+
+    __tablename__ = "pii_token_maps"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    subject_type: Mapped[str] = mapped_column(nullable=False)
+    subject_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
+    tokens: Mapped[dict] = mapped_column(JSONB, nullable=False, server_default=text("'{}'::jsonb"))
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
+
+    __table_args__ = (
+        UniqueConstraint("subject_type", "subject_id", name="uq_pii_token_maps_subject"),
     )
 
 
