@@ -53,6 +53,8 @@ class Settings:
 
     anthropic_api_key: str | None
     openai_api_key: str | None
+    openai_model_small: str | None
+    openai_model_large: str | None
     llm_default_provider: str
     embeddings_provider: str
     embeddings_dimension: int
@@ -81,6 +83,8 @@ def get_settings() -> Settings:
         s3_bucket=read_env("S3_BUCKET"),
         anthropic_api_key=read_env("ANTHROPIC_API_KEY"),
         openai_api_key=read_env("OPENAI_API_KEY"),
+        openai_model_small=read_env("OPENAI_MODEL_SMALL"),
+        openai_model_large=read_env("OPENAI_MODEL_LARGE"),
         llm_default_provider=read_env("LLM_DEFAULT_PROVIDER", "anthropic"),
         embeddings_provider=read_env("EMBEDDINGS_PROVIDER", "openai"),
         embeddings_dimension=read_int_env("EMBEDDINGS_DIMENSION", 1536),
