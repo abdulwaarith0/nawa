@@ -66,3 +66,28 @@ async def test_requires_permission(client):
     headers = await _bearer(client, email="aimember@example.com", group="Members")
     resp = await client.get("/api/v1/admin/ai-calls", headers=headers)
     assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_echo_stream_emits_delta_then_done(client):
+    headers = await _bearer(client, email="streamer@example.com", group="Administrators")
+    lines: list[str] = []
+    async with client.stream(
+        "POST", "/api/v1/ai/echo-stream", json={"text": "hello"}, headers=headers
+    ) as resp:
+        assert resp.status_code == 200
+        assert resp.headers["content-type"].startswith("text/event-stream")
+        async for line in resp.aiter_lines():
+            lines.append(line)
+            if "event: done" in line or len(lines) > 100:
+                break
+    blob = "\n".join(lines)
+    assert "event: delta" in blob
+    assert "event: done" in blob
+
+
+@pytest.mark.asyncio
+async def test_echo_stream_requires_stream_permission(client):
+    headers = await _bearer(client, email="nostream@example.com", group="Members")
+    resp = await client.post("/api/v1/ai/echo-stream", json={"text": "hi"}, headers=headers)
+    assert resp.status_code == 403
