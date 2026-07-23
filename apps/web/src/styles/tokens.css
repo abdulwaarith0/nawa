@@ -50,6 +50,9 @@
   --nw-shadow-2: 0 4px 12px rgba(28, 35, 33, 0.1);
   --nw-shadow-3: 0 12px 32px rgba(28, 35, 33, 0.16);
 
+  /* Scrim behind drawers/modals (§9). */
+  --nw-scrim: rgba(28, 35, 33, 0.4);
+
   /* Spacing — 4px base scale; use ONLY these steps */
   --nw-space-1: 4px;
   --nw-space-2: 8px;

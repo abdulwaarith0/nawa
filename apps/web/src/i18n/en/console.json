@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "sections": {
+      "workspace": "Workspace",
+      "administration": "Administration"
+    },
+    "intake": "Intake",
+    "journey": "Journey",
+    "portfolio": "Portfolio",
+    "generate": "Generate report",
+    "overview": "Overview",
+    "groups": "Groups",
+    "policies": "Policies",
+    "audit": "Audit log",
+    "menu": "Menu",
+    "close": "Close menu"
+  },
+  "onboarding": {
+    "title": "Set up your Founder Profile",
+    "progress": "Step {current} of {total}"
+  },
+  "states": {
+    "deniedTitle": "No access",
+    "deniedBody": "You don't have permission to view this area.",
+    "comingSoonTitle": "Not available yet",
+    "comingSoonBody": "This module is still being built. It will light up once its backend ships."
+  },
+  "admin": {
+    "overview": {
+      "title": "Platform overview",
+      "subtitle": "Usage, program configuration, and site settings.",
+      "siteConfig": "Site configuration",
+      "maintenance": "Maintenance mode"
+    },
+    "iam": {
+      "groups": {
+        "title": "Groups",
+        "subtitle": "Membership groups and their attached policies.",
+        "empty": "No groups yet.",
+        "members": "{count} members"
+      },
+      "policies": {
+        "title": "Policies",
+        "subtitle": "Permission statements. Managed built-ins are read-only.",
+        "empty": "No policies yet.",
+        "builtin": "Built-in"
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Every privileged mutation, most recent first.",
+      "empty": "No audit entries yet.",
+      "columns": {
+        "actor": "Actor",
+        "action": "Action",
+        "target": "Target",
+        "date": "When"
+      }
+    }
+  },
+  "modules": {
+    "intake": {
+      "title": "Screening console",
+      "subtitle": "Rank, score, and decide on applications across cycles."
+    },
+    "journey": {
+      "title": "Cohort journey",
+      "subtitle": "Milestone boards and per-member progress."
+    },
+    "community": {
+      "title": "Community hub",
+      "subtitle": "Directory, requests, opportunities, and mentors."
+    },
+    "reports": {
+      "title": "Reports & KPIs",
+      "subtitle": "Check-ins, KPI history, and drafted reports."
+    }
+  }
+}
