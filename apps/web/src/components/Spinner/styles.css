@@ -1,0 +1,12 @@
+/* Spinner — non-directional inline status glyph. */
+.nw-spinner {
+  display: inline-flex;
+}
+.nw-spinner svg {
+  animation: nw-spin 0.7s linear infinite;
+}
+@keyframes nw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

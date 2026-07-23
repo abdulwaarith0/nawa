@@ -1,0 +1,21 @@
+/* TopNav shell — sticky top bar. */
+.nw-topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nw-space-4);
+  padding: var(--nw-space-3) var(--nw-space-6);
+  background: var(--nw-white);
+  box-shadow: var(--nw-shadow-1);
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--nw-z-nav);
+}
+.nw-topnav-end {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-space-2);
+}
+.nw-topnav-avatar {
+  display: inline-flex;
+}

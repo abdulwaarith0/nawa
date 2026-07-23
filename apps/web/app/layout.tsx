@@ -1,9 +1,9 @@
+import { LocaleProvider } from "@/i18n/LocaleProvider";
 import type { TLocale } from "@nawa/contracts";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { LocaleProvider } from "../src/i18n/LocaleProvider";
-import "../src/styles/tokens.css";
-import "../src/styles/base.css";
+import "@/styles/tokens.css";
+import "@/styles/base.css";
 
 export const metadata: Metadata = {
   title: "NAWA",

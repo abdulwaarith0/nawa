@@ -1,0 +1,16 @@
+/* .nw-avatar — image with initials fallback; never flips in RTL. */
+.nw-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--nw-radius-full);
+  background: var(--nw-teal-100);
+  color: var(--nw-teal-700);
+  font-weight: 600;
+  overflow: hidden;
+}
+.nw-avatar-img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}

@@ -1,0 +1,30 @@
+/* .nw-badge — compact status token; *-100 bg + *-700 text per tone. */
+.nw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  padding: 2px var(--nw-space-2);
+  border-radius: var(--nw-radius-full);
+  font-size: var(--nw-text-xs);
+  font-weight: 600;
+}
+.nw-badge[data-tone="neutral"] {
+  background: var(--nw-sand-100);
+  color: var(--nw-ink-600);
+}
+.nw-badge[data-tone="success"] {
+  background: var(--nw-success-100);
+  color: var(--nw-success-700);
+}
+.nw-badge[data-tone="warning"] {
+  background: var(--nw-warning-100);
+  color: var(--nw-warning-700);
+}
+.nw-badge[data-tone="danger"] {
+  background: var(--nw-danger-100);
+  color: var(--nw-danger-700);
+}
+.nw-badge[data-tone="info"] {
+  background: var(--nw-info-100);
+  color: var(--nw-info-700);
+}

@@ -1,0 +1,11 @@
+/* .nw-progress — logical-direction fill meter. */
+.nw-progress {
+  background: var(--nw-sand-200);
+  border-radius: var(--nw-radius-full);
+  block-size: 8px;
+  overflow: hidden;
+}
+.nw-progress-fill {
+  background: var(--nw-teal-500);
+  block-size: 100%;
+}

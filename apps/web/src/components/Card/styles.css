@@ -1,0 +1,7 @@
+/* .nw-card — elevated content surface. */
+.nw-card {
+  background: var(--nw-white);
+  border-radius: var(--nw-radius-md);
+  box-shadow: var(--nw-shadow-1);
+  padding: var(--nw-space-6);
+}

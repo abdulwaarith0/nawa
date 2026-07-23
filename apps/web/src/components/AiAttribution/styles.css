@@ -1,0 +1,28 @@
+/* AI attribution marker — the ONLY place amber tokens are consumed (§2.2).
+ * Always pairs the amber accent with a text label + glyph so the attribution
+ * survives colour-blindness and grayscale. */
+.nw-ai-attribution {
+  border-inline-start: 3px solid var(--nw-amber-500);
+  background: var(--nw-amber-50);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-sm);
+}
+.nw-ai-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  color: var(--nw-amber-800);
+  font-size: var(--nw-text-sm);
+  font-weight: 600;
+}
+.nw-ai-sparkle {
+  color: var(--nw-amber-600);
+}
+.nw-ai-body {
+  margin-block-start: var(--nw-space-2);
+}
+.nw-ai-how {
+  margin-block-start: var(--nw-space-2);
+  font-size: var(--nw-text-sm);
+  color: var(--nw-ink-600);
+}

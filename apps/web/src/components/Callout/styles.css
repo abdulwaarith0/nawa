@@ -1,0 +1,16 @@
+/* .nw-callout — static info panel; never dismissible, never amber. */
+.nw-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nw-space-3);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-md);
+}
+.nw-callout[data-tone="info"] {
+  background: var(--nw-info-100);
+  color: var(--nw-info-700);
+}
+.nw-callout[data-tone="success"] {
+  background: var(--nw-success-100);
+  color: var(--nw-success-700);
+}

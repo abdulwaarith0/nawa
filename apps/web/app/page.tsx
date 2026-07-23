@@ -1,12 +1,12 @@
-import { TopNav } from "../src/components/shells/TopNav";
-import { MarketingHome } from "../src/features/marketing/MarketingHome";
+import { TopNav } from "@/layouts";
+import { MarketingWrapper } from "@/libs";
 
 // Thin shell — TopNav + the marketing feature module.
 export default function HomePage() {
   return (
     <>
       <TopNav />
-      <MarketingHome />
+      <MarketingWrapper />
     </>
   );
 }

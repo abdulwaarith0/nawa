@@ -1,0 +1,24 @@
+/* .nw-tabs — underline tabs with roving tabindex. Logical borders (RTL-safe). */
+.nw-tablist {
+  display: flex;
+  gap: var(--nw-space-4);
+  border-block-end: 1px solid var(--nw-sand-200);
+}
+.nw-tab {
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--nw-ink-600);
+  padding: var(--nw-space-2) var(--nw-space-1);
+  border-block-end: 2px solid transparent;
+  margin-block-end: -1px;
+}
+.nw-tab[data-selected="true"] {
+  color: var(--nw-teal-700);
+  border-block-end-color: var(--nw-teal-700);
+}
+.nw-tabpanel {
+  padding-block-start: var(--nw-space-4);
+}

@@ -1,0 +1,23 @@
+/* .nw-alert — full-width severity banner; icon + text, never colour alone. */
+.nw-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nw-space-3);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-md);
+}
+.nw-alert-body {
+  flex: 1;
+}
+.nw-alert[data-severity="info"] {
+  background: var(--nw-info-100);
+  color: var(--nw-info-700);
+}
+.nw-alert[data-severity="warning"] {
+  background: var(--nw-warning-100);
+  color: var(--nw-warning-700);
+}
+.nw-alert[data-severity="danger"] {
+  background: var(--nw-danger-100);
+  color: var(--nw-danger-700);
+}

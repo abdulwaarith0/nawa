@@ -1,21 +1,26 @@
 "use client";
 
+import {
+  AiAttribution,
+  Alert,
+  Avatar,
+  Badge,
+  Bidi,
+  Button,
+  Callout,
+  Card,
+  Chip,
+  EmptyState,
+  ErrorState,
+  Input,
+  Loading,
+  Progress,
+  Skeleton,
+  StatTile,
+} from "@/components";
+import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { PERMISSION_META } from "@nawa/contracts";
 import { useState } from "react";
-import { AiAttribution } from "../../src/components/ai/AiAttribution";
-import { Alert } from "../../src/components/ui/Alert";
-import { Avatar } from "../../src/components/ui/Avatar";
-import { Badge } from "../../src/components/ui/Badge";
-import { Bidi } from "../../src/components/ui/Bidi";
-import { Button } from "../../src/components/ui/Button";
-import { Callout } from "../../src/components/ui/Callout";
-import { Card } from "../../src/components/ui/Card";
-import { Chip } from "../../src/components/ui/Chip";
-import { Input } from "../../src/components/ui/Input";
-import { Progress } from "../../src/components/ui/Progress";
-import { StatTile } from "../../src/components/ui/StatTile";
-import { EmptyState, ErrorState, Loading, Skeleton } from "../../src/components/ui/states";
-import { LocaleProvider } from "../../src/i18n/LocaleProvider";
 
 const TEAL = ["900", "700", "600", "500", "100", "50"];
 const AMBER = ["800", "600", "500", "100", "50"];

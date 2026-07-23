@@ -1,0 +1,25 @@
+/* .nw-chip — compact selectable/removable token. */
+.nw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  padding: var(--nw-space-1) var(--nw-space-3);
+  border-radius: var(--nw-radius-full);
+  background: var(--nw-sand-100);
+  font-size: var(--nw-text-sm);
+}
+.nw-chip[data-state="selected"] {
+  background: var(--nw-teal-100);
+  color: var(--nw-teal-700);
+}
+.nw-chip[data-state="disabled"] {
+  opacity: 0.5;
+}
+.nw-chip-select,
+.nw-chip-remove {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}

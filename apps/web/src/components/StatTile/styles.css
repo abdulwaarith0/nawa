@@ -1,0 +1,19 @@
+/* .nw-stat — metric tile; value in the display face, delta in a semantic tone. */
+.nw-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-space-1);
+}
+.nw-stat-label {
+  color: var(--nw-ink-600);
+  font-size: var(--nw-text-sm);
+}
+.nw-stat-value {
+  font-size: var(--nw-text-3xl);
+}
+.nw-stat-delta[data-tone="up"] {
+  color: var(--nw-success-700);
+}
+.nw-stat-delta[data-tone="down"] {
+  color: var(--nw-danger-700);
+}
