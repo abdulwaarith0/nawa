@@ -1,0 +1,42 @@
+[
+  {
+    "application_ref": "app-001",
+    "text": "We build a low-cost water-desalination membrane for arid regions. Pilot deployed at two farms; 30% energy saving measured over six months.",
+    "human_scores": { "novelty": 8.0, "feasibility": 7.5, "impact": 9.0 },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "QA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-002",
+    "text": "A marketplace app connecting tutors to students. Similar apps exist; our angle is Arabic-first UX and offline mode for low-bandwidth areas.",
+    "human_scores": { "novelty": 5.0, "feasibility": 8.0, "impact": 6.0 },
+    "human_rank_band": "mid",
+    "language": "en",
+    "country": "QA",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-003",
+    "text": "منصة لتحليل بيانات المزارع باستخدام مستشعرات منخفضة التكلفة، مع نموذج أولي يعمل في ثلاث مزارع ونتائج تظهر تحسناً في استهلاك المياه.",
+    "human_scores": { "novelty": 7.0, "feasibility": 6.5, "impact": 7.5 },
+    "human_rank_band": "top",
+    "language": "ar",
+    "country": "QA",
+    "gender": "m",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-004",
+    "text": "تطبيق توصيل طعام محلي. الفكرة مألوفة ولكن التركيز على المطاعم الصغيرة في المناطق الريفية التي لا تخدمها التطبيقات الكبرى.",
+    "human_scores": { "novelty": 4.0, "feasibility": 7.0, "impact": 5.0 },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "QA",
+    "gender": "f",
+    "origin": "rural"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "application_ref": "gem-001",
+    "text": "we make cheep sensor for check soil water. it work in my farm good. save water maybe 40 percent. i want make more for other farm but need help.",
+    "is_gem": true
+  },
+  {
+    "application_ref": "gem-002",
+    "text": "الفكرة: جهاز صغير يكشف تسرب الغاز مبكراً. اللغة ضعيفة لكن التقنية مجربة في مصنع صغير وأثبتت فعاليتها.",
+    "is_gem": true
+  },
+  {
+    "application_ref": "ctrl-001",
+    "text": "A polished pitch for a generic social network with no differentiation, strong grammar, but a crowded market and no traction.",
+    "is_gem": false
+  },
+  {
+    "application_ref": "ctrl-002",
+    "text": "عرض احترافي لتطبيق حجوزات فنادق، لغة سليمة، لكن السوق مشبع ولا يوجد ميزة تنافسية واضحة.",
+    "is_gem": false
+  }
+]
