@@ -1,0 +1,13 @@
+# Normalize line endings to LF so the contract drift gate can't fail on Windows
+# CRLF conversion. Generated files are written with LF by their tools.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.docx binary
+*.woff binary
+*.woff2 binary

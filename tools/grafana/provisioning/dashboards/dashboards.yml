@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: NAWA
+    orgId: 1
+    folder: NAWA
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

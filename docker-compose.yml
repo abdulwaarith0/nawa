@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: nawa_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nawa
+      POSTGRES_PASSWORD: nawa
+      POSTGRES_DB: nawa_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - nawa_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nawa -d nawa_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:RELEASE.2024-06-13T22-53-53Z
+    container_name: nawa_minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: nawa
+      MINIO_ROOT_PASSWORD: nawa12345
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - nawa_miniodata:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+# Redis is intentionally NOT declared here: a shared Redis container on :6379
+# is reused across projects on this machine. Check `docker ps` before ever
+# starting one — never duplicate it.
+
+volumes:
+  nawa_pgdata:
+  nawa_miniodata:

@@ -1,0 +1,76 @@
+# Self-contained stack for TEAMMATES / testing — no local Python or Node needed
+# for the backend. Brings up Postgres + Redis + MinIO + the API (built from
+# services/api/Dockerfile), runs migrations, and seeds the demo dataset.
+#
+#   docker compose -f docker-compose.full.yml up --build
+#
+# Then: API at http://localhost:8000 (Swagger at /docs). Includes its OWN Redis
+# (unlike the canonical docker-compose.yml which reuses a shared host Redis) so
+# a fresh clone works with nothing pre-installed.
+
+name: nawa-full
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: nawa_full_postgres
+    environment:
+      POSTGRES_USER: nawa
+      POSTGRES_PASSWORD: nawa
+      POSTGRES_DB: nawa_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - nawa_full_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nawa -d nawa_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: nawa_full_redis
+    ports:
+      - "6380:6379"
+
+  minio:
+    image: minio/minio:RELEASE.2024-06-13T22-53-53Z
+    container_name: nawa_full_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: nawa
+      MINIO_ROOT_PASSWORD: nawa12345
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - nawa_full_miniodata:/data
+
+  api:
+    build:
+      context: ./services/api
+    container_name: nawa_full_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://nawa:nawa@postgres:5432/nawa_dev
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: dev-only-jwt-secret-at-least-32-characters-long
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: nawa
+      S3_SECRET_KEY: nawa12345
+      S3_BUCKET: nawa-uploads
+      LLM_DEFAULT_PROVIDER: mock
+      EMBEDDINGS_PROVIDER: mock
+      WEB_ORIGIN: http://localhost:3000
+      API_INTERNAL_URL: http://localhost:8000
+      SEED_ON_START: "true"
+    ports:
+      - "8000:8000"
+
+volumes:
+  nawa_full_pgdata:
+  nawa_full_miniodata:

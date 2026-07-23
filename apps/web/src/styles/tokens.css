@@ -1,0 +1,105 @@
+/* The ONLY file in the web app permitted to contain raw color literals.
+ * Every component consumes var(--nw-*) or a .nw-* utility — never a literal.
+ * Palette is the canonical, contrast-checked set from design-system §2. */
+
+:root {
+  /* Teal — trust, primary actions, links, focus */
+  --nw-teal-900: #063a37;
+  --nw-teal-700: #0a5c55; /* primary action bg; text-safe on sand/white (>= 7:1) */
+  --nw-teal-600: #0e6e66; /* hover state */
+  --nw-teal-500: #148a80; /* borders, icons, charts — GRAPHICS ONLY, not body text */
+  --nw-teal-100: #d3ece9; /* selected-row / active-nav backgrounds */
+  --nw-teal-50: #eaf6f4; /* subtle tinted panels */
+
+  /* Amber — RESERVED: AI-generated / AI-flagged content ONLY (§2.2) */
+  --nw-amber-800: #8a5a00; /* AI label text — text-safe on white/sand (>= 5.9:1) */
+  --nw-amber-600: #b87a00; /* AI icons on light backgrounds */
+  --nw-amber-500: #e39a0b; /* AI accent borders, sparkle glyph, badge fill — graphics only */
+  --nw-amber-100: #fcefd3; /* AI panel backgrounds */
+  --nw-amber-50: #fef8ea; /* AI inline-highlight background */
+
+  /* Warm sand — surfaces */
+  --nw-sand-50: #fbf8f3; /* app background */
+  --nw-sand-100: #f4eee4; /* recessed panels, table header rows */
+  --nw-sand-200: #e9e0d1; /* hairline borders, dividers */
+  --nw-white: #ffffff; /* cards, inputs, modals */
+
+  /* Ink — text */
+  --nw-ink-900: #1c2321; /* primary text */
+  --nw-ink-600: #4a5450; /* secondary text, captions (>= 7:1 on sand-50) */
+  --nw-ink-400: #7b857f; /* placeholders & disabled ONLY */
+
+  /* Semantic status — NOTE: warning is terracotta, NOT amber (amber = AI, always) */
+  --nw-success-700: #1e7b34;
+  --nw-success-100: #e8f5ec;
+  --nw-warning-700: #a6470e;
+  --nw-warning-100: #fbeee4; /* terracotta */
+  --nw-danger-700: #b3261e;
+  --nw-danger-100: #fceae8;
+  --nw-info-700: #22577e;
+  --nw-info-100: #e8f1f8;
+
+  /* Radii */
+  --nw-radius-sm: 6px;
+  --nw-radius-md: 10px;
+  --nw-radius-lg: 16px;
+  --nw-radius-full: 999px;
+
+  /* Shadows — the only three elevations */
+  --nw-shadow-1: 0 1px 2px rgba(28, 35, 33, 0.06);
+  --nw-shadow-2: 0 4px 12px rgba(28, 35, 33, 0.1);
+  --nw-shadow-3: 0 12px 32px rgba(28, 35, 33, 0.16);
+
+  /* Spacing — 4px base scale; use ONLY these steps */
+  --nw-space-1: 4px;
+  --nw-space-2: 8px;
+  --nw-space-3: 12px;
+  --nw-space-4: 16px;
+  --nw-space-5: 20px;
+  --nw-space-6: 24px;
+  --nw-space-8: 32px;
+  --nw-space-10: 40px;
+  --nw-space-12: 48px;
+  --nw-space-16: 64px;
+
+  /* Z-scale — the only permitted z-index values */
+  --nw-z-sticky: 150;
+  --nw-z-nav: 200;
+  --nw-z-dropdown: 300;
+  --nw-z-overlay: 400;
+  --nw-z-modal: 500;
+  --nw-z-toast: 600;
+
+  /* Focus & motion */
+  --nw-focus-ring: 0 0 0 3px rgba(20, 138, 128, 0.4);
+  --nw-transition-fast: 120ms ease;
+  --nw-transition-base: 200ms ease;
+
+  /* Type scale */
+  --nw-text-xs: 12px;
+  --nw-text-sm: 14px;
+  --nw-text-base: 16px;
+  --nw-text-lg: 18px;
+  --nw-text-xl: 20px;
+  --nw-text-2xl: 24px;
+  --nw-text-3xl: 30px;
+  --nw-text-4xl: 38px;
+
+  /* Line-height — overridden for Arabic in base.css */
+  --nw-leading-body: 1.5;
+  --nw-leading-display: 1.2;
+
+  /* Font families. When next/font later defines --font-plex-arabic /
+   * --font-archivo those win; otherwise fall back to a named face (if the OS
+   * has it) then a robust system stack — so the app boots offline. */
+  --nw-font-arabic: var(--font-plex-arabic, "IBM Plex Sans Arabic"), "Segoe UI", system-ui,
+    sans-serif;
+  --nw-font-latin: var(--font-archivo, "Archivo"), "Segoe UI", system-ui, sans-serif;
+  --nw-font-body: var(--nw-font-arabic);
+}
+
+/* Arabic script sits taller and connects: tune leading + zero letter-spacing. */
+:lang(ar) {
+  --nw-leading-body: 1.7;
+  --nw-leading-display: 1.4;
+}

@@ -1,0 +1,23 @@
+{
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "signIn": "Sign in",
+    "apply": "Apply",
+    "retry": "Retry",
+    "close": "Close",
+    "menu": "Menu"
+  },
+  "states": {
+    "loading": "Loading…",
+    "empty": "Nothing here yet",
+    "error": "Something went wrong"
+  },
+  "results": {
+    "count": {
+      "one": "{count} result",
+      "other": "{count} results"
+    }
+  }
+}

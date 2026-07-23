@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "NAWA Dev (Postgres + pgvector)",
+      "Group": "NAWA",
+      "Host": "host.docker.internal",
+      "Port": 5433,
+      "MaintenanceDB": "nawa_dev",
+      "Username": "nawa",
+      "SSLMode": "prefer",
+      "Comment": "Password is 'nawa'. Right-click > Connect and enter it once."
+    }
+  }
+}

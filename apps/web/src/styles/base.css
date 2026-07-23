@@ -1,0 +1,389 @@
+/* Reset, body defaults, and the starter .nw-* utility/component classes.
+ * Contains ZERO raw color literals — everything is var(--nw-*). RTL-safe
+ * (logical properties only). The full component kit (design-system §9) grows
+ * here in later work. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-text-base);
+  line-height: var(--nw-leading-body);
+  color: var(--nw-ink-900);
+  background: var(--nw-sand-50);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+/* Arabic never letter-spaces or italicizes. */
+:lang(ar) {
+  letter-spacing: 0;
+  font-style: normal;
+}
+
+a {
+  color: var(--nw-teal-700);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--nw-teal-600);
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--nw-focus-ring);
+}
+
+/* Directional icons flip in RTL; non-directional never do. */
+[dir="rtl"] .nw-icon-dir {
+  transform: scaleX(-1);
+}
+
+/* Display headings switch face by resolved language, never by [dir]. */
+.nw-display {
+  line-height: var(--nw-leading-display);
+  font-weight: 700;
+}
+.nw-display:lang(en) {
+  font-family: var(--nw-font-latin);
+}
+.nw-display:lang(ar) {
+  font-family: var(--nw-font-arabic);
+}
+
+/* --- Starter component classes (kit grows in later work) --- */
+
+.nw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nw-space-2);
+  padding: var(--nw-space-2) var(--nw-space-4);
+  border-radius: var(--nw-radius-md);
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--nw-transition-fast), color var(--nw-transition-fast);
+  min-height: 44px;
+}
+.nw-btn-primary {
+  background: var(--nw-teal-700);
+  color: var(--nw-white);
+}
+.nw-btn-primary:hover {
+  background: var(--nw-teal-600);
+}
+.nw-btn-secondary {
+  background: var(--nw-white);
+  color: var(--nw-teal-700);
+  border-color: var(--nw-teal-700);
+}
+.nw-btn-ghost {
+  background: transparent;
+  color: var(--nw-ink-600);
+}
+.nw-btn-danger {
+  background: var(--nw-danger-700);
+  color: var(--nw-white);
+}
+
+.nw-card {
+  background: var(--nw-white);
+  border-radius: var(--nw-radius-md);
+  box-shadow: var(--nw-shadow-1);
+  padding: var(--nw-space-6);
+}
+
+.nw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  padding: 2px var(--nw-space-2);
+  border-radius: var(--nw-radius-full);
+  font-size: var(--nw-text-xs);
+  font-weight: 600;
+}
+
+/* AI attribution marker — the ONLY place amber tokens are consumed (§2.2).
+ * Always pairs the amber accent with a text label + glyph so the attribution
+ * survives colour-blindness and grayscale. */
+.nw-ai-attribution {
+  border-inline-start: 3px solid var(--nw-amber-500);
+  background: var(--nw-amber-50);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-sm);
+}
+.nw-ai-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  color: var(--nw-amber-800);
+  font-size: var(--nw-text-sm);
+  font-weight: 600;
+}
+.nw-ai-sparkle {
+  color: var(--nw-amber-600);
+}
+.nw-ai-body {
+  margin-block-start: var(--nw-space-2);
+}
+.nw-ai-how {
+  margin-block-start: var(--nw-space-2);
+  font-size: var(--nw-text-sm);
+  color: var(--nw-ink-600);
+}
+
+/* Badge tones — *-100 bg + *-700 text. */
+.nw-badge[data-tone="neutral"] {
+  background: var(--nw-sand-100);
+  color: var(--nw-ink-600);
+}
+.nw-badge[data-tone="success"] {
+  background: var(--nw-success-100);
+  color: var(--nw-success-700);
+}
+.nw-badge[data-tone="warning"] {
+  background: var(--nw-warning-100);
+  color: var(--nw-warning-700);
+}
+.nw-badge[data-tone="danger"] {
+  background: var(--nw-danger-100);
+  color: var(--nw-danger-700);
+}
+.nw-badge[data-tone="info"] {
+  background: var(--nw-info-100);
+  color: var(--nw-info-700);
+}
+
+/* Spinner */
+.nw-spinner {
+  display: inline-flex;
+}
+.nw-spinner svg {
+  animation: nw-spin 0.7s linear infinite;
+}
+@keyframes nw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form field / input */
+.nw-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-space-1);
+}
+.nw-label {
+  font-size: var(--nw-text-sm);
+  font-weight: 600;
+  text-align: start;
+}
+.nw-input {
+  background: var(--nw-white);
+  border: 1px solid var(--nw-sand-200);
+  border-radius: var(--nw-radius-sm);
+  padding: var(--nw-space-2) var(--nw-space-3);
+  font: inherit;
+  text-align: start;
+  min-height: 44px;
+}
+.nw-input--error {
+  border-color: var(--nw-danger-700);
+}
+.nw-input-error-text {
+  color: var(--nw-danger-700);
+  font-size: var(--nw-text-sm);
+  text-align: start;
+}
+.nw-hint {
+  color: var(--nw-ink-600);
+  font-size: var(--nw-text-sm);
+  text-align: start;
+}
+
+/* Alert — full-width severity banner */
+.nw-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nw-space-3);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-md);
+}
+.nw-alert-body {
+  flex: 1;
+}
+.nw-alert[data-severity="info"] {
+  background: var(--nw-info-100);
+  color: var(--nw-info-700);
+}
+.nw-alert[data-severity="warning"] {
+  background: var(--nw-warning-100);
+  color: var(--nw-warning-700);
+}
+.nw-alert[data-severity="danger"] {
+  background: var(--nw-danger-100);
+  color: var(--nw-danger-700);
+}
+
+/* Callout — static info panel */
+.nw-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nw-space-3);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-md);
+}
+.nw-callout[data-tone="info"] {
+  background: var(--nw-info-100);
+  color: var(--nw-info-700);
+}
+.nw-callout[data-tone="success"] {
+  background: var(--nw-success-100);
+  color: var(--nw-success-700);
+}
+
+/* Chip */
+.nw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  padding: var(--nw-space-1) var(--nw-space-3);
+  border-radius: var(--nw-radius-full);
+  background: var(--nw-sand-100);
+  font-size: var(--nw-text-sm);
+}
+.nw-chip[data-state="selected"] {
+  background: var(--nw-teal-100);
+  color: var(--nw-teal-700);
+}
+.nw-chip[data-state="disabled"] {
+  opacity: 0.5;
+}
+.nw-chip-select,
+.nw-chip-remove {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Empty / skeleton / error / loading */
+.nw-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nw-space-2);
+  padding: var(--nw-space-10);
+  text-align: center;
+}
+.nw-empty-headline {
+  font-weight: 600;
+}
+.nw-empty-description {
+  color: var(--nw-ink-600);
+}
+.nw-skeleton {
+  background: var(--nw-sand-100);
+  border-radius: var(--nw-radius-sm);
+  background-image: linear-gradient(
+    90deg,
+    var(--nw-sand-100),
+    var(--nw-sand-200),
+    var(--nw-sand-100)
+  );
+  background-size: 200% 100%;
+  animation: nw-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes nw-shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+.nw-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nw-space-3);
+  background: var(--nw-danger-100);
+  color: var(--nw-danger-700);
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-radius: var(--nw-radius-md);
+}
+.nw-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-2);
+  color: var(--nw-ink-600);
+}
+
+/* Progress */
+.nw-progress {
+  background: var(--nw-sand-200);
+  border-radius: var(--nw-radius-full);
+  block-size: 8px;
+  overflow: hidden;
+}
+.nw-progress-fill {
+  background: var(--nw-teal-500);
+  block-size: 100%;
+}
+
+/* Stat tile */
+.nw-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-space-1);
+}
+.nw-stat-label {
+  color: var(--nw-ink-600);
+  font-size: var(--nw-text-sm);
+}
+.nw-stat-value {
+  font-size: var(--nw-text-3xl);
+}
+.nw-stat-delta[data-tone="up"] {
+  color: var(--nw-success-700);
+}
+.nw-stat-delta[data-tone="down"] {
+  color: var(--nw-danger-700);
+}
+
+/* Avatar */
+.nw-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--nw-radius-full);
+  background: var(--nw-teal-100);
+  color: var(--nw-teal-700);
+  font-weight: 600;
+  overflow: hidden;
+}
+.nw-avatar-img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* Respect reduced motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

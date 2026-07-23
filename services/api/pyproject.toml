@@ -1,0 +1,58 @@
+[project]
+name = "nawa-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Abdulwaarith", email = "abdulwaarithz@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.18.5",
+    "arq>=0.28.0",
+    "asyncpg>=0.31.0",
+    "bcrypt>=5.0.0",
+    "fastapi>=0.139.2",
+    "httpx>=0.28.1",
+    "pgvector>=0.5.0",
+    "prometheus-client>=0.25.0",
+    "pydantic>=2",
+    "pyjwt>=2.13.0",
+    "redis>=5.3.1",
+    "sqlalchemy[asyncio]>=2",
+    "structlog>=26.1.0",
+    "uvicorn[standard]>=0.51.0",
+]
+
+[project.scripts]
+nawa-api = "nawa_api:main"
+
+[build-system]
+requires = ["uv_build>=0.11.31,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "fakeredis>=2.36.2",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.22",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["nawa_api"]
+omit = ["*/__init__.py"]
