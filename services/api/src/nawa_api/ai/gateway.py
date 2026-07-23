@@ -38,7 +38,10 @@ from nawa_api.runtime.settings import get_settings
 from nawa_api.services.pii.get_pii_mapping import get_pii_mapping
 from nawa_api.services.pii.upsert_pii_mapping import upsert_pii_mapping
 from nawa_api.services.rate_limit.consume import consume
+from nawa_api.utils.invalidate_cache_keys import invalidate_cache_keys
 from nawa_api.utils.logger import get_logger
+
+_AI_CALLS_CACHE_GLOB = "services:ai_calls:list_ai_calls:*"
 
 AI_TIMEOUT_SECONDS = 120
 AI_MAX_RETRIES = 3
@@ -144,9 +147,11 @@ async def _invoke[T](provider: LLMProvider, call: Callable[[], Awaitable[T]]) ->
 
 
 async def _write_ai_call(**kwargs: object) -> None:
-    # Fire-and-forget: a logging failure must never fail the user's request.
+    # Fire-and-forget: a logging failure must never fail the user's request. The
+    # insert is the only writer, so it invalidates the admin-list cache glob.
     try:
         await create_ai_call_db(**kwargs)  # type: ignore[arg-type]
+        await invalidate_cache_keys(_AI_CALLS_CACHE_GLOB)
     except Exception:
         get_logger().warning("ai_calls_write_failed", exc_info=True)
 
