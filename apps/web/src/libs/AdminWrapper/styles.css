@@ -1,0 +1,21 @@
+/* Admin key/value list for the site-config overview. */
+.nw-adm-kv {
+  margin-block-start: var(--nw-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-space-2);
+}
+.nw-adm-kv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-space-4);
+  padding-block: var(--nw-space-2);
+  border-block-end: 1px solid var(--nw-sand-100);
+}
+.nw-adm-kv-row dt {
+  color: var(--nw-ink-600);
+  font-weight: 600;
+}
+.nw-adm-kv-row dd {
+  text-align: end;
+}

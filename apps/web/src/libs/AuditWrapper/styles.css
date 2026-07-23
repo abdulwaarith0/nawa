@@ -1,0 +1,29 @@
+/* Audit table — header row sand-100, numeric/date column end-aligned, Latin
+ * tabular digits (§3.3). Logical alignment keeps it honest in RTL. */
+.nw-adm-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  background: var(--nw-white);
+  border-radius: var(--nw-radius-md);
+  overflow: hidden;
+  box-shadow: var(--nw-shadow-1);
+}
+.nw-adm-table th,
+.nw-adm-table td {
+  padding: var(--nw-space-3) var(--nw-space-4);
+  text-align: start;
+  border-block-end: 1px solid var(--nw-sand-100);
+}
+.nw-adm-table th {
+  background: var(--nw-sand-100);
+  font-size: var(--nw-text-sm);
+  font-weight: 600;
+  color: var(--nw-ink-600);
+}
+.nw-adm-table tbody tr:hover {
+  background: var(--nw-teal-50);
+}
+.nw-adm-num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
