@@ -64,6 +64,30 @@
         "title": "CreatePolicyInput",
         "type": "object"
       },
+      "EchoStreamInput": {
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "thread_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thread Id"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "EchoStreamInput",
+        "type": "object"
+      },
       "ForgotPasswordInput": {
         "properties": {
           "identifier": {
@@ -363,6 +387,111 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/admin/ai-calls": {
+      "get": {
+        "operationId": "list_ai_calls_route_api_v1_admin_ai_calls_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "task",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Task"
+            }
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Provider"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cycle",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cycle"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Ai Calls Route",
+        "tags": [
+          "ai"
+        ]
+      }
+    },
     "/api/v1/admin/site-config": {
       "get": {
         "operationId": "admin_site_config_route_api_v1_admin_site_config_get",
@@ -416,6 +545,46 @@
         "summary": "Update Site Config Route",
         "tags": [
           "site_config"
+        ]
+      }
+    },
+    "/api/v1/ai/echo-stream": {
+      "post": {
+        "description": "Thin demo of the SSE plumbing (§9.5): the gateway streams through the\nRedis pub/sub channel events:assistant:<thread_id>, and this endpoint relays\nthe frames. The real assistant endpoint (slice 07) reuses this path.",
+        "operationId": "echo_stream_route_api_v1_ai_echo_stream_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EchoStreamInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Echo Stream Route",
+        "tags": [
+          "ai"
         ]
       }
     },
