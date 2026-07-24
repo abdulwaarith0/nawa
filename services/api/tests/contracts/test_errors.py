@@ -1,3 +1,5 @@
+from dataclasses import FrozenInstanceError
+
 import pytest
 
 from nawa_api.contracts.errors import (
@@ -26,7 +28,7 @@ def test_api_error_is_raisable_and_carries_code_and_message():
 
 
 def test_api_error_is_frozen():
-    with pytest.raises(Exception):
+    with pytest.raises(FrozenInstanceError):
         ERR_NOT_FOUND.code = 999
 
 

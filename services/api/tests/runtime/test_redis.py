@@ -1,5 +1,6 @@
 import pytest
 from pydantic import BaseModel
+from redis.exceptions import ConnectionError as RedisConnectionError
 
 from nawa_api.runtime.redis import (
     connect_redis,
@@ -32,7 +33,7 @@ async def test_connect_redis_raises_on_unreachable_redis():
     from redis.asyncio import from_url
 
     dead = from_url("redis://localhost:1/0")
-    with pytest.raises(Exception):
+    with pytest.raises(RedisConnectionError):
         await dead.ping()
     await dead.aclose()
 

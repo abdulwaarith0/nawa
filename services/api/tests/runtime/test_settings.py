@@ -1,4 +1,5 @@
 import importlib
+from dataclasses import FrozenInstanceError
 
 import pytest
 
@@ -93,7 +94,7 @@ def test_settings_reads_overrides(monkeypatch):
 def test_settings_is_frozen(monkeypatch):
     settings_module = _reload_settings()
     settings = settings_module.get_settings()
-    with pytest.raises(Exception):
+    with pytest.raises(FrozenInstanceError):
         settings.environment = "hacked"
 
 

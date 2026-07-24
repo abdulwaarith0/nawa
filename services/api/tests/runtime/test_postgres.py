@@ -33,7 +33,11 @@ async def test_connect_postgres_raises_on_unreachable_db():
         "postgresql+asyncpg://nawa:nawa@localhost:1/nawa_dev",
         pool_pre_ping=False,
     )
-    with pytest.raises(Exception):
+    # OSError, not a narrower type: an unreachable port can surface as
+    # ConnectionRefusedError, TimeoutError, or another OSError subclass
+    # depending on the environment — all are OSError, unlike a bare
+    # Exception catch which would also swallow programming errors.
+    with pytest.raises(OSError):
         async with bad_engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
     await bad_engine.dispose()
