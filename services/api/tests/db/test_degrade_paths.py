@@ -76,6 +76,7 @@ from nawa_api.db.intake.update_application_profile_link_db import (
     update_application_profile_link_db,
 )
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
+from nawa_api.db.intake.update_dedup_match_status_db import update_dedup_match_status_db
 from nawa_api.db.intake.update_scorecard_hidden_gem_db import update_scorecard_hidden_gem_db
 from nawa_api.db.intake.upsert_dedup_match_db import upsert_dedup_match_db
 from nawa_api.db.journey.create_assistant_message_db import create_assistant_message_db
@@ -257,6 +258,11 @@ _CASES = [
     (
         upsert_dedup_match_db,
         dict(application_id=_ID, matched_application_id=_ID, similarity=0.9),
+        False,
+    ),
+    (
+        update_dedup_match_status_db,
+        dict(match_id=_ID, status="confirmed", reviewed_by=_ID),
         False,
     ),
     (create_decision_db, dict(application_id=_ID, decided_by=_ID, decision="shortlist"), None),

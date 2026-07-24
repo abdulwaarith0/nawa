@@ -1,6 +1,25 @@
 {
   "components": {
     "schemas": {
+      "Body_create_upload_route_api_v1_intake_cycles__cycle_id__uploads_post": {
+        "properties": {
+          "column_map": {
+            "title": "Column Map",
+            "type": "string"
+          },
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "column_map"
+        ],
+        "title": "Body_create_upload_route_api_v1_intake_cycles__cycle_id__uploads_post",
+        "type": "object"
+      },
       "CreateDecisionInput": {
         "properties": {
           "cohort_id": {
@@ -207,6 +226,19 @@
           "new_password"
         ],
         "title": "ResetPasswordInput",
+        "type": "object"
+      },
+      "ResolveDedupMatchInput": {
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "ResolveDedupMatchInput",
         "type": "object"
       },
       "SetUserAccessInput": {
@@ -1689,6 +1721,53 @@
         ]
       }
     },
+    "/api/v1/intake/cycles": {
+      "get": {
+        "operationId": "list_cycles_route_api_v1_intake_cycles_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Cycles Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
     "/api/v1/intake/cycles/{cycle_id}/export": {
       "get": {
         "operationId": "export_shortlist_route_api_v1_intake_cycles__cycle_id__export_get",
@@ -1725,6 +1804,139 @@
           }
         },
         "summary": "Export Shortlist Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/cycles/{cycle_id}/score": {
+      "post": {
+        "operationId": "trigger_score_route_api_v1_intake_cycles__cycle_id__score_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "rescore",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Rescore",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Trigger Score Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/cycles/{cycle_id}/score/events": {
+      "get": {
+        "operationId": "score_events_route_api_v1_intake_cycles__cycle_id__score_events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Score Events Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/cycles/{cycle_id}/score/progress": {
+      "get": {
+        "operationId": "get_score_progress_route_api_v1_intake_cycles__cycle_id__score_progress_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Score Progress Route",
         "tags": [
           "intake"
         ]
@@ -1914,6 +2126,149 @@
           }
         },
         "summary": "List Shortlist Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/cycles/{cycle_id}/uploads": {
+      "post": {
+        "operationId": "create_upload_route_api_v1_intake_cycles__cycle_id__uploads_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_upload_route_api_v1_intake_cycles__cycle_id__uploads_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Upload Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/dedup-matches/{id}": {
+      "patch": {
+        "operationId": "resolve_dedup_match_route_api_v1_intake_dedup_matches__id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveDedupMatchInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Resolve Dedup Match Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/uploads/{upload_id}/events": {
+      "get": {
+        "operationId": "upload_events_route_api_v1_intake_uploads__upload_id__events_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "upload_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Upload Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload Events Route",
         "tags": [
           "intake"
         ]

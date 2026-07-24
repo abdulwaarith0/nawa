@@ -3,6 +3,7 @@ import pytest
 from nawa_api.contracts.auth import SessionUser
 from nawa_api.routes import events
 from nawa_api.utils import request_context as rc
+from nawa_api.utils import sse as sse_module
 
 
 class _FakePubSub:
@@ -34,7 +35,7 @@ class _FakeRedis:
 @pytest.mark.asyncio
 async def test_events_stream_yields_published_then_keepalive(monkeypatch):
     fake = _FakePubSub()
-    monkeypatch.setattr(events, "get_redis", lambda: _FakeRedis(fake))
+    monkeypatch.setattr(sse_module, "get_redis", lambda: _FakeRedis(fake))
 
     rc.session_var.set(SessionUser(sub="user-42", full_name="A", language="en", perms=[]))
     response = await events.events_route()

@@ -129,6 +129,22 @@ describe("createApiClient", () => {
     expect(onAuthError).toHaveBeenCalledOnce();
   });
 
+  it("posts FormData bodies untouched, without a JSON Content-Type", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(202, { code: 202, message: "Accepted", data: { ok: true } }));
+    const client = createApiClient({ baseUrl: "http://api", fetchImpl });
+
+    const form = new FormData();
+    form.append("file", new Blob(["x"]), "a.csv");
+    const data = await client.post("/uploads", form);
+
+    expect(data).toEqual({ ok: true });
+    const [, init] = fetchImpl.mock.calls[0] as [string, RequestInit];
+    expect(init.body).toBe(form);
+    expect((init.headers as Record<string, string>)["Content-Type"]).toBeUndefined();
+  });
+
   it("de-dupes concurrent 401s through a single refresh", async () => {
     let refreshCalls = 0;
     const fetchImpl = vi.fn(async (url: string, _init?: RequestInit) => {

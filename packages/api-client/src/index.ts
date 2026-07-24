@@ -100,8 +100,12 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
     body?: unknown,
     retried = false,
   ): Promise<T> {
+    // FormData bodies (multipart uploads) must NOT be JSON-stringified, and
+    // must NOT get an explicit Content-Type — fetch sets the multipart
+    // boundary itself only when it constructs that header.
+    const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...config.headers,
     };
     const token = config.getAccessToken?.();
@@ -111,7 +115,7 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
       method,
       headers,
       credentials: config.credentials,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : isFormData ? (body as FormData) : JSON.stringify(body),
     });
 
     if (res.status === 401) {

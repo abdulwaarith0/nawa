@@ -10,8 +10,7 @@ export const Routes = {
   profile: (handle: string) => `/profile/${handle}`,
   intake: {
     home: "/intake",
-    upload: "/intake/upload",
-    shortlist: "/intake/shortlist",
+    cycle: (cycleId: string) => `/intake/cycles/${cycleId}`,
     application: (id: string) => `/intake/applications/${id}`,
   },
   journey: {

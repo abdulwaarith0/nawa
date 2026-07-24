@@ -17,6 +17,7 @@ async def create_application_upload_db(
     size_bytes: int,
     uploaded_by_user_id: uuid.UUID,
     row_count: int | None = None,
+    id: uuid.UUID | None = None,
     session: AsyncSession | None = None,
 ) -> ApplicationUpload | None:
     with observe_db(
@@ -32,6 +33,7 @@ async def create_application_upload_db(
                     size_bytes=size_bytes,
                     row_count=row_count,
                     uploaded_by_user_id=uploaded_by_user_id,
+                    **({"id": id} if id is not None else {}),
                 )
                 s.add(row)
                 await s.flush()
