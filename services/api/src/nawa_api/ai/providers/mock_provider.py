@@ -69,8 +69,16 @@ def _build_mock_context(text: str) -> _MockContext:
     # scan to that section keeps rubric lines (which also contain a colon,
     # before their guidance text) out of the extracted answer key/value pairs.
     _, _, application_section = text.partition("Application:\n")
+    # `_application_text()` (jobs/score_applications.py, jobs/hidden_gem_scan.py)
+    # appends a trailing "summary: <application.summary>" line that is NOT a
+    # key in `original_answers` — a citation naming it as `answer:summary`
+    # can never resolve (`_citations._resolve_source` only looks up
+    # `original_answers`), so it's excluded here the same way it would need
+    # to be excluded by a real, correct citer.
     answer_kv = [
-        (key.strip(), value.strip()) for key, value in _KV_LINE_RE.findall(application_section)
+        (key.strip(), value.strip())
+        for key, value in _KV_LINE_RE.findall(application_section)
+        if key.strip() != "summary"
     ]
     return _MockContext(rubric_criteria=rubric_criteria, answer_kv=answer_kv)
 
