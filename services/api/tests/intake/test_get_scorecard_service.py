@@ -111,7 +111,7 @@ async def test_full_detail_shape(bound):
     assert item["scorecard_history"] == []
     assert len(item["documents"]) == 1
     assert item["documents"][0]["file_name"] == "cv.pdf"
-    assert item["documents"][0]["url"] is None  # presigning not implemented yet
+    assert item["documents"][0]["url"] is not None  # mock provider presigns a mock:// URL
     assert len(item["decisions"]) == 1
     assert item["decisions"][0]["decision"] == "shortlist"
     assert item["dedup_matches"] == []

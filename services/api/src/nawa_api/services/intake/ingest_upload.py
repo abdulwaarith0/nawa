@@ -104,8 +104,12 @@ async def create_upload_and_applications(
 
 
 async def fan_out_processing(
-    *, application_ids: list[uuid.UUID], upload_id: uuid.UUID, cycle_id: uuid.UUID
+    *, application_ids: list[uuid.UUID], upload_id: uuid.UUID | None, cycle_id: uuid.UUID
 ) -> None:
+    """`upload_id=None` for single-form entries (services/intake/create_application.py) —
+    there's no batch progress hash to track for a lone application;
+    normalize_application already treats a None upload_id as a no-op on the
+    progress-publishing side."""
     for application_id in application_ids:
         status = await normalize_application(
             application_id=application_id, upload_id=upload_id, cycle_id=cycle_id

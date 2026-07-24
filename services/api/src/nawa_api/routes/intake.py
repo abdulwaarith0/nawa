@@ -12,8 +12,9 @@ import uuid
 from fastapi import APIRouter, BackgroundTasks, File, Form, UploadFile
 from pydantic import BaseModel
 
-from nawa_api.contracts.errors import ERR_INVALID_FIELDS, ERR_RATE_LIMITED, ApiError
+from nawa_api.contracts.errors import ERR_INVALID_FIELDS, ERR_NOT_FOUND, ERR_RATE_LIMITED, ApiError
 from nawa_api.contracts.iam import Permission
+from nawa_api.db.programs.get_program_cycle_db import get_program_cycle_db
 from nawa_api.jobs.export_shortlist import export_shortlist
 from nawa_api.jobs.hidden_gem_scan import hidden_gem_scan
 from nawa_api.jobs.score_cycle import progress_channel, progress_key, score_cycle
@@ -21,6 +22,8 @@ from nawa_api.middleware.audit import audited
 from nawa_api.middleware.iam import require_permission
 from nawa_api.runtime.redis import get_redis
 from nawa_api.services.audit.create_audit_log import create_audit_log
+from nawa_api.services.intake.attach_document import attach_document
+from nawa_api.services.intake.create_application import create_application
 from nawa_api.services.intake.decide_application import decide_application
 from nawa_api.services.intake.get_scorecard import get_scorecard
 from nawa_api.services.intake.ingest_upload import (
@@ -33,11 +36,13 @@ from nawa_api.services.intake.ingest_upload import (
 from nawa_api.services.intake.ingest_upload import (
     progress_key as upload_progress_key,
 )
+from nawa_api.services.intake.list_cohorts_for_picker import list_cohorts_for_picker
 from nawa_api.services.intake.list_cycles_for_picker import list_cycles_for_picker
 from nawa_api.services.intake.list_shortlist import list_shortlist
+from nawa_api.services.intake.parse_upload import ParsedApplication
 from nawa_api.services.intake.resolve_dedup_match import resolve_dedup_match
 from nawa_api.services.rate_limit.consume import RateLimitResult, consume
-from nawa_api.utils.envelope import accepted, ok
+from nawa_api.utils.envelope import accepted, created, ok
 from nawa_api.utils.request_context import rate_limit_retry_after_var, request_id_var
 from nawa_api.utils.sse import sse_response
 
@@ -73,6 +78,12 @@ async def list_cycles_route(status: str | None = None):
     return ok(await list_cycles_for_picker(status=status))
 
 
+@router.get("/intake/cycles/{cycle_id}/cohorts")
+async def list_cohorts_route(cycle_id: uuid.UUID):
+    await require_permission(Permission.INTAKE_OVERRIDE)
+    return ok(await list_cohorts_for_picker(cycle_id=cycle_id))
+
+
 @router.post("/intake/cycles/{cycle_id}/uploads", status_code=202)
 @audited(action="intake.upload.create", target_type="intake_cycle")
 async def create_upload_route(
@@ -106,6 +117,69 @@ async def create_upload_route(
         cycle_id=cycle_id,
     )
     return accepted({"upload_id": str(outcome["upload_id"]), "row_count": outcome["row_count"]})
+
+
+class CreateApplicationInput(BaseModel):
+    applicant_name: str
+    applicant_email: str
+    phone: str | None = None
+    country: str | None = None
+    answers: dict[str, str] = {}
+
+
+@router.post("/intake/cycles/{cycle_id}/applications", status_code=202)
+@audited(action="intake.application.create", target_type="intake_cycle")
+async def create_single_application_route(
+    cycle_id: uuid.UUID, body: CreateApplicationInput, background_tasks: BackgroundTasks
+):
+    session = await require_permission(Permission.INTAKE_INGEST)
+    result = await consume(scope="intake_application", identifier=session.sub, limit=30)
+    if not result.allowed:
+        _raise_rate_limited(result)
+
+    cycle = await get_program_cycle_db(cycle_id=cycle_id)
+    if cycle is None:
+        raise ERR_NOT_FOUND
+
+    parsed = ParsedApplication(
+        applicant_name=body.applicant_name,
+        applicant_email=body.applicant_email,
+        phone=body.phone,
+        country=body.country,
+        original_answers=body.answers,
+    )
+    created = await create_application(cycle_id=cycle_id, parsed=parsed)
+    application_id = uuid.UUID(created["id"])
+    background_tasks.add_task(
+        fan_out_processing,
+        application_ids=[application_id],
+        upload_id=None,
+        cycle_id=cycle_id,
+    )
+    return accepted(created)
+
+
+@router.post("/intake/applications/{id}/documents", status_code=201)
+@audited(action="intake.document.attach", target_type="intake_application")
+async def attach_document_route(
+    id: uuid.UUID,
+    file: UploadFile = File(...),
+    kind: str = Form("attachment"),
+):
+    session = await require_permission(Permission.INTAKE_INGEST)
+    result = await consume(scope="intake_document", identifier=session.sub, limit=30)
+    if not result.allowed:
+        _raise_rate_limited(result)
+
+    content = await file.read()
+    document = await attach_document(
+        application_id=id,
+        filename=file.filename or "document",
+        content=content,
+        mime_type=file.content_type or "application/octet-stream",
+        kind=kind,
+    )
+    return created(document)
 
 
 @router.get("/intake/uploads/{upload_id}/events")

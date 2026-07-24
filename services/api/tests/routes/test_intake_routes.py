@@ -99,6 +99,38 @@ async def test_cycles_route_requires_review_permission(client):
 
 
 @pytest.mark.asyncio
+async def test_cohorts_route_scoped_to_cycle(client):
+    program = await create_program_db(slug="p-coh1", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c-coh1", name_en="C")
+    headers = await _bearer(client, email="picker3@example.com", group="Administrators")
+    manager_user = await create_user_db(
+        email="cohortmgr1@example.com",
+        username="cohortmgr1",
+        password_hash=hash_password("password123"),
+        full_name="Manager",
+    )
+    cohort = await create_cohort_db(
+        cycle_id=cycle.id,
+        program_manager_user_id=manager_user.id,
+        name_en="Cohort One",
+        starts_at=datetime.now(UTC),
+    )
+
+    resp = await client.get(f"/api/v1/intake/cycles/{cycle.id}/cohorts", headers=headers)
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert len(data) == 1
+    assert data[0]["id"] == str(cohort.id)
+
+
+@pytest.mark.asyncio
+async def test_cohorts_route_requires_override_permission(client):
+    headers = await _bearer(client, email="member11@example.com", group="Members")
+    resp = await client.get(f"/api/v1/intake/cycles/{uuid.uuid4()}/cohorts", headers=headers)
+    assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
 async def test_shortlist_route_returns_ranked_rows(client):
     program = await create_program_db(slug="p1", kind="competition", name_en="P")
     cycle = await create_program_cycle_db(program_id=program.id, slug="c1", name_en="C")
@@ -401,6 +433,141 @@ async def test_uploads_route_rate_limited_after_five_calls(client):
     # and-forget by design). Give it a beat to finish before the next test's
     # `client` fixture truncates `users` out from under it mid-flight.
     await asyncio.sleep(0.2)
+
+
+@pytest.mark.asyncio
+async def test_single_application_route_returns_202_with_created_application(client):
+    program = await create_program_db(slug="p-single1", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c-single1", name_en="C")
+
+    headers = await _bearer(client, email="ingest4@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/cycles/{cycle.id}/applications",
+        json={
+            "applicant_name": "Amina Al-Sayed",
+            "applicant_email": "amina-single1@example.com",
+            "country": "QA",
+            "answers": {"idea": "A solar irrigation kit for smallholder farmers."},
+        },
+        headers=headers,
+    )
+    assert resp.status_code == 202
+    data = resp.json()["data"]
+    assert data["applicant_name"] == "Amina Al-Sayed"
+    assert data["status"] == "submitted"
+    assert uuid.UUID(data["id"])
+
+
+@pytest.mark.asyncio
+async def test_single_application_route_requires_ingest_permission(client):
+    program = await create_program_db(slug="p-single2", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c-single2", name_en="C")
+
+    headers = await _bearer(client, email="member9@example.com", group="Members")
+    resp = await client.post(
+        f"/api/v1/intake/cycles/{cycle.id}/applications",
+        json={"applicant_name": "A", "applicant_email": "a-single2@example.com"},
+        headers=headers,
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_single_application_route_missing_cycle_returns_404(client):
+    headers = await _bearer(client, email="ingest5@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/cycles/{uuid.uuid4()}/applications",
+        json={"applicant_name": "A", "applicant_email": "a-single3@example.com"},
+        headers=headers,
+    )
+    assert resp.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_single_application_route_rate_limited_after_thirty_calls(client):
+    program = await create_program_db(slug="p-single4", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c-single4", name_en="C")
+
+    headers = await _bearer(client, email="ingest6@example.com", group="Administrators")
+    for i in range(30):
+        resp = await client.post(
+            f"/api/v1/intake/cycles/{cycle.id}/applications",
+            json={"applicant_name": "A", "applicant_email": f"a-single4-{i}@example.com"},
+            headers=headers,
+        )
+        assert resp.status_code == 202
+    resp = await client.post(
+        f"/api/v1/intake/cycles/{cycle.id}/applications",
+        json={"applicant_name": "A", "applicant_email": "a-single4-last@example.com"},
+        headers=headers,
+    )
+    assert resp.status_code == 429
+    assert "retry-after" in resp.headers
+    await asyncio.sleep(0.2)
+
+
+@pytest.mark.asyncio
+async def test_attach_document_route_returns_201_with_document_metadata(client):
+    program = await create_program_db(slug="p-doc1", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c-doc1", name_en="C")
+    app = await create_application_db(
+        cycle_id=cycle.id,
+        applicant_name="Amina",
+        applicant_email="amina-doc1@x.io",
+        source_language="en",
+        original_answers={"idea": "an idea"},
+    )
+
+    headers = await _bearer(client, email="ingest7@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/documents",
+        files={"file": ("pitch.pdf", b"pdf bytes", "application/pdf")},
+        data={"kind": "deck"},
+        headers=headers,
+    )
+    assert resp.status_code == 201
+    data = resp.json()["data"]
+    assert data["file_name"] == "pitch.pdf"
+    assert data["kind"] == "deck"
+
+    scorecard_resp = await client.get(
+        f"/api/v1/intake/applications/{app.id}/scorecard", headers=headers
+    )
+    docs = scorecard_resp.json()["data"]["documents"]
+    assert len(docs) == 1
+    assert docs[0]["url"] is not None
+
+
+@pytest.mark.asyncio
+async def test_attach_document_route_requires_ingest_permission(client):
+    program = await create_program_db(slug="p-doc2", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c-doc2", name_en="C")
+    app = await create_application_db(
+        cycle_id=cycle.id,
+        applicant_name="Amina",
+        applicant_email="amina-doc2@x.io",
+        source_language="en",
+        original_answers={"idea": "an idea"},
+    )
+
+    headers = await _bearer(client, email="member10@example.com", group="Members")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/documents",
+        files={"file": ("pitch.pdf", b"pdf bytes", "application/pdf")},
+        headers=headers,
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_attach_document_route_missing_application_returns_404(client):
+    headers = await _bearer(client, email="ingest8@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{uuid.uuid4()}/documents",
+        files={"file": ("pitch.pdf", b"pdf bytes", "application/pdf")},
+        headers=headers,
+    )
+    assert resp.status_code == 404
 
 
 @pytest.mark.asyncio

@@ -32,6 +32,7 @@ class Permission:
     INTAKE_EXPORT = "nawa:intake:export"
     INTAKE_RUBRIC_MANAGE = "nawa:intake:rubric_manage"
     JOURNEY_READ = "nawa:journey:read"
+    JOURNEY_PROGRESS = "nawa:journey:progress"
     JOURNEY_MANAGE = "nawa:journey:manage"
     JOURNEY_DIGESTS = "nawa:journey:digests"
     JOURNEY_ASSIST = "nawa:journey:assist"
@@ -126,6 +127,11 @@ PERMISSION_META: dict[str, dict] = {
     Permission.JOURNEY_READ: {
         "label": "View cohort milestones",
         "description": "Read cohort milestones.",
+        "kind": "feature",
+    },
+    Permission.JOURNEY_PROGRESS: {
+        "label": "Update own milestone progress",
+        "description": "Submit evidence and update your own milestone status.",
         "kind": "feature",
     },
     Permission.JOURNEY_MANAGE: {
@@ -304,6 +310,8 @@ BUILTIN_POLICIES: dict[str, list[dict]] = {
                 Permission.PROFILES_READ,
                 Permission.INTAKE_REVIEW,
                 Permission.INTAKE_OVERRIDE,
+                Permission.JOURNEY_READ,
+                Permission.JOURNEY_DIGESTS,
             ],
         }
     ],
@@ -313,6 +321,7 @@ BUILTIN_POLICIES: dict[str, list[dict]] = {
             "actions": [
                 Permission.PROFILES_WRITE,
                 Permission.JOURNEY_READ,
+                Permission.JOURNEY_PROGRESS,
                 Permission.JOURNEY_ASSIST,
                 Permission.COMMUNITY_READ,
                 Permission.COMMUNITY_POST,
@@ -327,6 +336,8 @@ BUILTIN_POLICIES: dict[str, list[dict]] = {
                 Permission.PROFILES_READ,
                 Permission.COMMUNITY_READ,
                 Permission.COMMUNITY_POST,
+                Permission.JOURNEY_READ,
+                Permission.JOURNEY_PROGRESS,
                 Permission.JOURNEY_ASSIST,
             ],
         }

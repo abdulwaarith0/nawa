@@ -1,6 +1,25 @@
 {
   "components": {
     "schemas": {
+      "Body_attach_document_route_api_v1_intake_applications__id__documents_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          },
+          "kind": {
+            "default": "attachment",
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_attach_document_route_api_v1_intake_applications__id__documents_post",
+        "type": "object"
+      },
       "Body_create_upload_route_api_v1_intake_cycles__cycle_id__uploads_post": {
         "properties": {
           "column_map": {
@@ -18,6 +37,54 @@
           "column_map"
         ],
         "title": "Body_create_upload_route_api_v1_intake_cycles__cycle_id__uploads_post",
+        "type": "object"
+      },
+      "CreateApplicationInput": {
+        "properties": {
+          "answers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "default": {},
+            "title": "Answers",
+            "type": "object"
+          },
+          "applicant_email": {
+            "title": "Applicant Email",
+            "type": "string"
+          },
+          "applicant_name": {
+            "title": "Applicant Name",
+            "type": "string"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          }
+        },
+        "required": [
+          "applicant_name",
+          "applicant_email"
+        ],
+        "title": "CreateApplicationInput",
         "type": "object"
       },
       "CreateDecisionInput": {
@@ -1680,6 +1747,57 @@
         ]
       }
     },
+    "/api/v1/intake/applications/{id}/documents": {
+      "post": {
+        "operationId": "attach_document_route_api_v1_intake_applications__id__documents_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_attach_document_route_api_v1_intake_applications__id__documents_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Attach Document Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
     "/api/v1/intake/applications/{id}/scorecard": {
       "get": {
         "operationId": "get_scorecard_route_api_v1_intake_applications__id__scorecard_get",
@@ -1763,6 +1881,98 @@
           }
         },
         "summary": "List Cycles Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/cycles/{cycle_id}/applications": {
+      "post": {
+        "operationId": "create_single_application_route_api_v1_intake_cycles__cycle_id__applications_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Single Application Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
+    "/api/v1/intake/cycles/{cycle_id}/cohorts": {
+      "get": {
+        "operationId": "list_cohorts_route_api_v1_intake_cycles__cycle_id__cohorts_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Cohorts Route",
         "tags": [
           "intake"
         ]

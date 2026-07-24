@@ -26,6 +26,7 @@ export const PERMISSIONS = {
   JOURNEY_ASSIST: "nawa:journey:assist",
   JOURNEY_DIGESTS: "nawa:journey:digests",
   JOURNEY_MANAGE: "nawa:journey:manage",
+  JOURNEY_PROGRESS: "nawa:journey:progress",
   JOURNEY_READ: "nawa:journey:read",
   KPI_WRITE: "nawa:kpi:write",
   MENTORSHIP_MANAGE: "nawa:mentorship:manage",
@@ -37,7 +38,7 @@ export const PERMISSIONS = {
   REPORTS_READ: "nawa:reports:read",
 } as const;
 
-export type Permission = "nawa:admin:ai_calls_read" | "nawa:admin:manage" | "nawa:ai:eval_run" | "nawa:ai:stream" | "nawa:audit:read" | "nawa:community:match" | "nawa:community:moderate" | "nawa:community:post" | "nawa:community:read" | "nawa:console:admin" | "nawa:console:intake" | "nawa:console:journey" | "nawa:console:reports" | "nawa:iam:manage" | "nawa:intake:export" | "nawa:intake:ingest" | "nawa:intake:override" | "nawa:intake:review" | "nawa:intake:rubric_manage" | "nawa:intake:score" | "nawa:journey:assist" | "nawa:journey:digests" | "nawa:journey:manage" | "nawa:journey:read" | "nawa:kpi:write" | "nawa:mentorship:manage" | "nawa:profiles:manage" | "nawa:profiles:read" | "nawa:profiles:write" | "nawa:programs:manage" | "nawa:reports:generate" | "nawa:reports:read";
+export type Permission = "nawa:admin:ai_calls_read" | "nawa:admin:manage" | "nawa:ai:eval_run" | "nawa:ai:stream" | "nawa:audit:read" | "nawa:community:match" | "nawa:community:moderate" | "nawa:community:post" | "nawa:community:read" | "nawa:console:admin" | "nawa:console:intake" | "nawa:console:journey" | "nawa:console:reports" | "nawa:iam:manage" | "nawa:intake:export" | "nawa:intake:ingest" | "nawa:intake:override" | "nawa:intake:review" | "nawa:intake:rubric_manage" | "nawa:intake:score" | "nawa:journey:assist" | "nawa:journey:digests" | "nawa:journey:manage" | "nawa:journey:progress" | "nawa:journey:read" | "nawa:kpi:write" | "nawa:mentorship:manage" | "nawa:profiles:manage" | "nawa:profiles:read" | "nawa:profiles:write" | "nawa:programs:manage" | "nawa:reports:generate" | "nawa:reports:read";
 
 export interface PermissionMeta {
   label: string;
@@ -69,6 +70,7 @@ export const PERMISSION_META: Record<Permission, PermissionMeta> = {
   "nawa:journey:assist": { label: "Use the RAG assistant", description: "Use the journey assistant.", kind: "feature" },
   "nawa:journey:digests": { label: "Generate and view weekly digests", description: "Manage digests.", kind: "feature" },
   "nawa:journey:manage": { label: "Manage cohorts and milestones", description: "Manage journey configuration.", kind: "feature" },
+  "nawa:journey:progress": { label: "Update own milestone progress", description: "Submit evidence and update your own milestone status.", kind: "feature" },
   "nawa:journey:read": { label: "View cohort milestones", description: "Read cohort milestones.", kind: "feature" },
   "nawa:kpi:write": { label: "Submit KPI check-ins and update KPI entries", description: "Write KPI data.", kind: "feature" },
   "nawa:mentorship:manage": { label: "Manage mentor matching", description: "Manage mentorships.", kind: "feature" },

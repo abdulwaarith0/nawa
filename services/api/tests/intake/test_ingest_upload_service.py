@@ -191,6 +191,34 @@ async def test_fan_out_processing_chains_embed_and_dedup_after_normalize_success
 
 
 @pytest.mark.asyncio
+async def test_fan_out_processing_accepts_no_upload_id_for_single_entry(monkeypatch):
+    # services/intake/create_application.py's single-form-entry route has no
+    # batch to track progress for — upload_id=None must still chain normally.
+    calls = []
+
+    async def fake_normalize(*, application_id, upload_id, cycle_id):
+        calls.append(("normalize", application_id, upload_id))
+        return "normalized"
+
+    async def fake_embed(*, application_id):
+        calls.append(("embed", application_id))
+        return "embedded"
+
+    async def fake_dedup(*, application_id):
+        calls.append(("dedup", application_id))
+        return 0
+
+    monkeypatch.setattr(ingest_upload_mod, "normalize_application", fake_normalize)
+    monkeypatch.setattr(ingest_upload_mod, "embed_application", fake_embed)
+    monkeypatch.setattr(ingest_upload_mod, "dedup_scan", fake_dedup)
+
+    aid = uuid.uuid4()
+    await fan_out_processing(application_ids=[aid], upload_id=None, cycle_id=uuid.uuid4())
+
+    assert calls == [("normalize", aid, None), ("embed", aid), ("dedup", aid)]
+
+
+@pytest.mark.asyncio
 async def test_fan_out_processing_skips_embed_when_normalize_fails(monkeypatch):
     calls = []
 

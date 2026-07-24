@@ -4,11 +4,11 @@ Key services:intake:get_scorecard:<application_id>, TTL 300s. Invalidated by
 scoring, hidden-gem, dedup, decision, and rubric writes — the same set that
 touches services:intake:list_shortlist:*.
 
-Presigned document links are NOT yet implemented: no object-storage client
-(MinIO/S3 presign helper) exists anywhere in the codebase yet — only
-`storage_key` strings are recorded. Documents are returned with their
-metadata (file name, kind, mime type); the `url` field is null until that
-infrastructure exists.
+Document links are presigned URLs (canon: cache raw storage keys, presign
+on the way out with the cache TTL as the link lifetime) — the presigned URL
+is generated once, at cache-write time, with `expires_seconds=
+CACHE_TTL_SECONDS`, so it's guaranteed valid for at least as long as this
+cached response could still be served.
 """
 
 from __future__ import annotations
@@ -30,6 +30,7 @@ from nawa_api.db.intake.list_scorecards_for_application_db import (
 )
 from nawa_api.db.programs.get_program_cycle_db import get_program_cycle_db
 from nawa_api.runtime.redis import redis_retrieve_key, redis_update_key
+from nawa_api.runtime.storage import get_storage_provider
 from nawa_api.services.intake._dto import application_dto
 from nawa_api.services.intake.decide_application import _compute_current_ai_band
 from nawa_api.services.intake.list_dedup_matches import list_dedup_matches
@@ -77,14 +78,17 @@ def _scorecard_dto(scorecard, criteria: list) -> dict:
     }
 
 
-def _document_dto(doc) -> dict:
+async def _document_dto(doc) -> dict:
+    url = await get_storage_provider().presign_get_url(
+        doc.storage_key, expires_seconds=CACHE_TTL_SECONDS
+    )
     return {
         "id": str(doc.id),
         "file_name": doc.file_name,
         "mime_type": doc.mime_type,
         "kind": doc.kind,
         "size_bytes": doc.size_bytes,
-        "url": None,  # presigning not yet implemented anywhere in the codebase
+        "url": url,
         "created_at": doc.created_at.isoformat(),
     }
 
@@ -136,7 +140,7 @@ async def get_scorecard(*, application_id: uuid.UUID) -> dict:
         "scorecard": _scorecard_dto(current, current_criteria) if current else None,
         "scorecard_history": [_scorecard_dto(sc, []) for sc in history],
         "dedup_matches": dedup_matches,
-        "documents": [_document_dto(d) for d in documents],
+        "documents": [await _document_dto(d) for d in documents],
         "decisions": [_decision_dto(d) for d in decisions],
         "ai_band": ai_band,
     }
