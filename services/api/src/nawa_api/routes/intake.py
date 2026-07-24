@@ -36,12 +36,17 @@ from nawa_api.services.intake.ingest_upload import (
 from nawa_api.services.intake.list_cycles_for_picker import list_cycles_for_picker
 from nawa_api.services.intake.list_shortlist import list_shortlist
 from nawa_api.services.intake.resolve_dedup_match import resolve_dedup_match
-from nawa_api.services.rate_limit.consume import consume
+from nawa_api.services.rate_limit.consume import RateLimitResult, consume
 from nawa_api.utils.envelope import accepted, ok
-from nawa_api.utils.request_context import request_id_var
+from nawa_api.utils.request_context import rate_limit_retry_after_var, request_id_var
 from nawa_api.utils.sse import sse_response
 
 router = APIRouter(tags=["intake"])
+
+
+def _raise_rate_limited(result: RateLimitResult) -> None:
+    rate_limit_retry_after_var.set(result.reset_seconds)
+    raise ERR_RATE_LIMITED
 
 
 async def _run_score_then_gem_scan(*, cycle_id: uuid.UUID, rescore: bool) -> None:
@@ -79,7 +84,7 @@ async def create_upload_route(
     session = await require_permission(Permission.INTAKE_INGEST)
     result = await consume(scope="intake_upload", identifier=session.sub, limit=5)
     if not result.allowed:
-        raise ERR_RATE_LIMITED
+        _raise_rate_limited(result)
     try:
         parsed_map = json.loads(column_map)
     except json.JSONDecodeError as exc:
@@ -118,7 +123,7 @@ async def trigger_score_route(
     session = await require_permission(Permission.INTAKE_SCORE)
     result = await consume(scope="ai:user", identifier=session.sub, limit=30)
     if not result.allowed:
-        raise ERR_RATE_LIMITED
+        _raise_rate_limited(result)
     background_tasks.add_task(_run_score_then_gem_scan, cycle_id=cycle_id, rescore=rescore)
     return accepted({"cycle_id": str(cycle_id)})
 
@@ -251,7 +256,7 @@ async def resolve_dedup_match_route(id: uuid.UUID, body: ResolveDedupMatchInput)
     session = await require_permission(Permission.INTAKE_OVERRIDE)
     result = await consume(scope="intake_dedup_resolve", identifier=session.sub, limit=60)
     if not result.allowed:
-        raise ERR_RATE_LIMITED
+        _raise_rate_limited(result)
     return ok(
         await resolve_dedup_match(
             match_id=id, status=body.status, reviewed_by=uuid.UUID(session.sub)
@@ -265,5 +270,5 @@ async def export_shortlist_route(cycle_id: uuid.UUID):
     session = await require_permission(Permission.INTAKE_EXPORT)
     result = await consume(scope="intake_export", identifier=session.sub, limit=5)
     if not result.allowed:
-        raise ERR_RATE_LIMITED
+        _raise_rate_limited(result)
     return ok(await export_shortlist(cycle_id=cycle_id))

@@ -8,16 +8,19 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from nawa_api.contracts.errors import ERR_INTERNAL, ERR_INVALID_FIELDS, ApiError
+from nawa_api.contracts.errors import ERR_INTERNAL, ERR_INVALID_FIELDS, ERR_RATE_LIMITED, ApiError
 from nawa_api.middleware.context import RequestContextMiddleware
 from nawa_api.middleware.rate_limit import RateLimitMiddleware
 from nawa_api.runtime.health import check_readiness
 from nawa_api.runtime.settings import get_settings
 from nawa_api.utils.logger import get_logger
+from nawa_api.utils.request_context import rate_limit_retry_after_var
 
 
-def _envelope_response(code: int, message: str, data=None) -> JSONResponse:
-    return JSONResponse(status_code=code, content={"code": code, "message": message, "data": data})
+def _envelope_response(code: int, message: str, data=None, *, headers=None) -> JSONResponse:
+    return JSONResponse(
+        status_code=code, content={"code": code, "message": message, "data": data}, headers=headers
+    )
 
 
 def create_app() -> FastAPI:
@@ -27,7 +30,13 @@ def create_app() -> FastAPI:
     # --- Exception handlers (map everything to the envelope) ---
     @app.exception_handler(ApiError)
     async def _api_error_handler(_request: Request, err: ApiError) -> JSONResponse:
-        return _envelope_response(err.code, err.message)
+        headers = None
+        if err == ERR_RATE_LIMITED:
+            retry_after = rate_limit_retry_after_var.get()
+            if retry_after is not None:
+                headers = {"Retry-After": str(retry_after)}
+                rate_limit_retry_after_var.set(None)
+        return _envelope_response(err.code, err.message, headers=headers)
 
     @app.exception_handler(RequestValidationError)
     async def _validation_handler(_request: Request, exc: RequestValidationError) -> JSONResponse:

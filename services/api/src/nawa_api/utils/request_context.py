@@ -35,6 +35,13 @@ logger_var: ContextVar[object | None] = ContextVar("logger_var", default=None)
 pending_cookies_var: ContextVar[list[CookieOp] | None] = ContextVar(
     "pending_cookies_var", default=None
 )
+# Set immediately before `raise ERR_RATE_LIMITED` by any caller holding a
+# `RateLimitResult`, so the app-level ApiError handler can attach a
+# Retry-After header without every raise site needing to build its own
+# Response (10-testing-validation.md / 06-intake-copilot.md DoD #12).
+rate_limit_retry_after_var: ContextVar[int | None] = ContextVar(
+    "rate_limit_retry_after_var", default=None
+)
 
 
 def get_session_user() -> SessionUser | None:

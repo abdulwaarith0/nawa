@@ -40,6 +40,7 @@ from nawa_api.services.pii.upsert_pii_mapping import upsert_pii_mapping
 from nawa_api.services.rate_limit.consume import consume
 from nawa_api.utils.invalidate_cache_keys import invalidate_cache_keys
 from nawa_api.utils.logger import get_logger
+from nawa_api.utils.request_context import rate_limit_retry_after_var
 
 _AI_CALLS_CACHE_GLOB = "services:ai_calls:list_ai_calls:*"
 
@@ -84,9 +85,11 @@ async def _check_rate(created_by: uuid.UUID | None) -> None:
             scope="ai:user", identifier=str(created_by), limit=_USER_LIMIT_PER_MIN
         )
         if not user.allowed:
+            rate_limit_retry_after_var.set(user.reset_seconds)
             raise ERR_RATE_LIMITED
     glob = await consume(scope="ai:global", identifier="all", limit=_GLOBAL_LIMIT_PER_MIN)
     if not glob.allowed:
+        rate_limit_retry_after_var.set(glob.reset_seconds)
         raise ERR_RATE_LIMITED
 
 

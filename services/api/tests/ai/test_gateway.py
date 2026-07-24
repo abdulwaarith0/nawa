@@ -19,6 +19,7 @@ from nawa_api.contracts.errors import (
 )
 from nawa_api.runtime.redis import get_redis
 from nawa_api.services.rate_limit.consume import RateLimitResult
+from nawa_api.utils.request_context import rate_limit_retry_after_var
 
 
 class Out(BaseModel):
@@ -169,18 +170,22 @@ def _limiter(blocked_scope: str):
 
 async def test_user_rate_limit_blocks(monkeypatch, calls):
     monkeypatch.setattr(gateway, "consume", _limiter("ai:user"))
+    rate_limit_retry_after_var.set(None)
     with pytest.raises(ApiError) as exc:
         await gateway.complete(_req(), pii_safe=True, created_by=uuid.uuid4())
     assert exc.value is ERR_RATE_LIMITED
     assert calls == []
+    assert rate_limit_retry_after_var.get() == 1
 
 
 async def test_global_rate_limit_blocks(monkeypatch, calls):
     monkeypatch.setattr(gateway, "consume", _limiter("ai:global"))
+    rate_limit_retry_after_var.set(None)
     # created_by=None (batch job) still hits the global net.
     with pytest.raises(ApiError) as exc:
         await gateway.complete(_req(), pii_safe=True, created_by=None)
     assert exc.value is ERR_RATE_LIMITED
+    assert rate_limit_retry_after_var.get() == 1
 
 
 async def test_complete_accrues_budget_on_success(calls):

@@ -435,6 +435,8 @@ async def test_score_route_rate_limited_after_thirty_calls(client):
         assert resp.status_code == 202
     resp = await client.post(f"/api/v1/intake/cycles/{cycle.id}/score", headers=headers)
     assert resp.status_code == 429
+    assert "retry-after" in resp.headers
+    assert int(resp.headers["retry-after"]) >= 0
     await asyncio.sleep(0.2)
 
 
