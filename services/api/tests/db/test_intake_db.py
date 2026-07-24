@@ -1,6 +1,7 @@
 import uuid
 
 import pytest
+from sqlalchemy import select
 
 from nawa_api.db.intake.create_application_db import create_application_db
 from nawa_api.db.intake.create_application_document_db import create_application_document_db
@@ -13,16 +14,20 @@ from nawa_api.db.intake.create_scorecard_criterion_db import create_scorecard_cr
 from nawa_api.db.intake.create_scorecard_db import create_scorecard_db
 from nawa_api.db.intake.get_active_rubric_db import get_active_rubric_db
 from nawa_api.db.intake.get_application_db import get_application_db
+from nawa_api.db.intake.get_application_embedding_db import get_application_embedding_db
 from nawa_api.db.intake.list_application_documents_db import list_application_documents_db
+from nawa_api.db.intake.list_applications_by_email_db import list_applications_by_email_db
 from nawa_api.db.intake.list_applications_db import list_applications_db
 from nawa_api.db.intake.list_scorecards_for_application_db import (
     list_scorecards_for_application_db,
 )
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
+from nawa_api.db.intake.upsert_dedup_match_db import upsert_dedup_match_db
 from nawa_api.db.programs.create_program_cycle_db import create_program_cycle_db
 from nawa_api.db.programs.create_program_db import create_program_db
 from nawa_api.db.users.create_user_db import create_user_db
+from nawa_api.models.intake import DedupMatch
 from nawa_api.runtime.settings import get_settings
 
 _DIM = get_settings().embeddings_dimension
@@ -275,3 +280,120 @@ async def test_get_active_rubric_db_returns_none_when_no_active_rubric(db_sessio
 async def test_list_similar_applications_db_returns_empty_for_unembedded_application(db_session):
     result = await list_similar_applications_db(application_id=uuid.uuid4(), session=db_session)
     assert result == []
+
+
+@pytest.mark.asyncio
+async def test_get_application_embedding_db_round_trips(db_session):
+    program = await create_program_db(
+        slug=f"emb-get-{uuid.uuid4().hex[:8]}", kind="competition", name_en="P", session=db_session
+    )
+    cycle = await create_program_cycle_db(
+        program_id=program.id, slug="c1", name_en="C", session=db_session
+    )
+    app = await create_application_db(
+        cycle_id=cycle.id,
+        applicant_name="A",
+        applicant_email=f"{uuid.uuid4().hex[:8]}@example.com",
+        source_language="en",
+        original_answers={"q1": "idea"},
+        session=db_session,
+    )
+    assert await get_application_embedding_db(application_id=app.id, session=db_session) is None
+
+    await create_application_embedding_db(
+        application_id=app.id,
+        embedding=_vec(2.0),
+        embedding_model="mock",
+        source_hash="hx",
+        session=db_session,
+    )
+    row = await get_application_embedding_db(application_id=app.id, session=db_session)
+    assert row is not None
+    assert row.embedding_model == "mock"
+    assert row.source_hash == "hx"
+
+
+@pytest.mark.asyncio
+async def test_upsert_dedup_match_db_converges_on_conflict(db_session):
+    program = await create_program_db(
+        slug=f"dedup-upsert-{uuid.uuid4().hex[:8]}",
+        kind="competition",
+        name_en="P",
+        session=db_session,
+    )
+    cycle = await create_program_cycle_db(
+        program_id=program.id, slug="c1", name_en="C", session=db_session
+    )
+    app_a = await create_application_db(
+        cycle_id=cycle.id,
+        applicant_name="A",
+        applicant_email=f"{uuid.uuid4().hex[:8]}@example.com",
+        source_language="en",
+        original_answers={"q1": "idea"},
+        session=db_session,
+    )
+    app_b = await create_application_db(
+        cycle_id=cycle.id,
+        applicant_name="B",
+        applicant_email=f"{uuid.uuid4().hex[:8]}@example.com",
+        source_language="en",
+        original_answers={"q1": "idea"},
+        session=db_session,
+    )
+
+    ok1 = await upsert_dedup_match_db(
+        application_id=app_a.id,
+        matched_application_id=app_b.id,
+        similarity=0.85,
+        session=db_session,
+    )
+    assert ok1 is True
+
+    ok2 = await upsert_dedup_match_db(
+        application_id=app_a.id,
+        matched_application_id=app_b.id,
+        similarity=0.91,  # a re-scan refreshing the score
+        session=db_session,
+    )
+    assert ok2 is True
+
+    stmt = select(DedupMatch).where(DedupMatch.application_id == app_a.id)
+    rows = (await db_session.execute(stmt)).scalars().all()
+    assert len(rows) == 1  # upsert converged, no duplicate row
+    assert rows[0].similarity == 0.91
+
+
+@pytest.mark.asyncio
+async def test_list_applications_by_email_db_finds_matches_across_cycles(db_session):
+    program = await create_program_db(
+        slug=f"email-dedup-{uuid.uuid4().hex[:8]}",
+        kind="competition",
+        name_en="P",
+        session=db_session,
+    )
+    cycle_17 = await create_program_cycle_db(
+        program_id=program.id, slug="s17", name_en="S17", session=db_session
+    )
+    cycle_18 = await create_program_cycle_db(
+        program_id=program.id, slug="s18", name_en="S18", session=db_session
+    )
+    shared_email = f"{uuid.uuid4().hex[:8]}@resubmitter.io"
+    app_17 = await create_application_db(
+        cycle_id=cycle_17.id,
+        applicant_name="A",
+        applicant_email=shared_email,
+        source_language="en",
+        original_answers={"q1": "idea"},
+        session=db_session,
+    )
+    app_18 = await create_application_db(
+        cycle_id=cycle_18.id,
+        applicant_name="A",
+        applicant_email=shared_email,
+        source_language="en",
+        original_answers={"q1": "idea, resubmitted"},
+        session=db_session,
+    )
+
+    rows = await list_applications_by_email_db(applicant_email=shared_email, session=db_session)
+    assert {r.id for r in rows} == {app_17.id, app_18.id}

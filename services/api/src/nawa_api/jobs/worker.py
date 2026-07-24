@@ -4,6 +4,8 @@ cache-invalidation globs (services:*) can never touch job state."""
 from arq import cron
 from arq.connections import RedisSettings
 
+from nawa_api.jobs.dedup_scan import dedup_scan
+from nawa_api.jobs.embed_application import embed_application
 from nawa_api.jobs.embed_resource import embed_resource
 from nawa_api.jobs.normalize_applications import normalize_application
 from nawa_api.jobs.purge_audit_logs import purge_audit_logs
@@ -32,6 +34,8 @@ class WorkerSettings:
         normalize_application,
         score_application,
         score_cycle,
+        embed_application,
+        dedup_scan,
         _noop,
     ]
     cron_jobs = [cron(purge_audit_logs, hour=3, minute=0)]

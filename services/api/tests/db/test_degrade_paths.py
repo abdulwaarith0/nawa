@@ -44,13 +44,16 @@ from nawa_api.db.intake.create_scorecard_criterion_db import create_scorecard_cr
 from nawa_api.db.intake.create_scorecard_db import create_scorecard_db
 from nawa_api.db.intake.get_active_rubric_db import get_active_rubric_db
 from nawa_api.db.intake.get_application_db import get_application_db
+from nawa_api.db.intake.get_application_embedding_db import get_application_embedding_db
 from nawa_api.db.intake.list_application_documents_db import list_application_documents_db
+from nawa_api.db.intake.list_applications_by_email_db import list_applications_by_email_db
 from nawa_api.db.intake.list_applications_db import list_applications_db
 from nawa_api.db.intake.list_scorecards_for_application_db import (
     list_scorecards_for_application_db,
 )
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
+from nawa_api.db.intake.upsert_dedup_match_db import upsert_dedup_match_db
 from nawa_api.db.journey.create_assistant_message_db import create_assistant_message_db
 from nawa_api.db.journey.create_assistant_thread_db import create_assistant_thread_db
 from nawa_api.db.journey.create_digest_db import create_digest_db
@@ -206,11 +209,18 @@ _CASES = [
         dict(application_id=_ID, embedding=_DIM_VEC, embedding_model="m", source_hash="h"),
         False,
     ),
+    (get_application_embedding_db, dict(application_id=_ID), None),
     (list_similar_applications_db, dict(application_id=_ID), []),
+    (list_applications_by_email_db, dict(applicant_email="a@example.com"), []),
     (
         create_dedup_match_db,
         dict(application_id=_ID, matched_application_id=_ID, similarity=0.9),
         None,
+    ),
+    (
+        upsert_dedup_match_db,
+        dict(application_id=_ID, matched_application_id=_ID, similarity=0.9),
+        False,
     ),
     (create_decision_db, dict(application_id=_ID, decided_by=_ID, decision="shortlist"), None),
     (create_milestone_db, dict(program_id=_ID, sequence=1), None),
