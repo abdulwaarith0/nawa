@@ -48,9 +48,18 @@ from nawa_api.db.intake.get_application_embedding_db import get_application_embe
 from nawa_api.db.intake.list_application_documents_db import list_application_documents_db
 from nawa_api.db.intake.list_applications_by_email_db import list_applications_by_email_db
 from nawa_api.db.intake.list_applications_db import list_applications_db
+from nawa_api.db.intake.list_decisions_for_application_db import (
+    list_decisions_for_application_db,
+)
+from nawa_api.db.intake.list_dedup_matches_db import list_dedup_matches_db
+from nawa_api.db.intake.list_pending_dedup_matches_for_applications_db import (
+    list_pending_dedup_matches_for_applications_db,
+)
+from nawa_api.db.intake.list_scorecard_criteria_db import list_scorecard_criteria_db
 from nawa_api.db.intake.list_scorecards_for_application_db import (
     list_scorecards_for_application_db,
 )
+from nawa_api.db.intake.list_shortlist_db import list_shortlist_db
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
 from nawa_api.db.intake.update_scorecard_hidden_gem_db import update_scorecard_hidden_gem_db
@@ -229,6 +238,15 @@ _CASES = [
         False,
     ),
     (create_decision_db, dict(application_id=_ID, decided_by=_ID, decision="shortlist"), None),
+    (list_decisions_for_application_db, dict(application_id=_ID), []),
+    (list_dedup_matches_db, dict(application_id=_ID), []),
+    (
+        list_pending_dedup_matches_for_applications_db,
+        dict(application_ids=[_ID]),
+        [],
+    ),
+    (list_scorecard_criteria_db, dict(scorecard_ids=[_ID]), []),
+    (list_shortlist_db, dict(cycle_id=_ID, rubric_id=_ID), []),
     (create_milestone_db, dict(program_id=_ID, sequence=1), None),
     (list_milestones_db, dict(), []),
     (
