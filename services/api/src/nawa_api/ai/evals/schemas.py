@@ -33,8 +33,14 @@ class HiddenGemEntry(BaseModel):
 
 
 class GroundTruth(BaseModel):
-    """Seeded answer key stored in site_config under `seed:ground_truth`."""
+    """Seeded answer key stored in site_config under `seed:ground_truth`.
+    `anomaly_profile_ids` is grouped by anomaly pattern (e.g. "stalled") —
+    matches `seed_data/profiles.py`'s `ProfilesSeedResult.anomaly_profile_ids:
+    dict[str, list[str]]` exactly; a flat list here would silently fail
+    validation against the real seeded value (09-reports-kpi-engine.md owns
+    consuming this — 06-intake-copilot.md only reads hidden_gem_ids/
+    dedup_pair_ids)."""
 
     hidden_gem_ids: list[str] = []
     dedup_pair_ids: list[list[str]] = []
-    anomaly_profile_ids: list[str] = []
+    anomaly_profile_ids: dict[str, list[str]] = {}

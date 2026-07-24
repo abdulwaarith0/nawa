@@ -66,12 +66,24 @@ def _bottom_band(applications: list[Application], band: float) -> list[Applicati
     return ranked[:cutoff]
 
 
-async def _review_one(application: Application, *, cycle_id: uuid.UUID) -> HiddenGemReview | None:
+async def _review_one(
+    application: Application,
+    *,
+    cycle_id: uuid.UUID,
+    provider_name: str | None = None,
+    task_override: str | None = None,
+) -> HiddenGemReview | None:
+    """`provider_name`/`task_override` exist for the eval harness
+    (06-intake-copilot.md §8) reusing this exact per-application review path
+    against a golden entry — see score_applications.py's `score_application`
+    for the same reasoning."""
     documents = await list_application_documents_db(application_id=application.id)
     document_texts = {doc.id: doc.extracted_text for doc in documents if doc.extracted_text}
     request = get_template("intake.hidden_gem").render(
         HiddenGemInput(application_text=_application_text(application))
     )
+    if task_override:
+        request = request.model_copy(update={"task": task_override})
 
     for _ in range(REVIEW_REPAIR_ATTEMPTS):
         candidate, _resp = await gateway.complete_structured(
@@ -79,6 +91,7 @@ async def _review_one(application: Application, *, cycle_id: uuid.UUID) -> Hidde
             HiddenGemReview,
             subject=("application", application.id),
             cycle_id=cycle_id,
+            provider_name=provider_name,
         )
         try:
             validate_hidden_gem_review(

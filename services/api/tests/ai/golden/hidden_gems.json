@@ -1,22 +1,62 @@
 [
   {
     "application_ref": "gem-001",
-    "text": "we make cheep sensor for check soil water. it work in my farm good. save water maybe 40 percent. i want make more for other farm but need help.",
+    "text": "بصراحة الفكرة بسيطة، سويت جهاز صغير يحل مشكلة كشف سوسة النخيل الحمراء في أشجار النخيل عندنا بالقرية واشتغل زين بس ما عندي فلوس اكمل، ياليت حد يساعدني",
     "is_gem": true
   },
   {
     "application_ref": "gem-002",
-    "text": "الفكرة: جهاز صغير يكشف تسرب الغاز مبكراً. اللغة ضعيفة لكن التقنية مجربة في مصنع صغير وأثبتت فعاليتها.",
+    "text": "انا موب متعلم كتير بس جربت شي يخص ري ذكي للزراعة المحمية على مزرعة عمي ونجح، احتاج مساعدة اطور الفكرة اكثر",
+    "is_gem": true
+  },
+  {
+    "application_ref": "gem-003",
+    "text": "سوينا جهاز رخيص يعالج مشكلة تشخيص فقر الدم المنجلي عند نقطة الرعاية، جربناه بمستشفى القرية وضبط معانا كذا مرة، بس مانعرف نكتب مشروع تجاري زين",
+    "is_gem": true
+  },
+  {
+    "application_ref": "gem-004",
+    "text": "bon en fait jai fait un truc pour PV-panel dust mitigation coating, ca marche bien dans mon village, jai pas de bon francais mais lidee elle marche vraiment",
+    "is_gem": true
+  },
+  {
+    "application_ref": "gem-005",
+    "text": "so basicaly i made a thing that check the low-cost prosthetic hand control problem we have here, it work good in my village test, need help to make it bigger scale",
+    "is_gem": true
+  },
+  {
+    "application_ref": "gem-006",
+    "text": "my idea is about early wildfire smoke detection network. i tested with my cusin farm, save alot time. sorry my english not so good but the idea real and work",
     "is_gem": true
   },
   {
     "application_ref": "ctrl-001",
-    "text": "A polished pitch for a generic social network with no differentiation, strong grammar, but a crowded market and no traction.",
+    "text": "want to make app like uber but for my city, no test yet just idea, need investor",
     "is_gem": false
   },
   {
     "application_ref": "ctrl-002",
-    "text": "عرض احترافي لتطبيق حجوزات فنادق، لغة سليمة، لكن السوق مشبع ولا يوجد ميزة تنافسية واضحة.",
+    "text": "thinking about desalination membrane fouling detection maybe, not sure how, just an idea for now nothing built",
+    "is_gem": false
+  },
+  {
+    "application_ref": "ctrl-003",
+    "text": "عندي فكرة تطبيق توصيل زي اللي موجودة بس ما سويت شي لسا، بس فكرة بالراس",
+    "is_gem": false
+  },
+  {
+    "application_ref": "ctrl-004",
+    "text": "افكر بمشروع بخصوص تطبيق تعليمي للغة الإشارة العربية بس ما عندي خطة ولا جربت شي لين الحين",
+    "is_gem": false
+  },
+  {
+    "application_ref": "ctrl-005",
+    "text": "thinking about microfinance credit-scoring for informal traders maybe, not sure how, just an idea for now nothing built",
+    "is_gem": false
+  },
+  {
+    "application_ref": "ctrl-006",
+    "text": "افكر بمشروع بخصوص تطبيق لتقييم عسر القراءة باللغة العربية بس ما عندي خطة ولا جربت شي لين الحين",
     "is_gem": false
   }
 ]

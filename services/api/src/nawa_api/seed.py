@@ -83,7 +83,10 @@ async def run_seed() -> None:
         )
 
     ground_truth = {
-        "hidden_gem_application_ids": [str(i) for i in applications_result.hidden_gem_ids],
+        # Keys must match ai/evals/schemas.py's GroundTruth field names exactly —
+        # pydantic silently drops unrecognized keys (no extra="forbid" here), so a
+        # mismatch degrades to an empty list with no error anywhere.
+        "hidden_gem_ids": [str(i) for i in applications_result.hidden_gem_ids],
         "dedup_pair_ids": [[str(a), str(b)] for a, b in applications_result.dedup_pairs],
         "anomaly_profile_ids": profiles_result.anomaly_profile_ids,
     }

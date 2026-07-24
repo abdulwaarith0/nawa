@@ -1,28 +1,148 @@
 [
   {
     "application_ref": "app-001",
-    "text": "We build a low-cost water-desalination membrane for arid regions. Pilot deployed at two farms; 30% energy saving measured over six months.",
-    "human_scores": { "novelty": 8.0, "feasibility": 7.5, "impact": 9.0 },
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال كشف تكلس أغشية تحلية المياه. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة طالب هندسة ميكانيكية في AE. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 9.2,
+      "feasibility": 9.2,
+      "capability": 8.3,
+      "regional_impact": 9.0
+    },
     "human_rank_band": "top",
-    "language": "en",
-    "country": "QA",
+    "language": "ar",
+    "country": "AE",
     "gender": "f",
-    "origin": "urban"
+    "origin": "rural"
   },
   {
     "application_ref": "app-002",
-    "text": "A marketplace app connecting tutors to students. Similar apps exist; our angle is Arabic-first UX and offline mode for low-bandwidth areas.",
-    "human_scores": { "novelty": 5.0, "feasibility": 8.0, "impact": 6.0 },
-    "human_rank_band": "mid",
-    "language": "en",
-    "country": "QA",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تطبيق لتقييم عسر القراءة باللغة العربية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة ممرضة صحة عامة في OM. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 2.2,
+      "feasibility": 3.2,
+      "capability": 2.5,
+      "regional_impact": 3.3
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "OM",
     "gender": "m",
     "origin": "urban"
   },
   {
     "application_ref": "app-003",
-    "text": "منصة لتحليل بيانات المزارع باستخدام مستشعرات منخفضة التكلفة، مع نموذج أولي يعمل في ثلاث مزارع ونتائج تظهر تحسناً في استهلاك المياه.",
-    "human_scores": { "novelty": 7.0, "feasibility": 6.5, "impact": 7.5 },
+    "text": "Our team has been working on PV-panel dust mitigation coating for the past year. We have built a working prototype and tested it with mechanical engineering student contacts in SA. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 5.9,
+      "feasibility": 6.2,
+      "capability": 6.0,
+      "regional_impact": 6.0
+    },
+    "human_rank_band": "mid",
+    "language": "en",
+    "country": "SA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-004",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال شبكة كشف مبكر لدخان حرائق الغابات. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة طالب هندسة ميكانيكية في JO. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 3.6,
+      "feasibility": 2.4,
+      "capability": 3.6,
+      "regional_impact": 2.6
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "JO",
+    "gender": "m",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-005",
+    "text": "Our team has been working on Arabic sign-language recognition tutor for the past year. We have built a working prototype and tested it with agritech founder contacts in LB. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 8.3,
+      "feasibility": 8.3,
+      "capability": 8.5,
+      "regional_impact": 7.5
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "LB",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-006",
+    "text": "Notre équipe travaille depuis un an sur sickle-cell point-of-care diagnostics. Nous avons développé un prototype fonctionnel et l'avons testé avec des contacts de type assistive-tech teacher au TN. Le besoin du marché est important : les solutions existantes sont soit importées, soit coûteuses, soit mal adaptées aux conditions locales.",
+    "human_scores": {
+      "novelty": 6.3,
+      "feasibility": 5.7,
+      "capability": 7.1,
+      "regional_impact": 6.7
+    },
+    "human_rank_band": "mid",
+    "language": "fr",
+    "country": "TN",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-007",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تشخيص فقر الدم المنجلي عند نقطة الرعاية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة فني طاقة متجددة في QA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 5.9,
+      "feasibility": 5.1,
+      "capability": 5.7,
+      "regional_impact": 6.0
+    },
+    "human_rank_band": "mid",
+    "language": "ar",
+    "country": "QA",
+    "gender": "f",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-008",
+    "text": "Our team has been working on sickle-cell point-of-care diagnostics for the past year. We have built a working prototype and tested it with renewable-energy technician contacts in JO. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 3.2,
+      "feasibility": 3.8,
+      "capability": 3.5,
+      "regional_impact": 2.5
+    },
+    "human_rank_band": "low",
+    "language": "en",
+    "country": "JO",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-009",
+    "text": "Our team has been working on desalination membrane fouling detection for the past year. We have built a working prototype and tested it with graduate researcher contacts in SA. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 8.0,
+      "feasibility": 8.6,
+      "capability": 8.4,
+      "regional_impact": 8.4
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "SA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-010",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال ري ذكي للزراعة المحمية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة باحث خريج في QA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 8.3,
+      "feasibility": 9.2,
+      "capability": 8.5,
+      "regional_impact": 8.3
+    },
     "human_rank_band": "top",
     "language": "ar",
     "country": "QA",
@@ -30,13 +150,453 @@
     "origin": "rural"
   },
   {
-    "application_ref": "app-004",
-    "text": "تطبيق توصيل طعام محلي. الفكرة مألوفة ولكن التركيز على المطاعم الصغيرة في المناطق الريفية التي لا تخدمها التطبيقات الكبرى.",
-    "human_scores": { "novelty": 4.0, "feasibility": 7.0, "impact": 5.0 },
+    "application_ref": "app-011",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تشخيص فقر الدم المنجلي عند نقطة الرعاية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة فني طاقة متجددة في QA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 5.5,
+      "feasibility": 7.0,
+      "capability": 6.2,
+      "regional_impact": 6.0
+    },
+    "human_rank_band": "mid",
+    "language": "ar",
+    "country": "QA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-012",
+    "text": "Our team has been working on low-cost prosthetic hand control for the past year. We have built a working prototype and tested it with renewable-energy technician contacts in LB. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 5.7,
+      "feasibility": 5.3,
+      "capability": 5.0,
+      "regional_impact": 6.0
+    },
+    "human_rank_band": "mid",
+    "language": "en",
+    "country": "LB",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-013",
+    "text": "Notre équipe travaille depuis un an sur date-palm red weevil pest detection. Nous avons développé un prototype fonctionnel et l'avons testé avec des contacts de type mechanical engineering student au BH. Le besoin du marché est important : les solutions existantes sont soit importées, soit coûteuses, soit mal adaptées aux conditions locales.",
+    "human_scores": {
+      "novelty": 8.5,
+      "feasibility": 9.4,
+      "capability": 9.5,
+      "regional_impact": 8.5
+    },
+    "human_rank_band": "top",
+    "language": "fr",
+    "country": "BH",
+    "gender": "f",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-014",
+    "text": "Our team has been working on low-cost prosthetic hand control for the past year. We have built a working prototype and tested it with agritech founder contacts in QA. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 9.0,
+      "feasibility": 8.4,
+      "capability": 8.4,
+      "regional_impact": 8.2
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "QA",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-015",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تشخيص فقر الدم المنجلي عند نقطة الرعاية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة ممرضة صحة عامة في BH. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 5.7,
+      "feasibility": 5.0,
+      "capability": 5.8,
+      "regional_impact": 4.8
+    },
+    "human_rank_band": "mid",
+    "language": "ar",
+    "country": "BH",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-016",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تطبيق لتقييم عسر القراءة باللغة العربية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة طالب هندسة ميكانيكية في AE. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 8.3,
+      "feasibility": 8.0,
+      "capability": 7.7,
+      "regional_impact": 7.9
+    },
+    "human_rank_band": "top",
+    "language": "ar",
+    "country": "AE",
+    "gender": "m",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-017",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تطبيق تعليمي للغة الإشارة العربية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة باحث خريج في JO. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 4.0,
+      "feasibility": 3.8,
+      "capability": 3.8,
+      "regional_impact": 5.0
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "JO",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-018",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تشخيص فقر الدم المنجلي عند نقطة الرعاية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة مهندس طبي حيوي في مستشفى في OM. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 1.8,
+      "feasibility": 3.0,
+      "capability": 2.8,
+      "regional_impact": 2.9
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "OM",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-019",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال طلاء لتخفيف تراكم الغبار على الألواح الشمسية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة فني طاقة متجددة في AE. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 4.7,
+      "feasibility": 4.7,
+      "capability": 4.0,
+      "regional_impact": 3.5
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "AE",
+    "gender": "f",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-020",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال طلاء لتخفيف تراكم الغبار على الألواح الشمسية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة ممرضة صحة عامة في AE. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 5.2,
+      "feasibility": 4.9,
+      "capability": 5.4,
+      "regional_impact": 5.8
+    },
+    "human_rank_band": "mid",
+    "language": "ar",
+    "country": "AE",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-021",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال طلاء لتخفيف تراكم الغبار على الألواح الشمسية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة فني في قطاع النفط والغاز في SA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 9.7,
+      "feasibility": 8.7,
+      "capability": 9.1,
+      "regional_impact": 8.6
+    },
+    "human_rank_band": "top",
+    "language": "ar",
+    "country": "SA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-022",
+    "text": "Our team has been working on desalination membrane fouling detection for the past year. We have built a working prototype and tested it with public-health nurse contacts in KW. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 9.4,
+      "feasibility": 9.1,
+      "capability": 8.8,
+      "regional_impact": 8.0
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "KW",
+    "gender": "m",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-023",
+    "text": "Our team has been working on date-palm red weevil pest detection for the past year. We have built a working prototype and tested it with assistive-tech teacher contacts in JO. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 3.2,
+      "feasibility": 3.0,
+      "capability": 2.2,
+      "regional_impact": 2.4
+    },
+    "human_rank_band": "low",
+    "language": "en",
+    "country": "JO",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-024",
+    "text": "Our team has been working on Arabic dyslexia reading-assessment app for the past year. We have built a working prototype and tested it with mechanical engineering student contacts in KW. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 8.2,
+      "feasibility": 9.0,
+      "capability": 8.8,
+      "regional_impact": 8.9
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "KW",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-025",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تشخيص فقر الدم المنجلي عند نقطة الرعاية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة ممرضة صحة عامة في DZ. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 2.9,
+      "feasibility": 3.2,
+      "capability": 2.0,
+      "regional_impact": 2.7
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "DZ",
+    "gender": "f",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-026",
+    "text": "Our team has been working on early wildfire smoke detection network for the past year. We have built a working prototype and tested it with assistive-tech teacher contacts in JO. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 6.5,
+      "feasibility": 5.7,
+      "capability": 5.4,
+      "regional_impact": 6.3
+    },
+    "human_rank_band": "mid",
+    "language": "en",
+    "country": "JO",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-027",
+    "text": "Our team has been working on sickle-cell point-of-care diagnostics for the past year. We have built a working prototype and tested it with agritech founder contacts in KW. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 7.1,
+      "feasibility": 7.2,
+      "capability": 7.7,
+      "regional_impact": 7.9
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "KW",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-028",
+    "text": "Our team has been working on smart irrigation for greenhouse farming for the past year. We have built a working prototype and tested it with public-health nurse contacts in KW. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 3.2,
+      "feasibility": 3.6,
+      "capability": 3.0,
+      "regional_impact": 2.9
+    },
+    "human_rank_band": "low",
+    "language": "en",
+    "country": "KW",
+    "gender": "m",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-029",
+    "text": "Our team has been working on smart irrigation for greenhouse farming for the past year. We have built a working prototype and tested it with renewable-energy technician contacts in DZ. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 5.3,
+      "feasibility": 5.1,
+      "capability": 6.4,
+      "regional_impact": 5.1
+    },
+    "human_rank_band": "mid",
+    "language": "en",
+    "country": "DZ",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-030",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال ري ذكي للزراعة المحمية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة فني طاقة متجددة في MA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 3.4,
+      "feasibility": 4.3,
+      "capability": 4.7,
+      "regional_impact": 4.8
+    },
+    "human_rank_band": "low",
+    "language": "ar",
+    "country": "MA",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-031",
+    "text": "Notre équipe travaille depuis un an sur PV-panel dust mitigation coating. Nous avons développé un prototype fonctionnel et l'avons testé avec des contacts de type assistive-tech teacher au BH. Le besoin du marché est important : les solutions existantes sont soit importées, soit coûteuses, soit mal adaptées aux conditions locales.",
+    "human_scores": {
+      "novelty": 7.0,
+      "feasibility": 7.3,
+      "capability": 7.1,
+      "regional_impact": 7.1
+    },
+    "human_rank_band": "mid",
+    "language": "fr",
+    "country": "BH",
+    "gender": "f",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-032",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال شبكة كشف مبكر لدخان حرائق الغابات. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة فني طاقة متجددة في SA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 8.5,
+      "feasibility": 7.8,
+      "capability": 8.8,
+      "regional_impact": 8.3
+    },
+    "human_rank_band": "top",
+    "language": "ar",
+    "country": "SA",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-033",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال كشف سوسة النخيل الحمراء في أشجار النخيل. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة مهندس طبي حيوي في مستشفى في QA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 3.1,
+      "feasibility": 3.0,
+      "capability": 2.8,
+      "regional_impact": 2.9
+    },
     "human_rank_band": "low",
     "language": "ar",
     "country": "QA",
     "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-034",
+    "text": "Our team has been working on Arabic dyslexia reading-assessment app for the past year. We have built a working prototype and tested it with oil-and-gas technician contacts in LB. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 5.2,
+      "feasibility": 5.4,
+      "capability": 5.2,
+      "regional_impact": 5.5
+    },
+    "human_rank_band": "mid",
+    "language": "en",
+    "country": "LB",
+    "gender": "m",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-035",
+    "text": "يعمل فريقنا منذ عام على مشروع في مجال تطبيق لتقييم عسر القراءة باللغة العربية. قمنا ببناء نموذج أولي عامل واختبرناه مع جهات اتصال من فئة باحث خريج في QA. الحاجة السوقية كبيرة، فالحلول الحالية إما مستوردة أو مكلفة أو غير ملائمة للظروف المحلية.",
+    "human_scores": {
+      "novelty": 5.3,
+      "feasibility": 5.4,
+      "capability": 6.5,
+      "regional_impact": 6.5
+    },
+    "human_rank_band": "mid",
+    "language": "ar",
+    "country": "QA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-036",
+    "text": "Our team has been working on PV-panel dust mitigation coating for the past year. We have built a working prototype and tested it with assistive-tech teacher contacts in MA. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 9.5,
+      "feasibility": 9.6,
+      "capability": 9.0,
+      "regional_impact": 9.6
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "MA",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-037",
+    "text": "Our team has been working on low-cost prosthetic hand control for the past year. We have built a working prototype and tested it with renewable-energy technician contacts in EG. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 8.9,
+      "feasibility": 9.8,
+      "capability": 9.7,
+      "regional_impact": 9.2
+    },
+    "human_rank_band": "top",
+    "language": "en",
+    "country": "EG",
+    "gender": "f",
+    "origin": "rural"
+  },
+  {
+    "application_ref": "app-038",
+    "text": "Notre équipe travaille depuis un an sur date-palm red weevil pest detection. Nous avons développé un prototype fonctionnel et l'avons testé avec des contacts de type agritech founder au SA. Le besoin du marché est important : les solutions existantes sont soit importées, soit coûteuses, soit mal adaptées aux conditions locales.",
+    "human_scores": {
+      "novelty": 7.1,
+      "feasibility": 7.0,
+      "capability": 6.4,
+      "regional_impact": 6.7
+    },
+    "human_rank_band": "mid",
+    "language": "fr",
+    "country": "SA",
+    "gender": "m",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-039",
+    "text": "Our team has been working on Arabic dyslexia reading-assessment app for the past year. We have built a working prototype and tested it with renewable-energy technician contacts in SA. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 4.2,
+      "feasibility": 5.0,
+      "capability": 4.0,
+      "regional_impact": 4.8
+    },
+    "human_rank_band": "low",
+    "language": "en",
+    "country": "SA",
+    "gender": "f",
+    "origin": "urban"
+  },
+  {
+    "application_ref": "app-040",
+    "text": "Our team has been working on low-cost prosthetic hand control for the past year. We have built a working prototype and tested it with oil-and-gas technician contacts in EG. The market need is significant: existing solutions are either imported, expensive, or not adapted to local conditions.",
+    "human_scores": {
+      "novelty": 2.3,
+      "feasibility": 3.4,
+      "capability": 2.7,
+      "regional_impact": 2.5
+    },
+    "human_rank_band": "low",
+    "language": "en",
+    "country": "EG",
+    "gender": "m",
     "origin": "rural"
   }
 ]

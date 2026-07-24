@@ -60,7 +60,16 @@ async def score_application(
     application_id: str | uuid.UUID = "",
     rubric_id: str | uuid.UUID = "",
     cycle_id: uuid.UUID | None = None,
+    *,
+    provider_name: str | None = None,
+    task_override: str | None = None,
 ) -> str:
+    """`provider_name`/`task_override` exist for the eval harness
+    (06-intake-copilot.md §8): running the REAL scoring pipeline offline
+    needs to force MockLLMProvider without ENVIRONMENT=test, and eval-run
+    ai_calls need `task=eval.intake` so they're distinguishable from
+    production scoring in the ledger. Normal callers (the score_cycle fan-out)
+    never pass either — both default to the ordinary behavior."""
     aid = uuid.UUID(str(application_id))
     rid = uuid.UUID(str(rubric_id))
 
@@ -83,13 +92,19 @@ async def score_application(
             application_text=_application_text(application),
         )
     )
+    if task_override:
+        request = request.model_copy(update={"task": task_override})
 
     try:
         draft: ScorecardDraft | None = None
         model_name: str | None = None
         for _ in range(SCORE_REPAIR_ATTEMPTS):
             candidate, resp = await gateway.complete_structured(
-                request, ScorecardDraft, subject=("application", aid), cycle_id=cycle_id
+                request,
+                ScorecardDraft,
+                subject=("application", aid),
+                cycle_id=cycle_id,
+                provider_name=provider_name,
             )
             try:
                 validate_scorecard(
