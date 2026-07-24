@@ -75,6 +75,7 @@ from nawa_api.db.profiles.set_profile_embedding_db import set_profile_embedding_
 from nawa_api.db.programs.create_program_cycle_db import create_program_cycle_db
 from nawa_api.db.programs.create_program_db import create_program_db
 from nawa_api.db.programs.get_program_by_slug_db import get_program_by_slug_db
+from nawa_api.db.programs.get_program_cycle_db import get_program_cycle_db
 from nawa_api.db.programs.list_program_cycles_db import list_program_cycles_db
 from nawa_api.db.programs.list_programs_db import list_programs_db
 from nawa_api.db.reports.create_anomaly_db import create_anomaly_db
@@ -129,6 +130,7 @@ _CASES = [
     (list_programs_db, dict(), []),
     (create_program_cycle_db, dict(program_id=_ID, slug="s"), None),
     (list_program_cycles_db, dict(), []),
+    (get_program_cycle_db, dict(cycle_id=_ID), None),
     (create_cohort_db, dict(cycle_id=_ID, program_manager_user_id=_ID, starts_at=_NOW), None),
     (list_cohorts_db, dict(), []),
     (create_cohort_member_db, dict(cohort_id=_ID, profile_id=_ID), None),

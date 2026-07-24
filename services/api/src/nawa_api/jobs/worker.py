@@ -8,6 +8,7 @@ from nawa_api.jobs.embed_resource import embed_resource
 from nawa_api.jobs.normalize_applications import normalize_application
 from nawa_api.jobs.purge_audit_logs import purge_audit_logs
 from nawa_api.jobs.score_applications import score_application
+from nawa_api.jobs.score_cycle import score_cycle
 from nawa_api.runtime.settings import get_settings
 
 QUEUE_NAME = "jobs:default"
@@ -30,6 +31,7 @@ class WorkerSettings:
         embed_resource,
         normalize_application,
         score_application,
+        score_cycle,
         _noop,
     ]
     cron_jobs = [cron(purge_audit_logs, hour=3, minute=0)]

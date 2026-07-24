@@ -17,6 +17,7 @@ from nawa_api.db.profiles.list_profiles_db import list_profiles_db
 from nawa_api.db.programs.create_program_cycle_db import create_program_cycle_db
 from nawa_api.db.programs.create_program_db import create_program_db
 from nawa_api.db.programs.get_program_by_slug_db import get_program_by_slug_db
+from nawa_api.db.programs.get_program_cycle_db import get_program_cycle_db
 from nawa_api.db.programs.list_program_cycles_db import list_program_cycles_db
 from nawa_api.db.programs.list_programs_db import list_programs_db
 from nawa_api.db.users.create_user_db import create_user_db
@@ -58,6 +59,15 @@ async def test_program_cycle_create_and_list(db_session):
     assert cycle is not None
     rows = await list_program_cycles_db(program_id=program.id, session=db_session)
     assert any(c.id == cycle.id for c in rows)
+
+    fetched = await get_program_cycle_db(cycle_id=cycle.id, session=db_session)
+    assert fetched is not None
+    assert fetched.program_id == program.id
+
+
+@pytest.mark.asyncio
+async def test_get_program_cycle_db_missing_returns_none(db_session):
+    assert await get_program_cycle_db(cycle_id=uuid.uuid4(), session=db_session) is None
 
 
 @pytest.mark.asyncio
