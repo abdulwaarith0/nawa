@@ -1,7 +1,9 @@
 import uuid
+from datetime import UTC, datetime
 
 import pytest
 
+from nawa_api.db.cohorts.create_cohort_db import create_cohort_db
 from nawa_api.db.iam.add_group_member_db import add_group_member_db
 from nawa_api.db.iam.get_group_by_name_db import get_group_by_name_db
 from nawa_api.db.intake.create_application_db import create_application_db
@@ -114,3 +116,109 @@ async def test_scorecard_route_requires_review_permission(client):
         f"/api/v1/intake/applications/{uuid.uuid4()}/scorecard", headers=headers
     )
     assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_decision_route_creates_a_decision_matching_the_ai_band(client):
+    program = await create_program_db(slug="p4", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c4", name_en="C")
+    rubric = await create_rubric_db(
+        program_id=program.id, version=1, criteria=_CRITERIA, name_en="R", status="active"
+    )
+    # Sole scored applicant, default capacity (20/20) -> AI band is "shortlist".
+    app = await _scored_application(cycle_id=cycle.id, rubric_id=rubric.id, total_score=80.0)
+
+    headers = await _bearer(client, email="decider@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/decision",
+        json={"decision": "shortlist"},
+        headers=headers,
+    )
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert data["status"] == "shortlisted"
+    assert data["overridden"] is False
+
+
+@pytest.mark.asyncio
+async def test_decision_route_requires_reason_when_overriding_the_ai_band(client):
+    program = await create_program_db(slug="p5", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c5", name_en="C")
+    rubric = await create_rubric_db(
+        program_id=program.id, version=1, criteria=_CRITERIA, name_en="R", status="active"
+    )
+    app = await _scored_application(cycle_id=cycle.id, rubric_id=rubric.id, total_score=80.0)
+
+    headers = await _bearer(client, email="decider2@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/decision",
+        json={"decision": "reject"},  # diverges from the "shortlist" AI band
+        headers=headers,
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_decision_route_requires_override_permission(client):
+    headers = await _bearer(client, email="member3@example.com", group="Members")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{uuid.uuid4()}/decision",
+        json={"decision": "shortlist"},
+        headers=headers,
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_decision_route_override_with_reason_succeeds(client):
+    program = await create_program_db(slug="p6", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c6", name_en="C")
+    rubric = await create_rubric_db(
+        program_id=program.id, version=1, criteria=_CRITERIA, name_en="R", status="active"
+    )
+    app = await _scored_application(cycle_id=cycle.id, rubric_id=rubric.id, total_score=80.0)
+
+    headers = await _bearer(client, email="decider3@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/decision",
+        json={"decision": "reject", "reason": "Idea already covered elsewhere."},
+        headers=headers,
+    )
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert data["overridden"] is True
+    assert data["status"] == "decided"
+
+
+@pytest.mark.asyncio
+async def test_decision_route_accept_creates_cohort_membership(client):
+    program = await create_program_db(slug="p7", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c7", name_en="C")
+    rubric = await create_rubric_db(
+        program_id=program.id, version=1, criteria=_CRITERIA, name_en="R", status="active"
+    )
+    app = await _scored_application(cycle_id=cycle.id, rubric_id=rubric.id, total_score=80.0)
+
+    manager = await create_user_db(
+        email="manager@example.com",
+        username="manager",
+        password_hash=hash_password("password123"),
+        full_name="Manager",
+    )
+    cohort = await create_cohort_db(
+        cycle_id=cycle.id,
+        program_manager_user_id=manager.id,
+        starts_at=datetime.now(UTC),
+        name_en="Cohort",
+    )
+
+    headers = await _bearer(client, email="decider4@example.com", group="Administrators")
+    resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/decision",
+        json={"decision": "accept", "cohort_id": str(cohort.id)},
+        headers=headers,
+    )
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert data["decision"] == "accept"
+    assert data["profile_id"] is not None

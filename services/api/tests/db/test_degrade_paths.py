@@ -16,8 +16,10 @@ from nawa_api.db.ai_calls.create_ai_call_db import create_ai_call_db
 from nawa_api.db.audit.create_audit_log_db import create_audit_log_db
 from nawa_api.db.cohorts.create_cohort_db import create_cohort_db
 from nawa_api.db.cohorts.create_cohort_member_db import create_cohort_member_db
+from nawa_api.db.cohorts.get_cohort_db import get_cohort_db
 from nawa_api.db.cohorts.list_cohort_members_db import list_cohort_members_db
 from nawa_api.db.cohorts.list_cohorts_db import list_cohorts_db
+from nawa_api.db.cohorts.upsert_cohort_member_db import upsert_cohort_member_db
 from nawa_api.db.community.create_mentorship_db import create_mentorship_db
 from nawa_api.db.community.create_opportunity_db import create_opportunity_db
 from nawa_api.db.community.create_opportunity_match_db import create_opportunity_match_db
@@ -33,6 +35,9 @@ from nawa_api.db.iam.get_policy_by_name_db import get_policy_by_name_db
 from nawa_api.db.iam.list_groups_db import list_groups_db
 from nawa_api.db.iam.list_policies_db import list_policies_db
 from nawa_api.db.iam.list_user_group_ids_db import list_user_group_ids_db
+from nawa_api.db.intake.count_higher_scoring_applications_db import (
+    count_higher_scoring_applications_db,
+)
 from nawa_api.db.intake.create_application_db import create_application_db
 from nawa_api.db.intake.create_application_document_db import create_application_document_db
 from nawa_api.db.intake.create_application_embedding_db import create_application_embedding_db
@@ -61,6 +66,12 @@ from nawa_api.db.intake.list_scorecards_for_application_db import (
 )
 from nawa_api.db.intake.list_shortlist_db import list_shortlist_db
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
+from nawa_api.db.intake.update_application_decision_status_db import (
+    update_application_decision_status_db,
+)
+from nawa_api.db.intake.update_application_profile_link_db import (
+    update_application_profile_link_db,
+)
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
 from nawa_api.db.intake.update_scorecard_hidden_gem_db import update_scorecard_hidden_gem_db
 from nawa_api.db.intake.upsert_dedup_match_db import upsert_dedup_match_db
@@ -78,6 +89,9 @@ from nawa_api.db.kpi.list_kpi_series_db import list_kpi_series_db
 from nawa_api.db.kpi.refresh_kpi_snapshot_db import refresh_kpi_snapshot_db
 from nawa_api.db.notifications.create_notification_db import create_notification_db
 from nawa_api.db.profiles.create_founder_profile_db import create_founder_profile_db
+from nawa_api.db.profiles.get_founder_profile_by_user_id_db import (
+    get_founder_profile_by_user_id_db,
+)
 from nawa_api.db.profiles.get_profile_by_handle_db import get_profile_by_handle_db
 from nawa_api.db.profiles.get_profile_by_id_any_status_db import get_profile_by_id_any_status_db
 from nawa_api.db.profiles.list_profile_program_history_db import (
@@ -89,6 +103,7 @@ from nawa_api.db.programs.create_program_cycle_db import create_program_cycle_db
 from nawa_api.db.programs.create_program_db import create_program_db
 from nawa_api.db.programs.get_program_by_slug_db import get_program_by_slug_db
 from nawa_api.db.programs.get_program_cycle_db import get_program_cycle_db
+from nawa_api.db.programs.get_program_db import get_program_db
 from nawa_api.db.programs.list_program_cycles_db import list_program_cycles_db
 from nawa_api.db.programs.list_programs_db import list_programs_db
 from nawa_api.db.reports.create_anomaly_db import create_anomaly_db
@@ -140,15 +155,19 @@ _CASES = [
     (list_user_group_ids_db, dict(user_id=_ID), []),
     (create_program_db, dict(slug="s", kind="competition"), None),
     (get_program_by_slug_db, dict(slug="s"), None),
+    (get_program_db, dict(program_id=_ID), None),
     (list_programs_db, dict(), []),
     (create_program_cycle_db, dict(program_id=_ID, slug="s"), None),
     (list_program_cycles_db, dict(), []),
     (get_program_cycle_db, dict(cycle_id=_ID), None),
     (create_cohort_db, dict(cycle_id=_ID, program_manager_user_id=_ID, starts_at=_NOW), None),
+    (get_cohort_db, dict(cohort_id=_ID), None),
     (list_cohorts_db, dict(), []),
     (create_cohort_member_db, dict(cohort_id=_ID, profile_id=_ID), None),
+    (upsert_cohort_member_db, dict(cohort_id=_ID, profile_id=_ID), False),
     (list_cohort_members_db, dict(cohort_id=_ID), []),
     (create_founder_profile_db, dict(user_id=_ID, handle="h"), None),
+    (get_founder_profile_by_user_id_db, dict(user_id=_ID), None),
     (get_profile_by_handle_db, dict(handle="h"), None),
     (get_profile_by_id_any_status_db, dict(profile_id=_ID), None),
     (list_profiles_db, dict(), []),
@@ -239,6 +258,13 @@ _CASES = [
     ),
     (create_decision_db, dict(application_id=_ID, decided_by=_ID, decision="shortlist"), None),
     (list_decisions_for_application_db, dict(application_id=_ID), []),
+    (count_higher_scoring_applications_db, dict(cycle_id=_ID, total_score=1.0), 0),
+    (update_application_profile_link_db, dict(application_id=_ID, profile_id=_ID), False),
+    (
+        update_application_decision_status_db,
+        dict(application_id=_ID, status="shortlisted"),
+        False,
+    ),
     (list_dedup_matches_db, dict(application_id=_ID), []),
     (
         list_pending_dedup_matches_for_applications_db,

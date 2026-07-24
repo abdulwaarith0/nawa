@@ -1,6 +1,42 @@
 {
   "components": {
     "schemas": {
+      "CreateDecisionInput": {
+        "properties": {
+          "cohort_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cohort Id"
+          },
+          "decision": {
+            "title": "Decision",
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "required": [
+          "decision"
+        ],
+        "title": "CreateDecisionInput",
+        "type": "object"
+      },
       "CreateGroupInput": {
         "properties": {
           "description": {
@@ -1558,6 +1594,57 @@
         "summary": "Set User Access Route",
         "tags": [
           "iam"
+        ]
+      }
+    },
+    "/api/v1/intake/applications/{id}/decision": {
+      "post": {
+        "operationId": "create_decision_route_api_v1_intake_applications__id__decision_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDecisionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Decision Route",
+        "tags": [
+          "intake"
         ]
       }
     },

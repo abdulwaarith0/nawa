@@ -145,6 +145,11 @@ async def seed_programs(session: AsyncSession, *, iam: IamSeedResult) -> Program
         name_en="Season 18",
         status="screening",
         closes_at=days_ago(26),
+        # 06-intake-copilot.md §6.2's "top-N-by-capacity" AI recommendation
+        # band needs a real number to demo against — no capacity key is
+        # specified anywhere in the spec pack, so this is a documented
+        # choice, not a spec-literal value.
+        config={"intake": {"shortlist_capacity": 20, "waitlist_capacity": 20}},
         session=session,
     )
     season_17 = await create_program_cycle_db(
