@@ -56,6 +56,45 @@ async def _scored_application(*, cycle_id, rubric_id, total_score=72.0):
 
 
 @pytest.mark.asyncio
+async def test_cycles_route_returns_program_name(client):
+    program = await create_program_db(slug="p-cyc1", kind="competition", name_en="P Cyc")
+    cycle = await create_program_cycle_db(
+        program_id=program.id, slug="c-cyc1", name_en="Cyc 1", status="active"
+    )
+
+    headers = await _bearer(client, email="picker1@example.com", group="Administrators")
+    resp = await client.get("/api/v1/intake/cycles", headers=headers)
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    match = next(item for item in data if item["id"] == str(cycle.id))
+    assert match["program_name_en"] == "P Cyc"
+
+
+@pytest.mark.asyncio
+async def test_cycles_route_filters_by_status(client):
+    program = await create_program_db(slug="p-cyc2", kind="competition", name_en="P")
+    await create_program_cycle_db(
+        program_id=program.id, slug="c-cyc2-draft", name_en="Draft", status="draft"
+    )
+    active = await create_program_cycle_db(
+        program_id=program.id, slug="c-cyc2-active", name_en="Active", status="active"
+    )
+
+    headers = await _bearer(client, email="picker2@example.com", group="Administrators")
+    resp = await client.get("/api/v1/intake/cycles", params={"status": "active"}, headers=headers)
+    assert resp.status_code == 200
+    ids = {item["id"] for item in resp.json()["data"]}
+    assert str(active.id) in ids
+
+
+@pytest.mark.asyncio
+async def test_cycles_route_requires_review_permission(client):
+    headers = await _bearer(client, email="member2@example.com", group="Members")
+    resp = await client.get("/api/v1/intake/cycles", headers=headers)
+    assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
 async def test_shortlist_route_returns_ranked_rows(client):
     program = await create_program_db(slug="p1", kind="competition", name_en="P")
     cycle = await create_program_cycle_db(program_id=program.id, slug="c1", name_en="C")

@@ -19,12 +19,19 @@ from nawa_api.middleware.iam import require_permission
 from nawa_api.services.audit.create_audit_log import create_audit_log
 from nawa_api.services.intake.decide_application import decide_application
 from nawa_api.services.intake.get_scorecard import get_scorecard
+from nawa_api.services.intake.list_cycles_for_picker import list_cycles_for_picker
 from nawa_api.services.intake.list_shortlist import list_shortlist
 from nawa_api.services.rate_limit.consume import consume
 from nawa_api.utils.envelope import ok
 from nawa_api.utils.request_context import request_id_var
 
 router = APIRouter(tags=["intake"])
+
+
+@router.get("/intake/cycles")
+async def list_cycles_route(status: str | None = None):
+    await require_permission(Permission.INTAKE_REVIEW)
+    return ok(await list_cycles_for_picker(status=status))
 
 
 @router.get("/intake/cycles/{cycle_id}/shortlist")
