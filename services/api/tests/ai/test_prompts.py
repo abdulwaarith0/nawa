@@ -22,14 +22,12 @@ def test_registry_has_the_slice_five_templates():
 
 def test_render_stamps_task_and_version_and_tier():
     tmpl = get_template("intake.score")
-    req = tmpl.render(
-        ScoreApplicationInput(rubric="R", criteria=["novelty"], application_text="A")
-    )
+    req = tmpl.render(ScoreApplicationInput(rubric="R", application_text="A"))
     assert req.task == "intake.score"
-    assert req.prompt_version == "v1"
+    assert req.prompt_version == "v2"
     assert req.tier is Tier.LARGE
     assert "R" in req.messages[0]["content"]
-    assert "novelty" in req.messages[0]["content"]
+    assert "A" in req.messages[0]["content"]
 
 
 def test_render_is_deterministic():
@@ -53,7 +51,7 @@ def test_render_wrong_model_type_raises():
     # A detect-language template can't render a score input.
     with pytest.raises(TypeError):
         get_template("intake.detect_language").render(
-            ScoreApplicationInput(rubric="r", criteria=[], application_text="a")
+            ScoreApplicationInput(rubric="r", application_text="a")
         )
 
 

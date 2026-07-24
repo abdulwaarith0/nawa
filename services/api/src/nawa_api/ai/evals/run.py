@@ -16,6 +16,7 @@ import asyncio
 import json
 from collections.abc import Awaitable, Callable
 from pathlib import Path
+from statistics import mean
 
 from pydantic import BaseModel
 
@@ -51,18 +52,15 @@ def load_hidden_gems(path: Path | None = None) -> list[HiddenGemEntry]:
 
 
 async def ai_overall(entry: ScoredEntry, *, provider_name: str | None = "mock") -> float:
+    rubric_text = "\n".join(f"- {key}" for key in entry.human_scores)
     request = get_template("intake.score").render(
-        ScoreApplicationInput(
-            rubric="Evaluate the venture against the criteria.",
-            criteria=list(entry.human_scores.keys()),
-            application_text=entry.text,
-        )
+        ScoreApplicationInput(rubric=rubric_text, application_text=entry.text)
     )
     request = request.model_copy(update={"task": "eval.intake"})
     scorecard, _ = await gateway.complete_structured(
         request, ScorecardDraft, pii_safe=True, provider_name=provider_name
     )
-    return scorecard.overall
+    return mean(criterion.score for criterion in scorecard.criteria)
 
 
 async def ai_is_gem(entry: HiddenGemEntry, *, provider_name: str | None = "mock") -> bool:

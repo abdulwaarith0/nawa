@@ -44,11 +44,13 @@ from nawa_api.db.intake.create_scorecard_criterion_db import create_scorecard_cr
 from nawa_api.db.intake.create_scorecard_db import create_scorecard_db
 from nawa_api.db.intake.get_active_rubric_db import get_active_rubric_db
 from nawa_api.db.intake.get_application_db import get_application_db
+from nawa_api.db.intake.list_application_documents_db import list_application_documents_db
 from nawa_api.db.intake.list_applications_db import list_applications_db
 from nawa_api.db.intake.list_scorecards_for_application_db import (
     list_scorecards_for_application_db,
 )
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
+from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
 from nawa_api.db.journey.create_assistant_message_db import create_assistant_message_db
 from nawa_api.db.journey.create_assistant_thread_db import create_assistant_thread_db
 from nawa_api.db.journey.create_digest_db import create_digest_db
@@ -186,6 +188,12 @@ _CASES = [
         None,
     ),
     (list_scorecards_for_application_db, dict(application_id=_ID), []),
+    (list_application_documents_db, dict(application_id=_ID), []),
+    (
+        update_application_scoring_db,
+        dict(application_id=_ID, total_score=1.0),
+        False,
+    ),
     (
         create_scorecard_criterion_db,
         dict(scorecard_id=_ID, criterion_key="k", score=1.0, weight=1.0),

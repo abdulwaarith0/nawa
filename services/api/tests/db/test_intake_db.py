@@ -13,11 +13,13 @@ from nawa_api.db.intake.create_scorecard_criterion_db import create_scorecard_cr
 from nawa_api.db.intake.create_scorecard_db import create_scorecard_db
 from nawa_api.db.intake.get_active_rubric_db import get_active_rubric_db
 from nawa_api.db.intake.get_application_db import get_application_db
+from nawa_api.db.intake.list_application_documents_db import list_application_documents_db
 from nawa_api.db.intake.list_applications_db import list_applications_db
 from nawa_api.db.intake.list_scorecards_for_application_db import (
     list_scorecards_for_application_db,
 )
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
+from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
 from nawa_api.db.programs.create_program_cycle_db import create_program_cycle_db
 from nawa_api.db.programs.create_program_db import create_program_db
 from nawa_api.db.users.create_user_db import create_user_db
@@ -100,9 +102,13 @@ async def test_application_lifecycle(db_session):
         mime_type="application/pdf",
         size_bytes=2048,
         kind="cv",
+        extracted_text="Real CV text.",
         session=db_session,
     )
     assert doc is not None
+
+    docs = await list_application_documents_db(application_id=application.id, session=db_session)
+    assert [d.id for d in docs] == [doc.id]
 
     rows = await list_applications_db(cycle_id=cycle.id, session=db_session)
     assert any(a.id == application.id for a in rows)
@@ -175,6 +181,15 @@ async def test_scorecard_and_criteria_and_decision(db_session):
         session=db_session,
     )
     assert decision is not None
+
+    updated = await update_application_scoring_db(
+        application_id=application.id, total_score=72.5, session=db_session
+    )
+    assert updated is True
+    rescored = await get_application_db(application_id=application.id, session=db_session)
+    assert rescored.status == "scored"
+    assert rescored.ai_total_score == 72.5
+    assert rescored.scored_at is not None
 
 
 @pytest.mark.asyncio
