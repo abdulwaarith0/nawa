@@ -1689,6 +1689,47 @@
         ]
       }
     },
+    "/api/v1/intake/cycles/{cycle_id}/export": {
+      "get": {
+        "operationId": "export_shortlist_route_api_v1_intake_cycles__cycle_id__export_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Cycle Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Export Shortlist Route",
+        "tags": [
+          "intake"
+        ]
+      }
+    },
     "/api/v1/intake/cycles/{cycle_id}/shortlist": {
       "get": {
         "operationId": "list_shortlist_route_api_v1_intake_cycles__cycle_id__shortlist_get",

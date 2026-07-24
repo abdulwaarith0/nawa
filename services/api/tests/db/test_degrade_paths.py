@@ -53,6 +53,9 @@ from nawa_api.db.intake.get_application_embedding_db import get_application_embe
 from nawa_api.db.intake.list_application_documents_db import list_application_documents_db
 from nawa_api.db.intake.list_applications_by_email_db import list_applications_by_email_db
 from nawa_api.db.intake.list_applications_db import list_applications_db
+from nawa_api.db.intake.list_decided_applications_for_export_db import (
+    list_decided_applications_for_export_db,
+)
 from nawa_api.db.intake.list_decisions_for_application_db import (
     list_decisions_for_application_db,
 )
@@ -258,6 +261,11 @@ _CASES = [
     ),
     (create_decision_db, dict(application_id=_ID, decided_by=_ID, decision="shortlist"), None),
     (list_decisions_for_application_db, dict(application_id=_ID), []),
+    (
+        list_decided_applications_for_export_db,
+        dict(cycle_id=_ID, rubric_id=_ID),
+        [],
+    ),
     (count_higher_scoring_applications_db, dict(cycle_id=_ID, total_score=1.0), 0),
     (update_application_profile_link_db, dict(application_id=_ID, profile_id=_ID), False),
     (

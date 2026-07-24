@@ -1,9 +1,6 @@
 """Intake console routes (06-intake-copilot.md §6.1, §6.2).
 
-Export (§6.1's XLSX bullet) and rubric-management routes are deferred to
-their own chunks, same as the batch-score and dedup-match routes chunks 5/6
-deferred — nothing in the repo enqueues a real arq job from an HTTP route
-yet, and that plumbing lands together with the export route.
+Rubric-management routes remain deferred to their own chunk.
 """
 
 from __future__ import annotations
@@ -14,13 +11,16 @@ import uuid
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from nawa_api.contracts.errors import ApiError
+from nawa_api.contracts.errors import ERR_RATE_LIMITED, ApiError
 from nawa_api.contracts.iam import Permission
+from nawa_api.jobs.export_shortlist import export_shortlist
+from nawa_api.middleware.audit import audited
 from nawa_api.middleware.iam import require_permission
 from nawa_api.services.audit.create_audit_log import create_audit_log
 from nawa_api.services.intake.decide_application import decide_application
 from nawa_api.services.intake.get_scorecard import get_scorecard
 from nawa_api.services.intake.list_shortlist import list_shortlist
+from nawa_api.services.rate_limit.consume import consume
 from nawa_api.utils.envelope import ok
 from nawa_api.utils.request_context import request_id_var
 
@@ -122,3 +122,13 @@ async def create_decision_route(id: uuid.UUID, body: CreateDecisionInput):
                 request_id=request_id_var.get(),
                 body=body.model_dump(),
             )
+
+
+@router.get("/intake/cycles/{cycle_id}/export")
+@audited(action="intake.export.create", target_type="intake_cycle")
+async def export_shortlist_route(cycle_id: uuid.UUID):
+    session = await require_permission(Permission.INTAKE_EXPORT)
+    result = await consume(scope="intake_export", identifier=session.sub, limit=5)
+    if not result.allowed:
+        raise ERR_RATE_LIMITED
+    return ok(await export_shortlist(cycle_id=cycle_id))

@@ -222,3 +222,58 @@ async def test_decision_route_accept_creates_cohort_membership(client):
     data = resp.json()["data"]
     assert data["decision"] == "accept"
     assert data["profile_id"] is not None
+
+
+@pytest.mark.asyncio
+async def test_export_route_returns_a_presigned_url(client):
+    program = await create_program_db(slug="p8", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c8", name_en="C")
+    rubric = await create_rubric_db(
+        program_id=program.id, version=1, criteria=_CRITERIA, name_en="R", status="active"
+    )
+    app = await _scored_application(cycle_id=cycle.id, rubric_id=rubric.id, total_score=80.0)
+
+    headers = await _bearer(client, email="exporter@example.com", group="Administrators")
+    decide_resp = await client.post(
+        f"/api/v1/intake/applications/{app.id}/decision",
+        json={"decision": "shortlist"},
+        headers=headers,
+    )
+    assert decide_resp.status_code == 200
+
+    resp = await client.get(f"/api/v1/intake/cycles/{cycle.id}/export", headers=headers)
+    assert resp.status_code == 200
+    data = resp.json()["data"]
+    assert data["row_count"] == 1
+    assert data["url"] is not None
+
+
+@pytest.mark.asyncio
+async def test_export_route_requires_export_permission(client):
+    headers = await _bearer(client, email="member4@example.com", group="Members")
+    resp = await client.get(
+        f"/api/v1/intake/cycles/{uuid.uuid4()}/export", headers=headers
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_export_route_missing_cycle_returns_404(client):
+    headers = await _bearer(client, email="exporter2@example.com", group="Administrators")
+    resp = await client.get(
+        f"/api/v1/intake/cycles/{uuid.uuid4()}/export", headers=headers
+    )
+    assert resp.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_export_route_rate_limited_after_five_calls(client):
+    program = await create_program_db(slug="p9", kind="competition", name_en="P")
+    cycle = await create_program_cycle_db(program_id=program.id, slug="c9", name_en="C")
+
+    headers = await _bearer(client, email="exporter3@example.com", group="Administrators")
+    for _ in range(5):
+        resp = await client.get(f"/api/v1/intake/cycles/{cycle.id}/export", headers=headers)
+        assert resp.status_code == 200
+    resp = await client.get(f"/api/v1/intake/cycles/{cycle.id}/export", headers=headers)
+    assert resp.status_code == 429
