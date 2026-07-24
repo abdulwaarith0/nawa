@@ -7,6 +7,7 @@ from arq.connections import RedisSettings
 from nawa_api.jobs.dedup_scan import dedup_scan
 from nawa_api.jobs.embed_application import embed_application
 from nawa_api.jobs.embed_resource import embed_resource
+from nawa_api.jobs.hidden_gem_scan import hidden_gem_scan
 from nawa_api.jobs.normalize_applications import normalize_application
 from nawa_api.jobs.purge_audit_logs import purge_audit_logs
 from nawa_api.jobs.score_applications import score_application
@@ -36,6 +37,7 @@ class WorkerSettings:
         score_cycle,
         embed_application,
         dedup_scan,
+        hidden_gem_scan,
         _noop,
     ]
     cron_jobs = [cron(purge_audit_logs, hour=3, minute=0)]

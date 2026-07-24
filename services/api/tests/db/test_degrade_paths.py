@@ -53,6 +53,7 @@ from nawa_api.db.intake.list_scorecards_for_application_db import (
 )
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
+from nawa_api.db.intake.update_scorecard_hidden_gem_db import update_scorecard_hidden_gem_db
 from nawa_api.db.intake.upsert_dedup_match_db import upsert_dedup_match_db
 from nawa_api.db.journey.create_assistant_message_db import create_assistant_message_db
 from nawa_api.db.journey.create_assistant_thread_db import create_assistant_thread_db
@@ -197,6 +198,11 @@ _CASES = [
     (
         update_application_scoring_db,
         dict(application_id=_ID, total_score=1.0),
+        False,
+    ),
+    (
+        update_scorecard_hidden_gem_db,
+        dict(scorecard_id=_ID, hidden_gem=True, hidden_gem_reason_ar="a", hidden_gem_reason_en="e"),
         False,
     ),
     (

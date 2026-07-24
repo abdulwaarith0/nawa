@@ -23,11 +23,12 @@ from nawa_api.db.intake.list_scorecards_for_application_db import (
 )
 from nawa_api.db.intake.list_similar_applications_db import list_similar_applications_db
 from nawa_api.db.intake.update_application_scoring_db import update_application_scoring_db
+from nawa_api.db.intake.update_scorecard_hidden_gem_db import update_scorecard_hidden_gem_db
 from nawa_api.db.intake.upsert_dedup_match_db import upsert_dedup_match_db
 from nawa_api.db.programs.create_program_cycle_db import create_program_cycle_db
 from nawa_api.db.programs.create_program_db import create_program_db
 from nawa_api.db.users.create_user_db import create_user_db
-from nawa_api.models.intake import DedupMatch
+from nawa_api.models.intake import DedupMatch, Scorecard
 from nawa_api.runtime.settings import get_settings
 
 _DIM = get_settings().embeddings_dimension
@@ -397,3 +398,57 @@ async def test_list_applications_by_email_db_finds_matches_across_cycles(db_sess
 
     rows = await list_applications_by_email_db(applicant_email=shared_email, session=db_session)
     assert {r.id for r in rows} == {app_17.id, app_18.id}
+
+
+@pytest.mark.asyncio
+async def test_update_scorecard_hidden_gem_db_round_trips(db_session):
+    program = await create_program_db(
+        slug=f"gem-update-{uuid.uuid4().hex[:8]}",
+        kind="competition",
+        name_en="P",
+        session=db_session,
+    )
+    cycle = await create_program_cycle_db(
+        program_id=program.id, slug="c1", name_en="C", session=db_session
+    )
+    rubric = await create_rubric_db(
+        program_id=program.id,
+        version=1,
+        criteria=[{"key": "novelty", "weight": 1.0, "scale_max": 10}],
+        name_en="R",
+        session=db_session,
+    )
+    app = await create_application_db(
+        cycle_id=cycle.id,
+        applicant_name="A",
+        applicant_email=f"{uuid.uuid4().hex[:8]}@example.com",
+        source_language="en",
+        original_answers={"q1": "idea"},
+        session=db_session,
+    )
+    scorecard = await create_scorecard_db(
+        application_id=app.id,
+        rubric_id=rubric.id,
+        rubric_version=1,
+        prompt_version="v2",
+        source="ai",
+        total_score=10.0,
+        session=db_session,
+    )
+    assert scorecard.hidden_gem is False
+
+    updated = await update_scorecard_hidden_gem_db(
+        scorecard_id=scorecard.id,
+        hidden_gem=True,
+        hidden_gem_reason_ar="سبب",
+        hidden_gem_reason_en="Strong idea, weak prose.",
+        session=db_session,
+    )
+    assert updated is True
+
+    stmt = select(Scorecard).where(Scorecard.id == scorecard.id).execution_options(
+        populate_existing=True
+    )
+    refreshed = (await db_session.execute(stmt)).scalar_one()
+    assert refreshed.hidden_gem is True
+    assert refreshed.hidden_gem_reason_en == "Strong idea, weak prose."

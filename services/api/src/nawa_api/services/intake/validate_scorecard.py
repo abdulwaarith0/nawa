@@ -7,9 +7,8 @@ both mandatory:
 1. The draft's criterion keys must exactly match the rubric's — no more, no
    fewer, nothing renamed.
 2. Every citation's `source` must resolve to a real place in the application
-   (an `answer:<question_key>` in `original_answers`, or a
-   `document:<document_id>` with extracted text), and its `quote` must appear
-   verbatim (after whitespace normalization) in that source's text.
+   and its `quote` must appear verbatim (see `_citations.citations_are_verbatim`
+   — shared with hidden-gem review validation, per spec).
 
 A citation that doesn't check out is a hallucination, and a hallucinated
 quote means the whole scorecard is untrustworthy — there is no partial
@@ -19,34 +18,11 @@ anything from a draft that fails this check.
 
 from __future__ import annotations
 
-import re
 import uuid
 
 from nawa_api.ai.prompts.score_application import ScorecardDraft
 from nawa_api.contracts.errors import ERR_AI_MALFORMED_OUTPUT
-
-_WS_RE = re.compile(r"\s+")
-
-
-def _normalize_ws(text: str) -> str:
-    return _WS_RE.sub(" ", text).strip()
-
-
-def _resolve_source(
-    source: str,
-    *,
-    original_answers: dict[str, str],
-    document_texts: dict[uuid.UUID, str],
-) -> str | None:
-    if source.startswith("answer:"):
-        return original_answers.get(source.removeprefix("answer:"))
-    if source.startswith("document:"):
-        try:
-            doc_id = uuid.UUID(source.removeprefix("document:"))
-        except ValueError:
-            return None
-        return document_texts.get(doc_id)
-    return None
+from nawa_api.services.intake._citations import citations_are_verbatim
 
 
 def validate_scorecard(
@@ -58,18 +34,12 @@ def validate_scorecard(
 ) -> None:
     """Raises ERR_AI_MALFORMED_OUTPUT if the draft's keys or citations don't
     check out. Returns None (no exception) when the draft is trustworthy."""
-    document_texts = document_texts or {}
-
     draft_keys = {criterion.criterion_key for criterion in draft.criteria}
     if draft_keys != criterion_keys:
         raise ERR_AI_MALFORMED_OUTPUT
 
     for criterion in draft.criteria:
-        for citation in criterion.citations:
-            source_text = _resolve_source(
-                citation.source, original_answers=original_answers, document_texts=document_texts
-            )
-            if source_text is None:
-                raise ERR_AI_MALFORMED_OUTPUT
-            if _normalize_ws(citation.quote) not in _normalize_ws(source_text):
-                raise ERR_AI_MALFORMED_OUTPUT
+        if not citations_are_verbatim(
+            criterion.citations, original_answers=original_answers, document_texts=document_texts
+        ):
+            raise ERR_AI_MALFORMED_OUTPUT

@@ -71,7 +71,7 @@ async def ai_is_gem(entry: HiddenGemEntry, *, provider_name: str | None = "mock"
     review, _ = await gateway.complete_structured(
         request, HiddenGemReview, pii_safe=True, provider_name=provider_name
     )
-    return review.is_gem
+    return review.is_hidden_gem
 
 
 async def run_evals(
