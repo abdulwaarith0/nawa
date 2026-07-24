@@ -55,14 +55,17 @@ async def test_eval_fixture_creates_and_tears_down_cleanly(bound):
     ).scalar_one_or_none() is None
 
 
-async def test_ai_overall_intake_via_real_mock_returns_zero_and_cleans_up(bound):
-    # No monkeypatching: MockLLMProvider's synthesized citations/criterion
-    # keys never pass validate_scorecard, so this legitimately falls back to
-    # 0.0 — the confirmed, honest offline behavior (see intake_pipeline.py).
+async def test_ai_overall_intake_via_real_mock_grounds_citations_and_scores(bound):
+    # No monkeypatching: MockLLMProvider grounds each criterion's citation in
+    # a real "answer:<key>" quote from the rendered application text
+    # (ai/providers/mock_provider.py), so validate_scorecard now accepts it
+    # on the first attempt and a real, deterministic (fingerprint-seeded)
+    # nonzero score comes back — this used to legitimately fall back to 0.0
+    # before that grounding existed.
     entry = _scored_entry()
     async with EvalFixture() as fixture:
         score = await ai_overall_intake(entry, fixture=fixture, provider_name="mock")
-        assert score == 0.0
+        assert score == 22.0
         remaining = (
             await bound.execute(
                 select(Application).where(Application.cycle_id == fixture.cycle_id)
@@ -105,11 +108,14 @@ async def test_ai_overall_intake_reads_back_a_real_score_on_success(bound, monke
         assert remaining == []  # torn down even after a successful score
 
 
-async def test_ai_is_gem_intake_via_real_mock_returns_false_and_cleans_up(bound):
+async def test_ai_is_gem_intake_via_real_mock_grounds_citations_and_cleans_up(bound):
+    # Grounded citations mean validate_hidden_gem_review now accepts the
+    # mock's output too; `is_hidden_gem` itself is fingerprint-varied (see
+    # mock_provider.py's `_ground_citations`) rather than always True.
     entry = HiddenGemEntry(application_ref="g1", text="weak prose, strong idea", is_gem=True)
     async with EvalFixture() as fixture:
         result = await ai_is_gem_intake(entry, fixture=fixture, provider_name="mock")
-        assert result is False
+        assert result is True
         remaining = (
             await bound.execute(
                 select(Application).where(Application.cycle_id == fixture.cycle_id)

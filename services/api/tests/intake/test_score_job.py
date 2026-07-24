@@ -7,6 +7,7 @@ from sqlalchemy import select
 from nawa_api.ai.prompts.score_application import Citation, CriterionScore, ScorecardDraft
 from nawa_api.db.intake.create_application_db import create_application_db
 from nawa_api.db.intake.create_rubric_db import create_rubric_db
+from nawa_api.db.intake.list_scorecard_criteria_db import list_scorecard_criteria_db
 from nawa_api.db.intake.list_scorecards_for_application_db import (
     list_scorecards_for_application_db,
 )
@@ -207,16 +208,27 @@ def test_application_text_includes_summary_when_present():
     assert "summary: A concise AI summary." in text
 
 
-async def test_score_via_real_mock_provider_fails_validation_and_is_retriable(bound):
-    # No monkeypatch on the gateway here: MockLLMProvider synthesizes structurally-valid
-    # but semantically-meaningless criterion keys/quotes, so validate_scorecard rejects
-    # every attempt and the job reports score_failed without touching application status.
+async def test_score_via_real_mock_provider_grounds_citations_and_succeeds(bound):
+    # No monkeypatch on the gateway here: MockLLMProvider grounds each
+    # criterion's citation in a real "answer:<key>" quote pulled verbatim out
+    # of the rendered application text (ai/providers/mock_provider.py), so
+    # validate_scorecard accepts it on the first attempt — the real pipeline
+    # works end to end even fully offline, not just when the gateway call is
+    # monkeypatched to a hand-built valid draft.
     rubric, app = await _rubric_and_application(
         bound, answers={"idea": "we build low-cost water sensors for farms"}
     )
 
     result = await score_application(application_id=str(app.id), rubric_id=str(rubric.id))
-    assert result == "score_failed"
+    assert result == "scored"
 
     row = await _fresh(bound, app.id)
-    assert row.status == "submitted"
+    assert row.status == "scored"
+    assert row.ai_total_score is not None
+
+    scorecards = await list_scorecards_for_application_db(application_id=app.id, session=bound)
+    assert len(scorecards) == 1
+    criteria = await list_scorecard_criteria_db(scorecard_ids=[scorecards[0].id], session=bound)
+    assert len(criteria) == 2
+    for criterion in criteria:
+        assert all(c["source"] == "answer:idea" for c in criterion.citations)

@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "i18n:check": "node scripts/i18n-check.mjs",
-    "lint": "biome check ."
+    "lint": "biome check .",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@nawa/api-client": "workspace:*",
@@ -23,6 +24,7 @@
     "swr": "2.2.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "16.0.1",
     "@testing-library/user-event": "14.5.2",
