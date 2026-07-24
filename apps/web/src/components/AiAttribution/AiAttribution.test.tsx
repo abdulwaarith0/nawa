@@ -34,4 +34,17 @@ describe("AiAttribution", () => {
     renderWithLocale(<AiAttribution>x</AiAttribution>, "en");
     expect(screen.queryByText("How was this produced?")).not.toBeInTheDocument();
   });
+
+  it("compact mode renders the sparkle + children without the label text or disclosure", () => {
+    renderWithLocale(
+      <AiAttribution compact how={<p>details</p>}>
+        Gem
+      </AiAttribution>,
+      "en",
+    );
+    expect(screen.getByText("✦")).toBeInTheDocument();
+    expect(screen.getByText("Gem")).toBeInTheDocument();
+    expect(screen.queryByText("AI-generated")).not.toBeInTheDocument();
+    expect(screen.queryByText("How was this produced?")).not.toBeInTheDocument();
+  });
 });

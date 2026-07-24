@@ -4,6 +4,8 @@ export { default as AuditWrapper } from "./AuditWrapper";
 export { default as CommunityWrapper } from "./CommunityWrapper";
 export { default as IamGroupsWrapper } from "./IamGroupsWrapper";
 export { default as IamPoliciesWrapper } from "./IamPoliciesWrapper";
+export { default as IntakeScorecardWrapper } from "./IntakeScorecardWrapper";
+export { default as IntakeShortlistWrapper } from "./IntakeShortlistWrapper";
 export { default as IntakeWrapper } from "./IntakeWrapper";
 export { default as JourneyWrapper } from "./JourneyWrapper";
 export { default as LoginWrapper } from "./LoginWrapper";

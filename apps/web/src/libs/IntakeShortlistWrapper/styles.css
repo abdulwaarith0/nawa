@@ -1,0 +1,23 @@
+.nw-intake-subtitle {
+  color: var(--nw-ink-600);
+  margin-block-end: var(--nw-space-4);
+}
+.nw-shortlist-filters,
+.nw-shortlist-bulk-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nw-space-2);
+  align-items: center;
+  margin-block-end: var(--nw-space-4);
+}
+.nw-shortlist-flag-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nw-space-1);
+  font-size: var(--nw-text-sm);
+}
+.nw-shortlist-flags {
+  display: inline-flex;
+  gap: var(--nw-space-1);
+  flex-wrap: wrap;
+}

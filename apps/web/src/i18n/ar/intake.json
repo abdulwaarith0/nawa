@@ -1,0 +1,126 @@
+{
+  "upload": {
+    "title": "رفع الطلبات",
+    "subtitle": "اختر دورة، ثم ارفع دفعة أو أضف طلبًا واحدًا يدويًا.",
+    "cyclePicker": {
+      "label": "الدورة",
+      "placeholder": "اختر دورة"
+    },
+    "dropzone": {
+      "label": "اسحب ملف CSV أو XLSX أو JSON هنا",
+      "hint": "أو",
+      "chooseFile": "اختر ملفًا"
+    },
+    "columnMap": {
+      "title": "ربط الأعمدة",
+      "subtitle": "طابق كل عمود مصدر بحقل. الأعمدة غير المطابقة تُحفظ ولا تُحذف.",
+      "applicantName": "اسم المتقدم",
+      "applicantEmail": "بريد المتقدم الإلكتروني",
+      "phone": "الهاتف",
+      "country": "الدولة",
+      "unmapped": "غير مطابق (يُحفظ كبيانات إضافية)",
+      "questionKey": "مفتاح السؤال"
+    },
+    "submit": "رفع الدفعة",
+    "submitting": "جارٍ الرفع…",
+    "uploadedSummary": "تم استلام {count} طلبًا",
+    "runScoring": "بدء التقييم",
+    "scoring": "جارٍ التقييم…",
+    "progress": {
+      "normalizing": "التطبيع {done}/{total}",
+      "scoring": "التقييم {done}/{total}",
+      "stopped": "توقف: {reason}"
+    },
+    "errors": {
+      "noFile": "اختر ملفًا أولاً.",
+      "noCycle": "اختر دورة أولاً."
+    }
+  },
+  "shortlist": {
+    "title": "القائمة المختصرة",
+    "subtitle": "مرتبة حسب تقييم الذكاء الاصطناعي مقابل معيار الدورة الفعّال.",
+    "filters": {
+      "scoreBand": "نطاق التقييم",
+      "criterion": "المعيار",
+      "criterionMin": "الحد الأدنى للتقييم",
+      "language": "اللغة",
+      "country": "الدولة",
+      "decision": "القرار",
+      "search": "بحث في العنوان أو الملخص",
+      "flags": {
+        "hiddenGem": "جوهرة خفية",
+        "dedupPending": "تكرار محتمل",
+        "normalizeFailed": "فشل التطبيع"
+      },
+      "anyLanguage": "أي لغة",
+      "anyDecision": "أي قرار",
+      "clear": "مسح عوامل التصفية"
+    },
+    "columns": {
+      "rank": "الترتيب",
+      "applicant": "المتقدم",
+      "title": "العنوان",
+      "language": "اللغة",
+      "country": "الدولة",
+      "score": "التقييم",
+      "decision": "القرار"
+    },
+    "decisionStates": {
+      "undecided": "غير محسوم",
+      "shortlist": "في القائمة المختصرة",
+      "waitlist": "في قائمة الانتظار",
+      "reject": "مرفوض",
+      "accept": "مقبول",
+      "decided": "تم القرار"
+    },
+    "empty": "لا توجد طلبات تطابق عوامل التصفية هذه بعد.",
+    "export": "تصدير القائمة المختصرة"
+  },
+  "scorecard": {
+    "title": "بطاقة تقييم الطلب",
+    "backToShortlist": "العودة إلى القائمة المختصرة",
+    "rubricVersion": "مُقيّم وفق الإصدار {version}",
+    "sourceLanguage": "لغة المصدر",
+    "noScorecard": "لم يتم تقييم هذا الطلب بعد.",
+    "scoringFailed": "فشل تقييم هذا الطلب.",
+    "retryScoring": "إعادة محاولة التقييم",
+    "hiddenGem": {
+      "title": "جوهرة خفية",
+      "body": "فكرة قوية بعرض ضعيف — تمت المراجعة على أساس الجوهر، لا جودة الكتابة."
+    },
+    "dedup": {
+      "title": "تقديم سابق محتمل",
+      "empty": "لم يُعثر على تكرارات محتملة.",
+      "similarity": "تطابق {pct}%",
+      "viewApplication": "عرض الطلب",
+      "confirm": "تأكيد التكرار",
+      "dismiss": "تجاهل"
+    },
+    "documents": {
+      "title": "المستندات",
+      "empty": "لا توجد مستندات مرفقة."
+    },
+    "history": {
+      "title": "سجل القرارات",
+      "empty": "لا توجد قرارات بعد.",
+      "overrodeBand": "تجاوز توصية الذكاء الاصطناعي ({band})"
+    }
+  },
+  "decision": {
+    "title": "اتخاذ القرار",
+    "aiBand": "توصية الذكاء الاصطناعي: {band}",
+    "actions": {
+      "shortlist": "إضافة للقائمة المختصرة",
+      "waitlist": "قائمة الانتظار",
+      "reject": "رفض",
+      "accept": "قبول في الدفعة"
+    },
+    "reasonLabel": "السبب",
+    "reasonPlaceholder": "ما سبب هذا القرار؟",
+    "reasonRequired": "أنت تتجاوز ترتيب الذكاء الاصطناعي — السبب مطلوب وسيتم تسجيله.",
+    "cohortLabel": "معرّف الدفعة",
+    "cohortRequired": "الدفعة مطلوبة للقبول فيها.",
+    "submit": "إرسال القرار",
+    "submitting": "جارٍ الإرسال…"
+  }
+}

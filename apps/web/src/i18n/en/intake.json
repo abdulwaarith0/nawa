@@ -1,0 +1,126 @@
+{
+  "upload": {
+    "title": "Upload applications",
+    "subtitle": "Pick a cycle, then upload a batch or add one application by hand.",
+    "cyclePicker": {
+      "label": "Cycle",
+      "placeholder": "Select a cycle"
+    },
+    "dropzone": {
+      "label": "Drag a CSV, XLSX, or JSON file here",
+      "hint": "or",
+      "chooseFile": "Choose file"
+    },
+    "columnMap": {
+      "title": "Map columns",
+      "subtitle": "Match each source column to a field. Unmapped columns are kept, not dropped.",
+      "applicantName": "Applicant name",
+      "applicantEmail": "Applicant email",
+      "phone": "Phone",
+      "country": "Country",
+      "unmapped": "Not mapped (kept as extra data)",
+      "questionKey": "Question key"
+    },
+    "submit": "Upload batch",
+    "submitting": "Uploading…",
+    "uploadedSummary": "{count} applications received",
+    "runScoring": "Run scoring",
+    "scoring": "Scoring…",
+    "progress": {
+      "normalizing": "Normalizing {done}/{total}",
+      "scoring": "Scoring {done}/{total}",
+      "stopped": "Stopped: {reason}"
+    },
+    "errors": {
+      "noFile": "Choose a file first.",
+      "noCycle": "Select a cycle first."
+    }
+  },
+  "shortlist": {
+    "title": "Shortlist",
+    "subtitle": "Ranked by AI score against the cycle's active rubric.",
+    "filters": {
+      "scoreBand": "Score band",
+      "criterion": "Criterion",
+      "criterionMin": "Minimum score",
+      "language": "Language",
+      "country": "Country",
+      "decision": "Decision",
+      "search": "Search title or summary",
+      "flags": {
+        "hiddenGem": "Hidden gem",
+        "dedupPending": "Possible duplicate",
+        "normalizeFailed": "Normalization failed"
+      },
+      "anyLanguage": "Any language",
+      "anyDecision": "Any decision",
+      "clear": "Clear filters"
+    },
+    "columns": {
+      "rank": "Rank",
+      "applicant": "Applicant",
+      "title": "Title",
+      "language": "Language",
+      "country": "Country",
+      "score": "Score",
+      "decision": "Decision"
+    },
+    "decisionStates": {
+      "undecided": "Undecided",
+      "shortlist": "Shortlisted",
+      "waitlist": "Waitlisted",
+      "reject": "Rejected",
+      "accept": "Accepted",
+      "decided": "Decided"
+    },
+    "empty": "No applications match these filters yet.",
+    "export": "Export shortlist"
+  },
+  "scorecard": {
+    "title": "Application scorecard",
+    "backToShortlist": "Back to shortlist",
+    "rubricVersion": "Scored against v{version}",
+    "sourceLanguage": "Source language",
+    "noScorecard": "This application has not been scored yet.",
+    "scoringFailed": "Scoring failed for this application.",
+    "retryScoring": "Retry scoring",
+    "hiddenGem": {
+      "title": "Hidden gem",
+      "body": "Strong idea, weak presentation — reviewed on substance, not writing quality."
+    },
+    "dedup": {
+      "title": "Possible prior submission",
+      "empty": "No possible duplicates found.",
+      "similarity": "{pct}% match",
+      "viewApplication": "View application",
+      "confirm": "Confirm duplicate",
+      "dismiss": "Dismiss"
+    },
+    "documents": {
+      "title": "Documents",
+      "empty": "No documents attached."
+    },
+    "history": {
+      "title": "Decision history",
+      "empty": "No decisions yet.",
+      "overrodeBand": "overrode the AI recommendation ({band})"
+    }
+  },
+  "decision": {
+    "title": "Decide",
+    "aiBand": "AI recommendation: {band}",
+    "actions": {
+      "shortlist": "Shortlist",
+      "waitlist": "Waitlist",
+      "reject": "Reject",
+      "accept": "Accept into cohort"
+    },
+    "reasonLabel": "Reason",
+    "reasonPlaceholder": "Why this decision?",
+    "reasonRequired": "You are overriding the AI ranking — a reason is required and will be logged.",
+    "cohortLabel": "Cohort ID",
+    "cohortRequired": "A cohort is required to accept into.",
+    "submit": "Submit decision",
+    "submitting": "Submitting…"
+  }
+}

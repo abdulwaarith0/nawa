@@ -1,0 +1,7 @@
+/* .nw-citation — verbatim quote highlighted in situ inside its source
+ * answer text (§6.3.3). Whitespace is preserved (pre-wrap) since original
+ * answers can be multi-line. */
+.nw-citation-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}

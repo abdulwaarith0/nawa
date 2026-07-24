@@ -103,6 +103,7 @@ async def test_full_detail_shape(bound):
 
     item = await get_scorecard(application_id=app.id)
     assert item["application"]["id"] == str(app.id)
+    assert item["application"]["original_answers"] == {"idea": "great idea"}
     assert item["scorecard"]["total_score"] == 72.0
     assert item["scorecard"]["criteria"][0]["citations"] == [
         {"source": "answer:idea", "quote": "great idea"}
@@ -114,6 +115,7 @@ async def test_full_detail_shape(bound):
     assert len(item["decisions"]) == 1
     assert item["decisions"][0]["decision"] == "shortlist"
     assert item["dedup_matches"] == []
+    assert item["ai_band"] in {"shortlist", "waitlist", "reject"}
 
 
 async def test_prior_rubric_version_becomes_history(bound):

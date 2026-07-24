@@ -31,6 +31,7 @@ from nawa_api.db.intake.list_scorecards_for_application_db import (
 from nawa_api.db.programs.get_program_cycle_db import get_program_cycle_db
 from nawa_api.runtime.redis import redis_retrieve_key, redis_update_key
 from nawa_api.services.intake._dto import application_dto
+from nawa_api.services.intake.decide_application import _compute_current_ai_band
 from nawa_api.services.intake.list_dedup_matches import list_dedup_matches
 
 CACHE_TTL_SECONDS = 300
@@ -128,6 +129,7 @@ async def get_scorecard(*, application_id: uuid.UUID) -> dict:
     documents = await list_application_documents_db(application_id=application_id)
     dedup_matches = await list_dedup_matches(application_id=application_id)
     decisions = await list_decisions_for_application_db(application_id=application_id)
+    ai_band, _rubric_version = await _compute_current_ai_band(application)
 
     item = {
         "application": application_dto(application),
@@ -136,6 +138,7 @@ async def get_scorecard(*, application_id: uuid.UUID) -> dict:
         "dedup_matches": dedup_matches,
         "documents": [_document_dto(d) for d in documents],
         "decisions": [_decision_dto(d) for d in decisions],
+        "ai_band": ai_band,
     }
     await redis_update_key(key, _CachedScorecard(item=item), CACHE_TTL_SECONDS)
     return item

@@ -1,0 +1,47 @@
+/* .nw-table — dense data grid (§9). Horizontal scroll owns overflow so a
+ * wide table never blows out the page layout. */
+.nw-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--nw-sand-200);
+  border-radius: var(--nw-radius-md);
+}
+.nw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--nw-text-sm);
+}
+.nw-table thead tr {
+  background: var(--nw-sand-100);
+}
+.nw-table th {
+  text-align: start;
+  padding: var(--nw-space-3) var(--nw-space-4);
+  color: var(--nw-ink-600);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.nw-table th[data-align="end"],
+.nw-table td[data-align="end"] {
+  text-align: end;
+}
+.nw-table td {
+  padding: var(--nw-space-3) var(--nw-space-4);
+  border-block-start: 1px solid var(--nw-sand-200);
+  color: var(--nw-ink-900);
+  vertical-align: middle;
+}
+.nw-table-row-clickable {
+  cursor: pointer;
+}
+.nw-table-row-clickable:hover {
+  background: var(--nw-sand-50);
+}
+.nw-table-row-clickable:focus-visible {
+  outline: 2px solid var(--nw-teal-500);
+  outline-offset: -2px;
+}
+.nw-table-empty {
+  padding: var(--nw-space-8);
+  text-align: center;
+  color: var(--nw-ink-600);
+}

@@ -169,6 +169,7 @@ async def test_get_application_is_cached(monkeypatch):
             title = None
             summary = None
             normalized = {}
+            original_answers = {}
             status = "submitted"
             ai_total_score = None
 

@@ -1,0 +1,40 @@
+.nw-criterion-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-space-2);
+}
+.nw-criterion-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--nw-space-2);
+}
+.nw-criterion-key {
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--nw-ink-900);
+}
+.nw-criterion-score {
+  font-size: var(--nw-text-lg, 18px);
+  font-weight: 700;
+  color: var(--nw-teal-700);
+}
+.nw-criterion-weight {
+  font-size: var(--nw-text-sm);
+  color: var(--nw-ink-600);
+}
+.nw-criterion-rationale {
+  color: var(--nw-ink-900);
+  line-height: 1.6;
+}
+.nw-criterion-citations {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-space-2);
+}
+.nw-criterion-citation-fallback {
+  color: var(--nw-ink-600);
+  font-style: italic;
+}

@@ -28,6 +28,7 @@ def application_dto(row) -> dict:
         "title": row.title,
         "summary": row.summary,
         "normalized": row.normalized,
+        "original_answers": row.original_answers,
         "status": row.status,
         "ai_total_score": row.ai_total_score,
         "submitted_at": row.submitted_at.isoformat(),
