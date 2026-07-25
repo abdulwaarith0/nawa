@@ -6,8 +6,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/hooks/Auth", () => ({
   usePermissions: () => ({ has: () => true, isLoading: false, isSignedIn: true }),
+  useSession: () => ({ user: null, isLoading: false, isSignedIn: false }),
 }));
-vi.mock("next/navigation", () => ({ usePathname: () => "/intake" }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/intake",
+  useSearchParams: () => new URLSearchParams(),
+}));
 
 const cycles = vi.hoisted(() => [
   {
@@ -29,6 +33,7 @@ vi.mock("@/hooks/Intake", () => ({
   useTriggerScore: () => ({ run: vi.fn(), isPending: false, error: undefined }),
   useUploadProgress: () => ({ total: 0, done: 0, failed: 0, stoppedReason: null }),
   useScoreProgress: () => ({ total: 0, done: 0, failed: 0, stoppedReason: null }),
+  useShortlist: () => ({ rows: undefined, error: undefined, isLoading: false, refresh: vi.fn() }),
 }));
 
 describe("IntakeWrapper column mapping", () => {
@@ -48,7 +53,7 @@ describe("IntakeWrapper column mapping", () => {
     await userEvent.upload(fileInput, file);
 
     await waitFor(() => {
-      expect(screen.getByText("Map columns")).toBeInTheDocument();
+      expect(screen.getAllByText("Map columns").length).toBeGreaterThan(0);
     });
 
     // Every <select> in the mapping rows must resolve every option's i18n
@@ -61,7 +66,7 @@ describe("IntakeWrapper column mapping", () => {
       "Phone",
       "Country",
       "Question key",
-      "Not mapped (kept as extra data)",
+      "Not mapped",
     ]) {
       expect(screen.getAllByText(label).length).toBeGreaterThan(0);
     }

@@ -1,0 +1,96 @@
+.nw-console-stat {
+  padding: 16px;
+}
+.nw-console-stat-label {
+  color: var(--nw-text-tertiary);
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-medium);
+}
+.nw-console-stat-value {
+  margin-block-start: 6px;
+  font-size: 28px;
+  font-weight: var(--nw-font-weight-semibold);
+  color: var(--nw-text-primary);
+}
+.nw-console-stat-sub {
+  margin-block-start: 4px;
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-quaternary);
+}
+
+.nw-console-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.nw-console-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+.nw-console-table th {
+  text-align: start;
+  padding: 12px 16px;
+  font-size: var(--nw-font-size-caption);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-quaternary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-block-end: 1px solid var(--nw-border-default);
+}
+.nw-console-table td {
+  padding: 12px 16px;
+  border-block-end: 1px solid var(--nw-border-subtle);
+  font-size: var(--nw-font-size-small);
+  vertical-align: middle;
+}
+.nw-console-row-link {
+  color: var(--nw-text-primary);
+  font-weight: var(--nw-font-weight-medium);
+  text-decoration: none;
+}
+.nw-console-row-link:hover {
+  text-decoration: underline;
+}
+.nw-console-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-inline-size: 160px;
+}
+.nw-console-score .nw-progress {
+  flex: 1;
+}
+.nw-console-table-footer {
+  padding: 14px 16px;
+  border-block-start: 1px solid var(--nw-border-default);
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-tertiary);
+}
+
+.nw-console-rail-score {
+  padding: 16px 16px 0;
+  font-size: 32px;
+  font-weight: var(--nw-font-weight-semibold);
+  color: var(--nw-text-primary);
+}
+.nw-console-rail-name {
+  padding: 0 16px;
+  margin-block-end: 12px;
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-tertiary);
+}
+.nw-console-rail-criteria {
+  display: grid;
+  gap: 10px;
+  padding: 0 16px;
+  max-block-size: 420px;
+  overflow-y: auto;
+}
+.nw-console-rail-link {
+  display: block;
+  text-align: center;
+  margin: 16px;
+}
+.nw-console-panel > .nw-ai-attribution-compact {
+  margin: 16px 16px 0;
+}

@@ -1,25 +1,73 @@
 {
+  "console": {
+    "eyebrow": "Intake Copilot",
+    "title": "Screening console",
+    "subtitle": "AI drafts the ranking, you decide.",
+    "filters": "Filters",
+    "auditLog": "Audit log",
+    "noCycleTitle": "No intake cycle yet",
+    "noCycleBody": "Upload a batch once a cycle is open to see it here.",
+    "stats": {
+      "scored": "Scored",
+      "shortlisted": "Shortlisted",
+      "inReview": "In review",
+      "avgScore": "Avg AI score",
+      "ofReceived": "of {count} received",
+      "awaitingDecision": "awaiting decision"
+    },
+    "table": {
+      "score": "AI score",
+      "flags": "Flags"
+    },
+    "showing": "Showing {count} of {total} scored",
+    "viewFullShortlist": "View full shortlist",
+    "viewScorecard": "View scorecard"
+  },
+  "audit": {
+    "title": "Intake audit log",
+    "subtitle": "Scoring runs, decisions, and dedup resolutions — most recent first.",
+    "empty": "No intake audit entries yet.",
+    "columns": {
+      "actor": "Actor",
+      "action": "Action",
+      "target": "Target",
+      "date": "When"
+    }
+  },
   "upload": {
-    "title": "Upload applications",
-    "subtitle": "Pick a cycle, then upload a batch or add one application by hand.",
+    "eyebrow": "Intake Copilot",
+    "title": "Upload batch",
+    "cancel": "Cancel",
+    "back": "Back",
+    "subtitle": "Import applications, then let AI score them.",
+    "steps": {
+      "upload": "Upload",
+      "mapping": "Map columns",
+      "scoring": "Score",
+      "done": "Done"
+    },
     "cyclePicker": {
       "label": "Cycle",
       "placeholder": "Select a cycle"
     },
     "dropzone": {
-      "label": "Drag a CSV, XLSX, or JSON file here",
-      "hint": "or",
-      "chooseFile": "Choose file"
+      "label": "Drop your applicant file here",
+      "formats": "CSV, XLSX, or JSON · one row per applicant",
+      "chooseFile": "Browse files"
     },
     "columnMap": {
       "title": "Map columns",
-      "subtitle": "Match each source column to a field. Unmapped columns are kept, not dropped.",
+      "subtitle": "We matched your columns to Nawa fields — adjust any that look wrong. Unmapped columns are kept, not scored.",
       "applicantName": "Applicant name",
       "applicantEmail": "Applicant email",
       "phone": "Phone",
       "country": "Country",
-      "unmapped": "Not mapped (kept as extra data)",
-      "questionKey": "Question key"
+      "unmapped": "Not mapped",
+      "notScored": "Not scored",
+      "questionKey": "Question key",
+      "addRow": "Add column",
+      "ready": "Required fields mapped",
+      "needsRequired": "Map applicant name and email to continue"
     },
     "submit": "Upload batch",
     "submitting": "Uploading…",
@@ -30,6 +78,15 @@
       "normalizing": "Normalizing {done}/{total}",
       "scoring": "Scoring {done}/{total}",
       "stopped": "Stopped: {reason}"
+    },
+    "done": {
+      "title": "Batch scored",
+      "body": "{count} applications normalized. Ready for your decisions.",
+      "scored": "Scored",
+      "shortlisted": "Shortlisted",
+      "avgScore": "Avg AI score",
+      "viewShortlist": "View shortlist",
+      "viewAudit": "View audit log"
     },
     "errors": {
       "noFile": "Choose a file first.",
@@ -54,6 +111,8 @@
         "normalizeFailed": "Normalization failed"
       },
       "anyLanguage": "Any language",
+      "languageEn": "English",
+      "languageAr": "Arabic",
       "anyDecision": "Any decision",
       "clear": "Clear filters"
     },

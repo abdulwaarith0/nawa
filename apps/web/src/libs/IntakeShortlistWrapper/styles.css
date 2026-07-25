@@ -1,23 +1,73 @@
-.nw-intake-subtitle {
-  color: var(--nw-ink-600);
-  margin-block-end: var(--nw-space-4);
-}
-.nw-shortlist-filters,
-.nw-shortlist-bulk-bar {
+.nw-shortlist-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--nw-space-2);
-  align-items: center;
-  margin-block-end: var(--nw-space-4);
+  gap: 6px;
+  margin-block-end: 14px;
 }
-.nw-shortlist-flag-check {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--nw-space-1);
-  font-size: var(--nw-text-sm);
+.nw-shortlist-tab {
+  border: 1px solid var(--nw-border-default);
+  border-radius: var(--nw-radius-pill);
+  padding: 7px 14px;
+  background: var(--nw-surface-card);
+  color: var(--nw-text-secondary);
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
+  cursor: pointer;
 }
+.nw-shortlist-tab[data-active="true"] {
+  border-color: var(--nw-action-primary);
+  background: var(--nw-color-green-50);
+  color: var(--nw-action-primary);
+}
+
+.nw-shortlist-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 16px;
+  margin-block-end: 16px;
+}
+.nw-shortlist-filters > .nw-field {
+  min-inline-size: 160px;
+}
+
 .nw-shortlist-flags {
   display: inline-flex;
-  gap: var(--nw-space-1);
+  gap: 6px;
   flex-wrap: wrap;
+}
+
+.nw-shortlist-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-block-start: 16px;
+}
+.nw-shortlist-pagination-label {
+  color: var(--nw-text-tertiary);
+  font-size: var(--nw-font-size-small);
+}
+
+.nw-shortlist-bulk-bar {
+  position: sticky;
+  inset-block-end: 20px;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-block-start: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--nw-border-default);
+  border-radius: var(--nw-radius-item);
+  background: var(--nw-surface-card);
+  box-shadow: var(--nw-shadow-elevated);
+}
+.nw-shortlist-bulk-count {
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-primary);
+  white-space: nowrap;
 }

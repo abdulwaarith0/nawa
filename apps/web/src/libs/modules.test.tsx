@@ -10,7 +10,10 @@ vi.mock("@/hooks/Auth", () => ({
   useSession: () => ({ user: null, isSignedIn: false }),
   usePermissions: () => ({ has: () => perm.allow, isLoading: false, isSignedIn: true }),
 }));
-vi.mock("next/navigation", () => ({ usePathname: () => "/intake" }));
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/intake",
+  useSearchParams: () => new URLSearchParams(),
+}));
 
 // IntakeWrapper is real (chunk 12) rather than a ComingSoon scaffold — stub
 // its data hooks so this render is a pure static-shell check, same as the
@@ -21,21 +24,24 @@ vi.mock("@/hooks/Intake", () => ({
   useTriggerScore: () => ({ run: vi.fn(), isPending: false, error: undefined }),
   useUploadProgress: () => ({ total: 0, done: 0, failed: 0, stoppedReason: null }),
   useScoreProgress: () => ({ total: 0, done: 0, failed: 0, stoppedReason: null }),
+  useShortlist: () => ({ rows: undefined, error: undefined, isLoading: false, refresh: vi.fn() }),
 }));
 
 describe("module scaffolds", () => {
   it("Intake renders inside the console shell when the gate is held", () => {
     perm.allow = true;
     renderWithLocale(<IntakeWrapper />, "en");
-    expect(screen.getByRole("heading", { name: "Upload applications" })).toBeInTheDocument();
-    expect(screen.getByText("Upload batch")).toBeInTheDocument();
+    expect(screen.getAllByText("Upload batch").length).toBeGreaterThan(0);
+    // No cycle is selected yet (none in the list, no ?cycle= param) — the
+    // picker gate shows instead of the dropzone.
+    expect(screen.getByLabelText("Cycle")).toBeInTheDocument();
   });
 
   it("Intake shows the denied state when the console gate is absent", () => {
     perm.allow = false;
     renderWithLocale(<IntakeWrapper />, "en");
     expect(screen.getByText("No access")).toBeInTheDocument();
-    expect(screen.queryByText("Upload batch")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Cycle")).not.toBeInTheDocument();
   });
 
   it("Journey renders its title + placeholder on the member surface", () => {

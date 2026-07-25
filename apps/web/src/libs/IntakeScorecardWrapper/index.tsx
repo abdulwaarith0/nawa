@@ -11,9 +11,12 @@ import {
   ErrorState,
   Loading,
 } from "@/components";
-import DecisionPanel, { type DecisionSubmission } from "@/components/DecisionPanel";
+import DecisionPanel, {
+  type CohortOption,
+  type DecisionSubmission,
+} from "@/components/DecisionPanel";
 import { usePermissions } from "@/hooks/Auth";
-import { useDecision, useResolveDedupMatch, useScorecard } from "@/hooks/Intake";
+import { useCohorts, useDecision, useResolveDedupMatch, useScorecard } from "@/hooks/Intake";
 import { useLocale } from "@/i18n/LocaleProvider";
 import { useT } from "@/i18n/useT";
 import { ConsoleShell, Guard } from "@/layouts";
@@ -33,6 +36,16 @@ export default function IntakeScorecardWrapper({ applicationId }: IProps) {
   const { detail, error, isLoading, refresh } = useScorecard(applicationId);
   const decision = useDecision(applicationId);
   const resolveDedup = useResolveDedupMatch();
+  const { cohorts, isLoading: cohortsLoading } = useCohorts(detail?.application.cycle_id ?? null);
+
+  const cohortOptions: CohortOption[] = (cohorts ?? []).map((cohort) => ({
+    id: cohort.id,
+    label:
+      (locale === "ar" ? cohort.name_ar : cohort.name_en) ??
+      cohort.name_en ??
+      cohort.name_ar ??
+      cohort.id,
+  }));
 
   async function handleDecision(input: DecisionSubmission) {
     await decision.run(input);
@@ -174,6 +187,8 @@ export default function IntakeScorecardWrapper({ applicationId }: IProps) {
             <DecisionPanel
               aiBand={ai_band}
               isPending={decision.isPending}
+              cohorts={cohortOptions}
+              cohortsLoading={cohortsLoading}
               onSubmit={handleDecision}
             />
           </Card>
