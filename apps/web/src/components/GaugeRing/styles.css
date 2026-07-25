@@ -1,0 +1,35 @@
+.nw-gauge {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.nw-gauge-svg {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 290px;
+}
+
+.nw-gauge-tick {
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+.nw-gauge-tick--filled {
+  stroke: var(--nw-color-green-500);
+}
+.nw-gauge-tick--filled-leading {
+  stroke: var(--nw-color-green-400);
+}
+.nw-gauge-tick--empty {
+  stroke: var(--nw-border-strong);
+}
+.nw-gauge-tick--empty-trailing {
+  stroke: var(--nw-chart-comparison);
+}
+
+.nw-gauge-content {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 2px;
+  text-align: center;
+}

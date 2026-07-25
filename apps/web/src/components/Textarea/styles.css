@@ -1,0 +1,5 @@
+.nw-textarea {
+  min-block-size: 96px;
+  resize: vertical;
+  font: inherit;
+}
