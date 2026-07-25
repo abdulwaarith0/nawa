@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, ForeignKey, UniqueConstraint, func, text
+from sqlalchemy import CheckConstraint, ForeignKey, Index, UniqueConstraint, func, text
 from sqlalchemy.dialects.postgresql import ARRAY, CITEXT, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -165,6 +165,30 @@ class Notification(Base):
 
     __table_args__ = (
         CheckConstraint("title_ar IS NOT NULL OR title_en IS NOT NULL", name="title"),
+    )
+
+
+class MembershipRequest(Base):
+    __tablename__ = "membership_requests"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    full_name: Mapped[str] = mapped_column(nullable=False)
+    email: Mapped[str] = mapped_column(CITEXT, nullable=False)
+    organization: Mapped[str | None]
+    reason: Mapped[str | None]
+    status: Mapped[str] = mapped_column(nullable=False, server_default="pending")
+    reviewed_by_user_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    reviewed_at: Mapped[datetime | None]
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
+
+    __table_args__ = (
+        CheckConstraint("status IN ('pending','approved','rejected')", name="status"),
+        Index("ix_membership_requests_status_created", "status", "created_at"),
     )
 
 

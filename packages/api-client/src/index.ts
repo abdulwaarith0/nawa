@@ -42,6 +42,7 @@ export interface ApiClient {
   auth: {
     login(identifier: string, password: string): Promise<unknown>;
     signup(input: unknown): Promise<unknown>;
+    requestAccess(input: unknown): Promise<unknown>;
     me(): Promise<unknown>;
     logout(): Promise<unknown>;
   };
@@ -147,6 +148,7 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
     auth: {
       login: (identifier, password) => request("POST", "/auth/login", { identifier, password }),
       signup: (input) => request("POST", "/auth/signup", input),
+      requestAccess: (input) => request("POST", "/auth/request-access", input),
       me: () => request("GET", "/auth/me"),
       logout: () => request("POST", "/auth/logout"),
     },

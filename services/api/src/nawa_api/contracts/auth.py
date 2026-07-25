@@ -24,6 +24,13 @@ class SignupInput(BaseModel):
     phone: str | None = None
 
 
+class RequestAccessInput(BaseModel):
+    full_name: str = Field(min_length=1)
+    email: str
+    organization: str | None = None
+    reason: str | None = None
+
+
 class LoginInput(BaseModel):
     identifier: str
     password: str

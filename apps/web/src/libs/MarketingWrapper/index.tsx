@@ -42,7 +42,7 @@ export default function MarketingWrapper() {
           Founder Profile spine.
         </p>
         <div style={{ display: "flex", gap: "var(--nw-space-3)", marginTop: "var(--nw-space-8)" }}>
-          <a className="nw-btn nw-btn-primary" href={Routes.signup}>
+          <a className="nw-btn nw-btn-primary" href={Routes.requestAccess}>
             Apply · تقديم
           </a>
           <a className="nw-btn nw-btn-secondary" href={Routes.login}>

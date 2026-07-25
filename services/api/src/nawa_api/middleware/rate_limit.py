@@ -1,7 +1,7 @@
 """Pure-ASGI rate-limit middleware (innermost, so 429s still carry CORS headers).
 
-Default scope rl:api:<ip> at 100/min. Auth overrides: login/signup 10/min,
-forgot/reset 5/min per IP. Bypassed when site_config.rate_limiting_enabled
+Default scope rl:api:<ip> at 100/min. Auth overrides: login/signup/request-access
+10/min, forgot/reset 5/min per IP. Bypassed when site_config.rate_limiting_enabled
 is false (the e2e switch). Over limit → the ERR_RATE_LIMITED envelope with
 Retry-After and X-RateLimit-* headers.
 """
@@ -14,7 +14,7 @@ from nawa_api.services.site_config.get_site_config import get_flag
 
 _DEFAULT_LIMIT = 100
 _AUTH_STRICT_PATHS = ("/api/v1/auth/forgot-password", "/api/v1/auth/reset-password")
-_AUTH_PATHS = ("/api/v1/auth/login", "/api/v1/auth/signup")
+_AUTH_PATHS = ("/api/v1/auth/login", "/api/v1/auth/signup", "/api/v1/auth/request-access")
 
 
 def _scope_and_limit(path: str) -> tuple[str, int]:

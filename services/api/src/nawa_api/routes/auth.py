@@ -4,6 +4,7 @@ from nawa_api.contracts.auth import (
     ForgotPasswordInput,
     LoginInput,
     RefreshInput,
+    RequestAccessInput,
     ResetPasswordInput,
     SignupInput,
 )
@@ -14,6 +15,9 @@ from nawa_api.services.auth.logout import logout as logout_service
 from nawa_api.services.auth.password_reset import forgot_password, reset_password
 from nawa_api.services.auth.refresh import refresh as refresh_service
 from nawa_api.services.auth.signup import signup as signup_service
+from nawa_api.services.membership_requests.submit_membership_request import (
+    submit_membership_request,
+)
 from nawa_api.utils.envelope import ok
 from nawa_api.utils.request_context import REFRESH_COOKIE_NAME
 
@@ -37,6 +41,13 @@ def _refresh_from_request(request: Request, body_token: str | None) -> str | Non
 async def signup_route(body: SignupInput, request: Request):
     data = await signup_service(body, bearer=_is_bearer(request), device_id=_device_id(request))
     return ok(data)
+
+
+@router.post("/request-access")
+@audited(action="auth.request_access", target_type="membership_request", capture_body=False)
+async def request_access_route(body: RequestAccessInput):
+    await submit_membership_request(body)
+    return ok(None)
 
 
 @router.post("/login")

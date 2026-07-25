@@ -145,6 +145,20 @@ describe("createApiClient", () => {
     expect((init.headers as Record<string, string>)["Content-Type"]).toBeUndefined();
   });
 
+  it("auth.requestAccess posts to /auth/request-access with the given input", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(200, { code: 200, message: "OK", data: null }));
+    const client = createApiClient({ baseUrl: "http://api", fetchImpl });
+    const input = { full_name: "Alice", email: "alice@example.com", reason: "join" };
+    await client.auth.requestAccess(input);
+
+    const [url, init] = fetchImpl.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe("http://api/auth/request-access");
+    expect(init.method).toBe("POST");
+    expect(JSON.parse(init.body as string)).toEqual(input);
+  });
+
   it("de-dupes concurrent 401s through a single refresh", async () => {
     let refreshCalls = 0;
     const fetchImpl = vi.fn(async (url: string, _init?: RequestInit) => {

@@ -362,6 +362,47 @@
         "title": "RefreshInput",
         "type": "object"
       },
+      "RequestAccessInput": {
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "full_name": {
+            "minLength": 1,
+            "title": "Full Name",
+            "type": "string"
+          },
+          "organization": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organization"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "required": [
+          "full_name",
+          "email"
+        ],
+        "title": "RequestAccessInput",
+        "type": "object"
+      },
       "ResetPasswordInput": {
         "properties": {
           "code": {
@@ -871,6 +912,155 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/admin/access-requests": {
+      "get": {
+        "operationId": "list_access_requests_route_api_v1_admin_access_requests_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Access Requests Route",
+        "tags": [
+          "membership_requests"
+        ]
+      }
+    },
+    "/api/v1/admin/access-requests/{request_id}/approve": {
+      "post": {
+        "operationId": "approve_access_request_route_api_v1_admin_access_requests__request_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Access Request Route",
+        "tags": [
+          "membership_requests"
+        ]
+      }
+    },
+    "/api/v1/admin/access-requests/{request_id}/reject": {
+      "post": {
+        "operationId": "reject_access_request_route_api_v1_admin_access_requests__request_id__reject_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reject Access Request Route",
+        "tags": [
+          "membership_requests"
+        ]
+      }
+    },
     "/api/v1/admin/ai-calls": {
       "get": {
         "operationId": "list_ai_calls_route_api_v1_admin_ai_calls_get",
@@ -1345,6 +1535,45 @@
           }
         },
         "summary": "Refresh Route",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/request-access": {
+      "post": {
+        "operationId": "request_access_route_api_v1_auth_request_access_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAccessInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Request Access Route",
         "tags": [
           "auth"
         ]
@@ -3443,6 +3672,25 @@
           }
         },
         "summary": " Metrics"
+      }
+    },
+    "/api/v1/profiles/me/program-history": {
+      "get": {
+        "operationId": "get_my_program_history_route_api_v1_profiles_me_program_history_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get My Program History Route",
+        "tags": [
+          "profiles"
+        ]
       }
     },
     "/api/v1/site-config": {
