@@ -594,6 +594,195 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/journey/cohorts/{cohort_id}/at-risk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List At Risk Route */
+        get: operations["list_at_risk_route_api_v1_journey_cohorts__cohort_id__at_risk_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/cohorts/{cohort_id}/board": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Cohort Board Route */
+        get: operations["get_cohort_board_route_api_v1_journey_cohorts__cohort_id__board_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/cohorts/{cohort_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cohort Events Route */
+        get: operations["cohort_events_route_api_v1_journey_cohorts__cohort_id__events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/cohorts/{cohort_id}/milestones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Cohort Milestones Route */
+        get: operations["list_cohort_milestones_route_api_v1_journey_cohorts__cohort_id__milestones_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/cohorts/{cohort_id}/milestones/instantiate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Instantiate Cohort Milestones Route */
+        post: operations["instantiate_cohort_milestones_route_api_v1_journey_cohorts__cohort_id__milestones_instantiate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/me/timeline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get My Timeline Route */
+        get: operations["get_my_timeline_route_api_v1_journey_me_timeline_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/milestone-templates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Milestone Template Route */
+        delete: operations["delete_milestone_template_route_api_v1_journey_milestone_templates__id__delete"];
+        options?: never;
+        head?: never;
+        /** Update Milestone Template Route */
+        patch: operations["update_milestone_template_route_api_v1_journey_milestone_templates__id__patch"];
+        trace?: never;
+    };
+    "/api/v1/journey/milestones/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Cohort Milestone Route */
+        patch: operations["update_cohort_milestone_route_api_v1_journey_milestones__id__patch"];
+        trace?: never;
+    };
+    "/api/v1/journey/programs/{program_id}/milestone-templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Milestone Templates Route */
+        get: operations["list_milestone_templates_route_api_v1_journey_programs__program_id__milestone_templates_get"];
+        put?: never;
+        /** Create Milestone Template Route */
+        post: operations["create_milestone_template_route_api_v1_journey_programs__program_id__milestone_templates_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/journey/progress/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Milestone Progress Route */
+        patch: operations["update_milestone_progress_route_api_v1_journey_progress__id__patch"];
+        trace?: never;
+    };
+    "/api/v1/journey/progress/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Review Milestone Progress Route */
+        patch: operations["review_milestone_progress_route_api_v1_journey_progress__id__review_patch"];
+        trace?: never;
+    };
     "/api/v1/metrics": {
         parameters: {
             query?: never;
@@ -722,6 +911,35 @@ export interface components {
              */
             policy_ids: string[];
         };
+        /** CreateMilestoneTemplateInput */
+        CreateMilestoneTemplateInput: {
+            /**
+             * Config
+             * @default {}
+             */
+            config: {
+                [key: string]: unknown;
+            };
+            /** Description Ar */
+            description_ar?: string | null;
+            /** Description En */
+            description_en?: string | null;
+            /** Due Offset Days */
+            due_offset_days?: number | null;
+            /**
+             * Evidence Required
+             * @default false
+             */
+            evidence_required: boolean;
+            /** Program Cycle Id */
+            program_cycle_id?: string | null;
+            /** Sequence */
+            sequence: number;
+            /** Title Ar */
+            title_ar?: string | null;
+            /** Title En */
+            title_en?: string | null;
+        };
         /** CreatePolicyInput */
         CreatePolicyInput: {
             /** Description */
@@ -777,6 +995,15 @@ export interface components {
             /** Status */
             status: string;
         };
+        /** ReviewMilestoneProgressInput */
+        ReviewMilestoneProgressInput: {
+            /** Note Ar */
+            note_ar?: string | null;
+            /** Note En */
+            note_en?: string | null;
+            /** Status */
+            status: string;
+        };
         /** SetUserAccessInput */
         SetUserAccessInput: {
             /** Attached Policy Ids */
@@ -802,12 +1029,66 @@ export interface components {
             /** Username */
             username?: string | null;
         };
+        /** UpdateCohortMilestoneInput */
+        UpdateCohortMilestoneInput: {
+            /** Description Ar */
+            description_ar?: string | null;
+            /** Description En */
+            description_en?: string | null;
+            /** Due Date */
+            due_date?: string | null;
+            /** Evidence Required */
+            evidence_required?: boolean | null;
+            /** Title Ar */
+            title_ar?: string | null;
+            /** Title En */
+            title_en?: string | null;
+        };
         /** UpdateGroupInput */
         UpdateGroupInput: {
             /** Description */
             description?: string | null;
             /** Policy Ids */
             policy_ids?: string[] | null;
+        };
+        /**
+         * UpdateMilestoneProgressInput
+         * @description Founder-drivable — narrower than the review schema: no `done`,
+         *     `blocked`, `waived`, and no `reviewed_by_user_id` field at all. The
+         *     service enforces the not_started -> in_progress -> submitted graph.
+         */
+        UpdateMilestoneProgressInput: {
+            /** Evidence Links */
+            evidence_links?: {
+                [key: string]: unknown;
+            }[] | null;
+            /** Note Ar */
+            note_ar?: string | null;
+            /** Note En */
+            note_en?: string | null;
+            /** Status */
+            status?: string | null;
+        };
+        /** UpdateMilestoneTemplateInput */
+        UpdateMilestoneTemplateInput: {
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
+            /** Description Ar */
+            description_ar?: string | null;
+            /** Description En */
+            description_en?: string | null;
+            /** Due Offset Days */
+            due_offset_days?: number | null;
+            /** Evidence Required */
+            evidence_required?: boolean | null;
+            /** Sequence */
+            sequence?: number | null;
+            /** Title Ar */
+            title_ar?: string | null;
+            /** Title En */
+            title_en?: string | null;
         };
         /** UpdatePolicyInput */
         UpdatePolicyInput: {
@@ -2125,6 +2406,431 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_at_risk_route_api_v1_journey_cohorts__cohort_id__at_risk_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cohort_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_cohort_board_route_api_v1_journey_cohorts__cohort_id__board_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cohort_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cohort_events_route_api_v1_journey_cohorts__cohort_id__events_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cohort_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_cohort_milestones_route_api_v1_journey_cohorts__cohort_id__milestones_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cohort_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    instantiate_cohort_milestones_route_api_v1_journey_cohorts__cohort_id__milestones_instantiate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cohort_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_my_timeline_route_api_v1_journey_me_timeline_get: {
+        parameters: {
+            query: {
+                cohort_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_milestone_template_route_api_v1_journey_milestone_templates__id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_milestone_template_route_api_v1_journey_milestone_templates__id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMilestoneTemplateInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_cohort_milestone_route_api_v1_journey_milestones__id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCohortMilestoneInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_milestone_templates_route_api_v1_journey_programs__program_id__milestone_templates_get: {
+        parameters: {
+            query?: {
+                program_cycle_id?: string | null;
+            };
+            header?: never;
+            path: {
+                program_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_milestone_template_route_api_v1_journey_programs__program_id__milestone_templates_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                program_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMilestoneTemplateInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_milestone_progress_route_api_v1_journey_progress__id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMilestoneProgressInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    review_milestone_progress_route_api_v1_journey_progress__id__review_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewMilestoneProgressInput"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {

@@ -84,8 +84,20 @@ from nawa_api.db.journey.create_assistant_thread_db import create_assistant_thre
 from nawa_api.db.journey.create_digest_db import create_digest_db
 from nawa_api.db.journey.create_milestone_db import create_milestone_db
 from nawa_api.db.journey.create_milestone_progress_db import create_milestone_progress_db
+from nawa_api.db.journey.delete_milestone_db import delete_milestone_db
+from nawa_api.db.journey.get_cohort_board_db import get_cohort_board_db
+from nawa_api.db.journey.get_member_timeline_db import get_member_timeline_db
+from nawa_api.db.journey.get_milestone_db import get_milestone_db
+from nawa_api.db.journey.get_milestone_progress_db import get_milestone_progress_db
+from nawa_api.db.journey.instantiate_cohort_milestones_db import (
+    instantiate_cohort_milestones_db,
+)
+from nawa_api.db.journey.list_at_risk_progress_db import list_at_risk_progress_db
 from nawa_api.db.journey.list_milestone_progress_db import list_milestone_progress_db
+from nawa_api.db.journey.list_milestone_templates_db import list_milestone_templates_db
 from nawa_api.db.journey.list_milestones_db import list_milestones_db
+from nawa_api.db.journey.update_milestone_db import update_milestone_db
+from nawa_api.db.journey.update_milestone_progress_db import update_milestone_progress_db
 from nawa_api.db.kpi.create_kpi_definition_db import create_kpi_definition_db
 from nawa_api.db.kpi.create_kpi_entry_db import create_kpi_entry_db
 from nawa_api.db.kpi.list_kpi_definitions_db import list_kpi_definitions_db
@@ -289,12 +301,34 @@ _CASES = [
     (list_shortlist_db, dict(cycle_id=_ID, rubric_id=_ID), []),
     (create_milestone_db, dict(program_id=_ID, sequence=1), None),
     (list_milestones_db, dict(), []),
+    (get_milestone_db, dict(milestone_id=_ID), None),
+    (update_milestone_db, dict(milestone_id=_ID, patch={"title_en": "x"}), False),
+    (delete_milestone_db, dict(milestone_id=_ID), False),
+    (list_milestone_templates_db, dict(program_id=_ID), []),
+    (
+        instantiate_cohort_milestones_db,
+        dict(cohort_id=_ID),
+        {"milestones_created": 0, "progress_created": 0},
+    ),
+    (get_cohort_board_db, dict(cohort_id=_ID), {"milestones": [], "members": [], "progress": []}),
+    (
+        get_member_timeline_db,
+        dict(founder_profile_id=_ID, cohort_id=_ID),
+        {"milestones": [], "progress": []},
+    ),
     (
         create_milestone_progress_db,
         dict(milestone_id=_ID, cohort_member_id=_ID, founder_profile_id=_ID),
         None,
     ),
     (list_milestone_progress_db, dict(), []),
+    (get_milestone_progress_db, dict(progress_id=_ID), None),
+    (
+        update_milestone_progress_db,
+        dict(progress_id=_ID, patch={"status": "in_progress"}, updated_by_user_id=_ID),
+        False,
+    ),
+    (list_at_risk_progress_db, dict(cohort_id=_ID, as_of=date.today()), []),
     (create_resource_db, dict(kind="handbook"), None),
     (list_resources_db, dict(), []),
     (

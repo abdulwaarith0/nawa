@@ -6,7 +6,7 @@ _API_PREFIX = "/api/v1"
 
 
 def register_routers(app: FastAPI) -> None:
-    from nawa_api.routes import ai, audit, auth, events, iam, intake, site_config
+    from nawa_api.routes import ai, audit, auth, events, iam, intake, journey, site_config
 
     app.include_router(auth.router, prefix=_API_PREFIX)
     app.include_router(iam.router, prefix=_API_PREFIX)
@@ -15,3 +15,4 @@ def register_routers(app: FastAPI) -> None:
     app.include_router(events.router, prefix=_API_PREFIX)
     app.include_router(ai.router, prefix=_API_PREFIX)
     app.include_router(intake.router, prefix=_API_PREFIX)
+    app.include_router(journey.router, prefix=_API_PREFIX)
