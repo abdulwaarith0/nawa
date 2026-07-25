@@ -51,7 +51,10 @@ describe("DecisionPanel", () => {
 
   it("treats accept as matching (not overriding) a shortlist band, and picks a real cohort", async () => {
     const onSubmit = vi.fn();
-    renderWithLocale(<DecisionPanel aiBand="shortlist" cohorts={COHORTS} onSubmit={onSubmit} />, "en");
+    renderWithLocale(
+      <DecisionPanel aiBand="shortlist" cohorts={COHORTS} onSubmit={onSubmit} />,
+      "en",
+    );
 
     await userEvent.click(screen.getByRole("button", { name: "Accept into cohort" }));
     expect(screen.queryByText(/overriding the AI ranking/)).not.toBeInTheDocument();
@@ -67,7 +70,10 @@ describe("DecisionPanel", () => {
 
   it("requires a cohort to be picked before accept can submit", async () => {
     const onSubmit = vi.fn();
-    renderWithLocale(<DecisionPanel aiBand="shortlist" cohorts={COHORTS} onSubmit={onSubmit} />, "en");
+    renderWithLocale(
+      <DecisionPanel aiBand="shortlist" cohorts={COHORTS} onSubmit={onSubmit} />,
+      "en",
+    );
 
     await userEvent.click(screen.getByRole("button", { name: "Accept into cohort" }));
     await userEvent.click(screen.getByRole("button", { name: "Submit decision" }));
@@ -82,7 +88,9 @@ describe("DecisionPanel", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Accept into cohort" }));
     expect(
-      screen.getByText("No cohorts exist yet for this cycle — create one before accepting applicants."),
+      screen.getByText(
+        "No cohorts exist yet for this cycle — create one before accepting applicants.",
+      ),
     ).toBeInTheDocument();
     expect(screen.queryByLabelText("Cohort")).not.toBeInTheDocument();
 
