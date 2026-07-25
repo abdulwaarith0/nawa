@@ -10,8 +10,12 @@ const nav = vi.hoisted(() => ({ path: "/intake" }));
 
 vi.mock("@/hooks/Auth", () => ({
   usePermissions: () => ({ has: perm.has, isLoading: perm.isLoading, isSignedIn: true }),
+  useSession: () => ({ user: null, isLoading: false, isSignedIn: false }),
 }));
 vi.mock("next/navigation", () => ({ usePathname: () => nav.path }));
+vi.mock("@/lib/apiClient", () => ({
+  getApiClient: () => ({ auth: { logout: vi.fn() } }),
+}));
 
 describe("ConsoleShell", () => {
   beforeEach(() => {
@@ -20,37 +24,48 @@ describe("ConsoleShell", () => {
     nav.path = "/intake";
   });
 
-  it("renders the page title and only the permitted nav entries", () => {
+  it("renders the legacy title and only the permitted nav entries", () => {
     // Only the intake console permission is held.
     perm.has.mockImplementation((p: string) => p === "nawa:console:intake");
     renderWithLocale(<ConsoleShell title="Screening console">body</ConsoleShell>, "en");
 
     expect(screen.getByRole("heading", { name: "Screening console" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Intake" })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Portfolio" })).not.toBeInTheDocument();
-    // The whole administration section is hidden when it has no permitted items.
-    expect(screen.queryByText("Administration")).not.toBeInTheDocument();
-    expect(screen.getByText("Workspace")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Reports" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Admin" })).not.toBeInTheDocument();
+  });
+
+  it("always shows the Home entry, even with no permitted modules", () => {
+    perm.has.mockReturnValue(false);
+    renderWithLocale(<ConsoleShell title="Home">body</ConsoleShell>, "en");
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/dashboard");
   });
 
   it("marks the active entry with aria-current based on the pathname", () => {
     perm.has.mockReturnValue(true);
     nav.path = "/admin/iam/groups";
     renderWithLocale(<ConsoleShell title="Groups">body</ConsoleShell>, "en");
-    expect(screen.getByRole("link", { name: "Groups" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "Admin" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", { name: "Intake" })).not.toHaveAttribute("aria-current");
   });
 
-  it("toggles the mobile drawer open and closed", async () => {
+  it("toggles the mobile nav open and closed", async () => {
     perm.has.mockReturnValue(true);
     const { container } = renderWithLocale(
       <ConsoleShell title="Overview">body</ConsoleShell>,
       "en",
     );
     const root = container.querySelector(".nw-console");
-    expect(root).toHaveAttribute("data-open", "false");
+    expect(root).toHaveAttribute("data-nav-open", "false");
     await userEvent.click(screen.getByRole("button", { name: "Menu" }));
-    expect(root).toHaveAttribute("data-open", "true");
+    expect(root).toHaveAttribute("data-nav-open", "true");
+  });
+
+  it("renders no legacy page-head when title is omitted, leaving layout to the caller", () => {
+    perm.has.mockReturnValue(true);
+    renderWithLocale(<ConsoleShell>own content</ConsoleShell>, "en");
+    expect(screen.queryByRole("heading")).not.toBeInTheDocument();
+    expect(screen.getByText("own content")).toBeInTheDocument();
   });
 });
 
