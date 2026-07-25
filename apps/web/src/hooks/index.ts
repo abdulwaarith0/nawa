@@ -2,5 +2,6 @@
 export * from "./Admin";
 export * from "./Audit";
 export * from "./Auth";
+export * from "./Dashboard";
 export * from "./Iam";
 export * from "./Intake";
