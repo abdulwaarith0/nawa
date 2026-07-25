@@ -14,10 +14,10 @@
 
 html {
   font-family: var(--nw-font-body);
-  font-size: var(--nw-text-base);
+  font-size: var(--nw-font-size-body);
   line-height: var(--nw-leading-body);
-  color: var(--nw-ink-900);
-  background: var(--nw-sand-50);
+  color: var(--nw-text-primary);
+  background: var(--nw-surface-canvas);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -32,11 +32,11 @@ body {
 }
 
 a {
-  color: var(--nw-teal-700);
+  color: var(--nw-text-link);
   text-decoration: none;
 }
 a:hover {
-  color: var(--nw-teal-600);
+  color: var(--nw-color-green-800);
   text-decoration: underline;
 }
 
@@ -63,9 +63,9 @@ a:hover {
 }
 
 .nw-wordmark {
-  font-size: var(--nw-text-xl);
+  font-size: 20px;
   font-weight: 700;
-  color: var(--nw-teal-700);
+  color: var(--nw-brand-forest);
   letter-spacing: 0.04em;
 }
 
@@ -78,33 +78,176 @@ a:hover {
   justify-content: center;
   gap: var(--nw-space-2);
   padding: var(--nw-space-2) var(--nw-space-4);
-  border-radius: var(--nw-radius-md);
+  border-radius: var(--nw-radius-control);
   border: 1px solid transparent;
   font: inherit;
-  font-weight: 600;
+  font-weight: var(--nw-font-weight-semibold);
   cursor: pointer;
-  transition: background var(--nw-transition-fast), color var(--nw-transition-fast);
+  transition: background var(--nw-motion-duration-fast) var(--nw-motion-ease-standard), color
+    var(--nw-motion-duration-fast) var(--nw-motion-ease-standard);
   min-height: 44px;
 }
 .nw-btn-primary {
-  background: var(--nw-teal-700);
-  color: var(--nw-white);
+  background: var(--nw-action-primary);
+  color: var(--nw-text-inverse);
 }
 .nw-btn-primary:hover {
-  background: var(--nw-teal-600);
+  background: var(--nw-action-primaryHover);
 }
 .nw-btn-secondary {
-  background: var(--nw-white);
-  color: var(--nw-teal-700);
-  border-color: var(--nw-teal-700);
+  background: var(--nw-surface-card);
+  color: var(--nw-action-secondaryText);
+  border-color: var(--nw-action-secondaryBorder);
 }
 .nw-btn-ghost {
   background: transparent;
-  color: var(--nw-ink-600);
+  color: var(--nw-action-ghostText);
 }
 .nw-btn-danger {
-  background: var(--nw-danger-700);
-  color: var(--nw-white);
+  background: var(--nw-action-danger);
+  color: var(--nw-text-inverse);
+}
+
+a.nw-link {
+  color: var(--nw-text-link);
+  text-decoration: none;
+  font-weight: var(--nw-font-weight-medium);
+}
+a.nw-link:hover {
+  color: var(--nw-color-green-800);
+}
+
+/* ---------------- Shared console page-layout grammar ----------------
+ * Ported from the approved new design (apps/console's sample) — page header,
+ * split/grid layouts reused across Dashboard, Intake, and future console
+ * pages. Logical properties throughout. */
+.nw-shell {
+  max-inline-size: var(--nw-layout-shellMax);
+  margin: 0 auto;
+  padding: 26px 30px 60px;
+}
+
+.nw-page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-block-end: 22px;
+}
+.nw-page-eyebrow {
+  font-size: 13px;
+  color: var(--nw-text-eyebrow);
+  font-weight: 500;
+  margin-block-end: 5px;
+}
+.nw-page-title {
+  margin: 0;
+  font-size: var(--nw-font-size-page);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.nw-page-sub {
+  font-size: 14px;
+  color: var(--nw-text-tertiary);
+  margin-block-start: 6px;
+}
+.nw-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nw-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  align-items: start;
+}
+.nw-split-wide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 20px;
+  align-items: start;
+}
+.nw-split-narrow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 408px;
+  gap: 20px;
+  align-items: start;
+}
+.nw-split > *,
+.nw-split-wide > *,
+.nw-split-narrow > * {
+  min-inline-size: 0;
+}
+.nw-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.nw-pair-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.nw-three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.nw-two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.nw-section-gap {
+  margin-block-start: 20px;
+}
+
+@media (max-width: 1024px) {
+  .nw-shell {
+    padding-inline: 20px;
+  }
+  .nw-split,
+  .nw-split-wide,
+  .nw-split-narrow {
+    grid-template-columns: 1fr;
+  }
+  .nw-three-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .nw-two-column {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 900px) {
+  .nw-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+@media (max-width: 768px) {
+  .nw-shell {
+    padding: 20px 16px 48px;
+  }
+  .nw-pair-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .nw-three-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .nw-page-actions {
+    inline-size: 100%;
+  }
+}
+@media (max-width: 340px) {
+  .nw-stat-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Respect reduced motion globally. */

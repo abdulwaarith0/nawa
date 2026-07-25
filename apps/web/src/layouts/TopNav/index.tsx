@@ -35,6 +35,9 @@ export default function TopNav() {
           <LocaleSwitcher />
           {isSignedIn && user ? (
             <>
+              <a href={Routes.dashboard} className="nw-btn nw-btn-ghost">
+                {t("actions.dashboard")}
+              </a>
               <a
                 href={Routes.profile(user.username)}
                 className="nw-topnav-avatar"
@@ -51,7 +54,7 @@ export default function TopNav() {
               <a href={Routes.login} className="nw-btn nw-btn-ghost">
                 {t("actions.signIn")}
               </a>
-              <a href={Routes.signup} className="nw-btn nw-btn-primary">
+              <a href={Routes.requestAccess} className="nw-btn nw-btn-primary">
                 {t("actions.apply")}
               </a>
             </>

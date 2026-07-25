@@ -1,8 +1,10 @@
 "use client";
 
-import { usePermissions } from "@/hooks/Auth";
+import { Avatar } from "@/components";
+import { usePermissions, useSession } from "@/hooks/Auth";
 import { useT } from "@/i18n/useT";
 import LocaleSwitcher from "@/layouts/LocaleSwitcher";
+import { getApiClient } from "@/lib/apiClient";
 import { Routes } from "@nawa/contracts";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
@@ -11,113 +13,119 @@ import "./styles.css";
 interface NavItem {
   key: string;
   href: string;
-  gate: string;
-}
-interface NavSection {
-  section: string;
-  items: NavItem[];
+  // null = no permission check, always shown (e.g. the dashboard/Home link).
+  gate: string | null;
 }
 
-const NAV: NavSection[] = [
-  {
-    section: "workspace",
-    items: [
-      { key: "intake", href: Routes.intake.home, gate: "nawa:console:intake" },
-      { key: "journey", href: Routes.journey.home, gate: "nawa:console:journey" },
-      { key: "portfolio", href: Routes.reports.portfolio, gate: "nawa:console:reports" },
-      { key: "generate", href: Routes.reports.generate, gate: "nawa:reports:generate" },
-    ],
-  },
-  {
-    section: "administration",
-    items: [
-      { key: "overview", href: Routes.admin.home, gate: "nawa:console:admin" },
-      { key: "groups", href: Routes.admin.iamGroups, gate: "nawa:iam:manage" },
-      { key: "policies", href: Routes.admin.iamPolicies, gate: "nawa:iam:manage" },
-      { key: "audit", href: Routes.admin.audit, gate: "nawa:audit:read" },
-    ],
-  },
+const NAV: NavItem[] = [
+  { key: "dashboard", href: Routes.dashboard, gate: null },
+  { key: "intake", href: Routes.intake.home, gate: "nawa:console:intake" },
+  { key: "journey", href: Routes.journey.home, gate: "nawa:console:journey" },
+  { key: "community", href: Routes.community.home, gate: "nawa:community:read" },
+  { key: "reports", href: Routes.reports.portfolio, gate: "nawa:console:reports" },
+  { key: "admin", href: Routes.admin.home, gate: "nawa:console:admin" },
 ];
 
 export interface IProps {
-  title: string;
+  // Legacy: a bare title for pages not yet migrated to render their own rich
+  // `.nw-page-head` (eyebrow + title + actions) — see DashboardWrapper for
+  // the current pattern new pages should follow instead.
+  title?: string;
   children: ReactNode;
 }
 
-// Console shell (design-system §7.2): fixed permission-gated sidebar at
-// inset-inline-start, content area on sand-50 with a sticky page-title header.
-// Sidebar sections render only the entries the session's permissions allow;
-// the API re-checks authoritatively. Collapses to a drawer below 768px.
+// Console shell (ported from the approved new design): sticky top bar
+// (brand, permission-gated flat nav, locale switcher, avatar/sign-out)
+// replacing the old fixed sidebar. Nav items render only what the session's
+// permissions allow; the API re-checks authoritatively.
 export default function ConsoleShell({ title, children }: IProps) {
   const t = useT("console");
+  const tCommon = useT("common");
   const pathname = usePathname();
   const { has } = usePermissions();
-  const [open, setOpen] = useState(false);
+  const { user, isSignedIn } = useSession();
+  const [navOpen, setNavOpen] = useState(false);
 
-  const sections = useMemo(
-    () =>
-      NAV.map((s) => ({ ...s, items: s.items.filter((i) => has(i.gate)) })).filter(
-        (s) => s.items.length > 0,
-      ),
-    [has],
-  );
+  const items = useMemo(() => NAV.filter((i) => i.gate === null || has(i.gate)), [has]);
 
-  const closeDrawer = useCallback(() => setOpen(false), []);
+  const closeNav = useCallback(() => setNavOpen(false), []);
+
+  const onSignOut = useCallback(async () => {
+    try {
+      await getApiClient().auth.logout();
+    } finally {
+      window.location.assign(Routes.home);
+    }
+  }, []);
 
   return (
-    <div className="nw-console" data-open={open}>
-      <button
-        type="button"
-        className="nw-console-scrim"
-        aria-hidden={!open}
-        tabIndex={-1}
-        onClick={closeDrawer}
-      />
-      <aside className="nw-console-sidebar" aria-label={t("nav.menu")}>
-        <a href={Routes.home} className="nw-wordmark nw-display nw-console-brand" lang="en">
-          NAWA
-        </a>
-        <nav className="nw-console-nav">
-          {sections.map((s) => (
-            <div key={s.section} className="nw-console-section">
-              <p className="nw-console-section-label">{t(`nav.sections.${s.section}`)}</p>
-              {s.items.map((item) => {
-                const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-                return (
-                  <a
-                    key={item.key}
-                    href={item.href}
-                    className="nw-console-link"
-                    data-active={active}
-                    aria-current={active ? "page" : undefined}
-                    onClick={closeDrawer}
-                  >
-                    {t(`nav.${item.key}`)}
-                  </a>
-                );
-              })}
-            </div>
-          ))}
-        </nav>
-      </aside>
-      <div className="nw-console-body">
-        <header className="nw-console-header">
+    <div className="nw-console" data-nav-open={navOpen}>
+      <header className="nw-topbar">
+        <div className="nw-topbar-inner">
+          <a href={Routes.home} className="nw-console-brand" lang="en">
+            <img className="nw-console-brand-mark" src="/brand/nawa-emblem.svg" alt="" />
+            <span className="nw-console-brand-name">Nawa</span>
+          </a>
+
           <button
             type="button"
             className="nw-btn nw-btn-ghost nw-console-menu"
-            aria-label={open ? t("nav.close") : t("nav.menu")}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
+            aria-label={navOpen ? t("nav.close") : t("nav.menu")}
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen((v) => !v)}
           >
             ☰
           </button>
-          <h1 className="nw-display nw-console-title">{title}</h1>
-          <div className="nw-console-header-end">
+
+          <nav className="nw-primary-nav" aria-label={t("nav.menu")}>
+            {items.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <a
+                  key={item.key}
+                  href={item.href}
+                  data-active={active}
+                  aria-current={active ? "page" : undefined}
+                  onClick={closeNav}
+                >
+                  {t(`nav.${item.key}`)}
+                </a>
+              );
+            })}
+          </nav>
+
+          <div className="nw-topbar-actions">
             <LocaleSwitcher />
+            {isSignedIn && user ? (
+              <>
+                <a
+                  href={Routes.profile(user.username)}
+                  className="nw-topbar-avatar-link"
+                  aria-label={user.full_name}
+                >
+                  <Avatar name={user.full_name} size={38} />
+                </a>
+                <button type="button" className="nw-btn nw-btn-ghost" onClick={onSignOut}>
+                  {tCommon("actions.signOut")}
+                </button>
+              </>
+            ) : null}
           </div>
-        </header>
-        <main className="nw-console-main">{children}</main>
-      </div>
+        </div>
+      </header>
+
+      <main className="nw-console-main">
+        {title ? (
+          <div className="nw-shell">
+            <div className="nw-page-head">
+              <h1 className="nw-page-title">{title}</h1>
+            </div>
+            {children}
+          </div>
+        ) : (
+          children
+        )}
+      </main>
     </div>
   );
 }

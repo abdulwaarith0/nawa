@@ -36,8 +36,12 @@ vi.mock("@/hooks/Iam", () => ({ useGroups: () => s.groups, usePolicies: () => s.
 vi.mock("@/hooks/Audit", () => ({ useAuditLogs: () => s.audit }));
 vi.mock("@/hooks/Auth", () => ({
   usePermissions: () => ({ has: () => true, isLoading: false, isSignedIn: true }),
+  useSession: () => ({ user: null, isLoading: false, isSignedIn: false }),
 }));
 vi.mock("next/navigation", () => ({ usePathname: () => "/admin" }));
+vi.mock("@/lib/apiClient", () => ({
+  getApiClient: () => ({ auth: { logout: vi.fn() } }),
+}));
 
 beforeEach(() => {
   s.site = { config: undefined, error: undefined, isLoading: false, refresh: vi.fn() };

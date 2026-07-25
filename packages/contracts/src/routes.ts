@@ -4,12 +4,16 @@
 export const Routes = {
   home: "/",
   login: "/login",
-  signup: "/signup",
+  requestAccess: "/request-access",
   forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
   onboarding: "/onboarding",
+  dashboard: "/dashboard",
   profile: (handle: string) => `/profile/${handle}`,
   intake: {
     home: "/intake",
+    upload: "/intake/upload",
+    audit: "/intake/audit",
     cycle: (cycleId: string) => `/intake/cycles/${cycleId}`,
     application: (id: string) => `/intake/applications/${id}`,
   },
@@ -33,10 +37,25 @@ export const Routes = {
     iamGroups: "/admin/iam/groups",
     iamPolicies: "/admin/iam/policies",
     audit: "/admin/audit",
+    accessRequests: "/admin/access-requests",
   },
   styleguide: "/styleguide",
 } as const;
 
-// Public prefixes the edge gate lets through without a session.
-export const PUBLIC_PREFIXES = ["/", "/login", "/signup", "/forgot-password"] as const;
-export const GUEST_ONLY_PREFIXES = ["/login", "/signup", "/forgot-password"] as const;
+// Public prefixes the edge gate lets through without a session. `/styleguide`
+// is the dev-only kit gallery (design-system §14) — the Playwright DoD suite
+// exercises it unauthenticated, so it must stay public.
+export const PUBLIC_PREFIXES = [
+  "/",
+  "/login",
+  "/request-access",
+  "/forgot-password",
+  "/reset-password",
+  "/styleguide",
+] as const;
+export const GUEST_ONLY_PREFIXES = [
+  "/login",
+  "/request-access",
+  "/forgot-password",
+  "/reset-password",
+] as const;

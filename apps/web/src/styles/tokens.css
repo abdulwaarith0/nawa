@@ -1,59 +1,160 @@
 /* The ONLY file in the web app permitted to contain raw color literals.
  * Every component consumes var(--nw-*) or a .nw-* utility — never a literal.
- * Palette is the canonical, contrast-checked set from design-system §2. */
+ *
+ * Ported from the approved new brand system (packages/tokens/src/tokens.json,
+ * forest-green, Inter Tight) — semantic-role naming (--nw-surface-canvas,
+ * --nw-text-primary, --nw-action-primary), not the old palette-literal naming
+ * (--nw-teal-700, --nw-ink-900). The old names are kept below as aliases onto
+ * the new values so every not-yet-repainted component picks up the new brand
+ * automatically instead of breaking; migrate a component to the new names
+ * directly only when it needs more than a color swap (radius/shadow/layout).
+ *
+ * The new source system has no Arabic typography story (Inter Tight has no
+ * Arabic glyphs) — apps/web's bilingual/RTL-first requirement is binding
+ * (architecture spec, §"Arabic-first, bilingual") and is preserved as-is:
+ * Arabic still renders in IBM Plex Sans Arabic via --nw-font-arabic/-body. */
 
 :root {
-  /* Teal — trust, primary actions, links, focus */
-  --nw-teal-900: #063a37;
-  --nw-teal-700: #0a5c55; /* primary action bg; text-safe on sand/white (>= 7:1) */
-  --nw-teal-600: #0e6e66; /* hover state */
-  --nw-teal-500: #148a80; /* borders, icons, charts — GRAPHICS ONLY, not body text */
-  --nw-teal-100: #d3ece9; /* selected-row / active-nav backgrounds */
-  --nw-teal-50: #eaf6f4; /* subtle tinted panels */
+  /* ---- Palette (raw values feeding the semantic roles below) ---- */
+  --nw-color-green-50: #f4fbf8;
+  --nw-color-green-100: #e7f6ef;
+  --nw-color-green-200: #bfe0d2;
+  --nw-color-green-300: #8fd3b4;
+  --nw-color-green-400: #5cc79a;
+  --nw-color-green-500: #1fa971;
+  --nw-color-green-600: #178a5b;
+  --nw-color-green-700: #167c55;
+  --nw-color-green-800: #0f6a46;
+  --nw-color-green-900: #123d2b;
 
-  /* Amber — RESERVED: AI-generated / AI-flagged content ONLY (§2.2) */
-  --nw-amber-800: #8a5a00; /* AI label text — text-safe on white/sand (>= 5.9:1) */
-  --nw-amber-600: #b87a00; /* AI icons on light backgrounds */
-  --nw-amber-500: #e39a0b; /* AI accent borders, sparkle glyph, badge fill — graphics only */
-  --nw-amber-100: #fcefd3; /* AI panel backgrounds */
-  --nw-amber-50: #fef8ea; /* AI inline-highlight background */
+  --nw-color-amber-50: #fef8ea;
+  --nw-color-amber-100: #fcefd3;
+  --nw-color-amber-200: #f2d79a;
+  --nw-color-amber-300: #f4e4bd;
+  --nw-color-amber-500: #e39a0b;
+  --nw-color-amber-600: #b87a00;
+  --nw-color-amber-700: #8a5a00;
+  --nw-color-amber-800: #6b4a00;
 
-  /* Warm sand — surfaces */
-  --nw-sand-50: #fbf8f3; /* app background */
-  --nw-sand-100: #f4eee4; /* recessed panels, table header rows */
-  --nw-sand-200: #e9e0d1; /* hairline borders, dividers */
-  --nw-white: #ffffff; /* cards, inputs, modals */
+  --nw-color-ink-900: #14231b;
+  --nw-color-ink-800: #16211c;
+  --nw-color-ink-700: #2c332f;
+  --nw-color-ink-600: #3a423e;
+  --nw-color-ink-500: #4a5450;
+  --nw-color-ink-400: #69726f;
+  --nw-color-ink-300: #7b857f;
+  --nw-color-ink-200: #9aa0a0;
+  --nw-color-ink-100: #c4cac7;
 
-  /* Ink — text */
-  --nw-ink-900: #1c2321; /* primary text */
-  --nw-ink-600: #4a5450; /* secondary text, captions (>= 7:1 on sand-50) */
-  --nw-ink-400: #7b857f; /* placeholders & disabled ONLY */
+  --nw-color-neutral-0: #ffffff;
+  --nw-color-neutral-50: #f8f9f9;
+  --nw-color-neutral-100: #f7f8f8;
+  --nw-color-neutral-150: #f3f5f3;
+  --nw-color-neutral-200: #eef0f0;
+  --nw-color-neutral-300: #eaecec;
+  --nw-color-neutral-400: #e5e9e6;
+  --nw-color-neutral-500: #f0f1f1;
 
-  /* Semantic status — NOTE: warning is terracotta, NOT amber (amber = AI, always) */
-  --nw-success-700: #1e7b34;
-  --nw-success-100: #e8f5ec;
-  --nw-warning-700: #a6470e;
-  --nw-warning-100: #fbeee4; /* terracotta */
-  --nw-danger-700: #b3261e;
-  --nw-danger-100: #fceae8;
-  --nw-info-700: #22577e;
-  --nw-info-100: #e8f1f8;
+  --nw-color-info-50: #e8f1f8;
+  --nw-color-info-600: #22577e;
+  --nw-color-warning-50: #fbeee4;
+  --nw-color-warning-600: #a6470e;
+  --nw-color-warning-amber: #e08a2b;
+  --nw-color-critical-50: #fceae8;
+  --nw-color-critical-500: #e14b4b;
+  --nw-color-critical-600: #b3261e;
 
-  /* Radii */
-  --nw-radius-sm: 6px;
-  --nw-radius-md: 10px;
-  --nw-radius-lg: 16px;
-  --nw-radius-full: 999px;
+  /* ---- Surfaces ---- */
+  --nw-surface-canvas: var(--nw-color-neutral-150);
+  --nw-surface-app: var(--nw-color-neutral-150);
+  --nw-surface-card: var(--nw-color-neutral-0);
+  --nw-surface-subtle: var(--nw-color-neutral-100);
+  --nw-surface-muted: var(--nw-color-neutral-50);
+  --nw-surface-inset: var(--nw-color-neutral-200);
+  --nw-surface-elevated: var(--nw-color-neutral-0);
 
-  /* Shadows — the only three elevations */
-  --nw-shadow-1: 0 1px 2px rgba(28, 35, 33, 0.06);
-  --nw-shadow-2: 0 4px 12px rgba(28, 35, 33, 0.1);
-  --nw-shadow-3: 0 12px 32px rgba(28, 35, 33, 0.16);
+  /* ---- Text ---- */
+  --nw-text-primary: var(--nw-color-ink-900);
+  --nw-text-secondary: var(--nw-color-ink-500);
+  --nw-text-tertiary: var(--nw-color-ink-400);
+  --nw-text-quaternary: var(--nw-color-ink-200);
+  --nw-text-disabled: var(--nw-color-ink-100);
+  --nw-text-eyebrow: var(--nw-color-ink-300);
+  --nw-text-inverse: var(--nw-color-neutral-0);
+  --nw-text-link: var(--nw-color-green-600);
 
-  /* Scrim behind drawers/modals (§9). */
-  --nw-scrim: rgba(28, 35, 33, 0.4);
+  /* ---- Borders ---- */
+  --nw-border-subtle: var(--nw-color-neutral-500);
+  --nw-border-default: var(--nw-color-neutral-300);
+  --nw-border-strong: var(--nw-color-neutral-400);
 
-  /* Spacing — 4px base scale; use ONLY these steps */
+  /* ---- Brand ---- */
+  --nw-brand-forest: var(--nw-color-green-900);
+  --nw-brand-teal: var(--nw-color-green-700);
+  --nw-brand-mark: var(--nw-color-green-900);
+
+  /* ---- Actions ---- */
+  --nw-action-primary: var(--nw-color-green-500);
+  --nw-action-primaryHover: var(--nw-color-green-600);
+  --nw-action-primarySoft: var(--nw-color-green-100);
+  --nw-action-secondaryText: var(--nw-color-green-600);
+  --nw-action-secondaryBorder: var(--nw-color-green-200);
+  --nw-action-ghostText: var(--nw-color-ink-500);
+  --nw-action-danger: var(--nw-color-critical-600);
+  --nw-focus-ring: 0 0 0 3px rgba(22, 124, 85, 0.22);
+
+  /* ---- AI attribution — RESERVED, AI-generated/flagged content only ---- */
+  --nw-ai-text: var(--nw-color-amber-700);
+  --nw-ai-textDeep: var(--nw-color-amber-800);
+  --nw-ai-accent: var(--nw-color-amber-500);
+  --nw-ai-mark: var(--nw-color-amber-600);
+  --nw-ai-surface: var(--nw-color-amber-50);
+  --nw-ai-chip: var(--nw-color-amber-100);
+  --nw-ai-border: var(--nw-color-amber-200);
+  --nw-ai-borderSoft: var(--nw-color-amber-300);
+
+  /* ---- Semantic status — warning is terracotta/amber-adjacent, NOT the
+   * reserved AI amber; never reuse --nw-ai-* for a non-AI warning. ---- */
+  --nw-status-success: var(--nw-color-green-600);
+  --nw-status-successSurface: var(--nw-color-green-100);
+  --nw-status-warning: var(--nw-color-warning-600);
+  --nw-status-warningSurface: var(--nw-color-warning-50);
+  --nw-status-critical: var(--nw-color-critical-600);
+  --nw-status-criticalSurface: var(--nw-color-critical-50);
+  --nw-status-info: var(--nw-color-info-600);
+  --nw-status-infoSurface: var(--nw-color-info-50);
+
+  /* ---- Capacity / charts ---- */
+  --nw-capacity-filling: var(--nw-color-green-500);
+  --nw-capacity-nearFull: var(--nw-color-warning-amber);
+  --nw-capacity-full: var(--nw-color-critical-500);
+  --nw-chart-screening: var(--nw-color-green-500);
+  --nw-chart-interviews: var(--nw-color-warning-amber);
+  --nw-chart-deadlines: #3b7ea1;
+  --nw-chart-highlight: var(--nw-color-green-600);
+  --nw-chart-track: var(--nw-color-neutral-200);
+  --nw-chart-grid: var(--nw-color-neutral-500);
+  --nw-chart-comparison: #c7d3dd;
+
+  --nw-avatar-surface: #e4f2ea;
+  --nw-avatar-text: var(--nw-color-green-600);
+
+  /* ---- Radius ---- */
+  --nw-radius-xs: 6px;
+  --nw-radius-sm: 8px;
+  --nw-radius-control: 10px;
+  --nw-radius-item: 12px;
+  --nw-radius-card: 14px;
+  --nw-radius-feature: 16px;
+  --nw-radius-pill: 999px;
+
+  /* ---- Shadow ---- */
+  --nw-shadow-topbar: 0 1px 0 rgba(20, 35, 27, 0.04);
+  --nw-shadow-card: 0 1px 2px rgba(20, 35, 27, 0.025);
+  --nw-shadow-elevated: 0 12px 32px rgba(20, 35, 27, 0.12);
+  --nw-shadow-focus: 0 0 0 3px rgba(22, 124, 85, 0.22);
+
+  /* ---- Spacing — unchanged from the old scale; both systems already agree. ---- */
   --nw-space-1: 4px;
   --nw-space-2: 8px;
   --nw-space-3: 12px;
@@ -65,7 +166,41 @@
   --nw-space-12: 48px;
   --nw-space-16: 64px;
 
-  /* Z-scale — the only permitted z-index values */
+  /* ---- Type scale ---- */
+  --nw-font-size-micro: 11px;
+  --nw-font-size-caption: 12px;
+  --nw-font-size-meta: 13px;
+  --nw-font-size-small: 14px;
+  --nw-font-size-body: 16px;
+  --nw-font-size-cardTitle: 15px;
+  --nw-font-size-section: 24px;
+  --nw-font-size-page: 32px;
+  --nw-font-size-display: 38px;
+  --nw-font-size-metric: 34px;
+  --nw-font-line-tight: 1.2;
+  --nw-font-line-normal: 1.5;
+  --nw-font-line-relaxed: 1.55;
+  --nw-font-weight-regular: 400;
+  --nw-font-weight-medium: 500;
+  --nw-font-weight-semibold: 600;
+  --nw-font-letter-tight: -0.02em;
+  --nw-font-letter-caps: 0.05em;
+
+  /* ---- Motion ---- */
+  --nw-motion-duration-fast: 120ms;
+  --nw-motion-duration-medium: 180ms;
+  --nw-motion-duration-slow: 240ms;
+  --nw-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---- Layout ---- */
+  --nw-layout-shellMax: 1280px;
+  --nw-layout-pageGutter: 30px;
+  --nw-layout-mobileGutter: 20px;
+  --nw-layout-gridGap: 20px;
+  --nw-layout-topbarHeight: 66px;
+  --nw-control-minTarget: 40px;
+
+  /* ---- Z-scale — the only permitted z-index values (unchanged) ---- */
   --nw-z-sticky: 150;
   --nw-z-nav: 200;
   --nw-z-dropdown: 300;
@@ -73,32 +208,67 @@
   --nw-z-modal: 500;
   --nw-z-toast: 600;
 
-  /* Focus & motion */
-  --nw-focus-ring: 0 0 0 3px rgba(20, 138, 128, 0.4);
-  --nw-transition-fast: 120ms ease;
-  --nw-transition-base: 200ms ease;
+  /* ---- Scrim behind drawers/modals ---- */
+  --nw-scrim: rgba(20, 35, 27, 0.4);
 
-  /* Type scale */
-  --nw-text-xs: 12px;
-  --nw-text-sm: 14px;
-  --nw-text-base: 16px;
-  --nw-text-lg: 18px;
-  --nw-text-xl: 20px;
-  --nw-text-2xl: 24px;
-  --nw-text-3xl: 30px;
-  --nw-text-4xl: 38px;
+  /* ---- Bilingual type — preserved as-is; Inter Tight has no Arabic glyphs,
+   * so only the Latin face changes. When next/font later defines
+   * --font-plex-arabic / --font-inter-tight those win; otherwise fall back to
+   * a named face (if the OS has it) then a robust system stack. ---- */
+  --nw-font-arabic: var(--font-plex-arabic, "IBM Plex Sans Arabic"), "Segoe UI", system-ui,
+    sans-serif;
+  --nw-font-latin: var(--font-inter-tight, "Inter Tight"), "Segoe UI", system-ui, sans-serif;
+  --nw-font-body: var(--nw-font-arabic);
 
-  /* Line-height — overridden for Arabic in base.css */
   --nw-leading-body: 1.5;
   --nw-leading-display: 1.2;
 
-  /* Font families. When next/font later defines --font-plex-arabic /
-   * --font-archivo those win; otherwise fall back to a named face (if the OS
-   * has it) then a robust system stack — so the app boots offline. */
-  --nw-font-arabic: var(--font-plex-arabic, "IBM Plex Sans Arabic"), "Segoe UI", system-ui,
-    sans-serif;
-  --nw-font-latin: var(--font-archivo, "Archivo"), "Segoe UI", system-ui, sans-serif;
-  --nw-font-body: var(--nw-font-arabic);
+  /* ==== Back-compat aliases — old palette-literal names some not-yet-ported
+   * components still reference. Resolve onto the new semantic values above so
+   * the whole app inherits the new brand immediately; retire an alias once
+   * every component using it has been migrated to the semantic name directly. */
+  --nw-teal-900: var(--nw-brand-forest);
+  --nw-teal-700: var(--nw-brand-teal);
+  --nw-teal-600: var(--nw-action-primaryHover);
+  --nw-teal-500: var(--nw-action-primary);
+  --nw-teal-100: var(--nw-action-primarySoft);
+  --nw-teal-50: var(--nw-color-green-50);
+  --nw-amber-800: var(--nw-ai-textDeep);
+  --nw-amber-600: var(--nw-ai-mark);
+  --nw-amber-500: var(--nw-ai-accent);
+  --nw-amber-100: var(--nw-ai-chip);
+  --nw-amber-50: var(--nw-ai-surface);
+  --nw-sand-50: var(--nw-surface-canvas);
+  --nw-sand-100: var(--nw-surface-subtle);
+  --nw-sand-200: var(--nw-border-default);
+  --nw-white: var(--nw-color-neutral-0);
+  --nw-ink-900: var(--nw-text-primary);
+  --nw-ink-600: var(--nw-text-secondary);
+  --nw-ink-400: var(--nw-text-tertiary);
+  --nw-success-700: var(--nw-status-success);
+  --nw-success-100: var(--nw-status-successSurface);
+  --nw-warning-700: var(--nw-status-warning);
+  --nw-warning-100: var(--nw-status-warningSurface);
+  --nw-danger-700: var(--nw-status-critical);
+  --nw-danger-100: var(--nw-status-criticalSurface);
+  --nw-info-700: var(--nw-status-info);
+  --nw-info-100: var(--nw-status-infoSurface);
+  --nw-radius-md: var(--nw-radius-control);
+  --nw-radius-lg: var(--nw-radius-feature);
+  --nw-radius-full: var(--nw-radius-pill);
+  --nw-shadow-1: var(--nw-shadow-card);
+  --nw-shadow-2: var(--nw-shadow-elevated);
+  --nw-shadow-3: var(--nw-shadow-elevated);
+  --nw-transition-fast: var(--nw-motion-duration-fast) var(--nw-motion-ease-standard);
+  --nw-transition-base: var(--nw-motion-duration-medium) var(--nw-motion-ease-standard);
+  --nw-text-xs: var(--nw-font-size-caption);
+  --nw-text-sm: var(--nw-font-size-small);
+  --nw-text-base: var(--nw-font-size-body);
+  --nw-text-lg: var(--nw-font-size-cardTitle);
+  --nw-text-xl: 20px;
+  --nw-text-2xl: var(--nw-font-size-section);
+  --nw-text-3xl: var(--nw-font-size-page);
+  --nw-text-4xl: var(--nw-font-size-display);
 }
 
 /* Arabic script sits taller and connects: tune leading + zero letter-spacing. */

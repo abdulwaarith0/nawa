@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Mock the session hook so TopNav can be tested signed-out vs signed-in.
+// Mock the session hook so TopNav/AuthShell can be tested signed-out vs signed-in.
 const mockUseSession = vi.fn();
 vi.mock("@/hooks/Auth", () => ({
   useSession: () => mockUseSession(),
@@ -13,6 +13,11 @@ vi.mock("@/hooks/Auth", () => ({
 const logout = vi.fn().mockResolvedValue(undefined);
 vi.mock("@/lib/apiClient", () => ({
   getApiClient: () => ({ auth: { logout } }),
+}));
+
+const routerReplace = vi.fn();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace: routerReplace, push: vi.fn() }),
 }));
 
 describe("LocaleSwitcher", () => {
@@ -71,6 +76,7 @@ describe("TopNav", () => {
     });
     renderWithLocale(<TopNav />, "en");
     expect(screen.queryByRole("link", { name: "Sign in" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/dashboard");
     expect(screen.getByRole("img", { name: "Ahmed Al-Sayed" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument();
   });
@@ -106,16 +112,50 @@ describe("TopNav", () => {
 });
 
 describe("AuthShell", () => {
-  it("renders the wordmark, a locale switcher, and its children", () => {
+  afterEach(() => {
+    mockUseSession.mockReset();
+    routerReplace.mockReset();
+  });
+
+  it("renders the wordmark, a locale switcher, and its children when signed out", () => {
+    mockUseSession.mockReturnValue({ isLoading: false, isSignedIn: false });
     // Rendered under ar, so the switcher offers English.
     renderWithLocale(
-      <AuthShell>
+      <AuthShell storyKey="login">
         <p>child content</p>
       </AuthShell>,
       "ar",
     );
-    expect(screen.getByText("NAWA")).toBeInTheDocument();
+    expect(screen.getByText("Nawa")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Switch to English" })).toBeInTheDocument();
     expect(screen.getByText("child content")).toBeInTheDocument();
+  });
+
+  it("shows a loading state instead of the form while the session resolves", () => {
+    mockUseSession.mockReturnValue({ isLoading: true, isSignedIn: false });
+    renderWithLocale(
+      <AuthShell storyKey="login">
+        <p>child content</p>
+      </AuthShell>,
+      "en",
+    );
+    expect(screen.queryByText("child content")).not.toBeInTheDocument();
+    expect(routerReplace).not.toHaveBeenCalled();
+  });
+
+  it("bounces an already-signed-in user to their permission-based home instead of flashing the form", () => {
+    mockUseSession.mockReturnValue({
+      isLoading: false,
+      isSignedIn: true,
+      user: { effective: ["nawa:console:intake"] },
+    });
+    renderWithLocale(
+      <AuthShell storyKey="login">
+        <p>child content</p>
+      </AuthShell>,
+      "en",
+    );
+    expect(screen.queryByText("child content")).not.toBeInTheDocument();
+    expect(routerReplace).toHaveBeenCalledWith("/intake");
   });
 });
