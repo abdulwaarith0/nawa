@@ -1,0 +1,15 @@
+/* .nw-select — same field shell as .nw-input (Input/styles.css), sized for a
+ * native <select>'s dropdown affordance. */
+.nw-select {
+  background: var(--nw-white);
+  border: 1px solid var(--nw-sand-200);
+  border-radius: var(--nw-radius-sm);
+  padding: var(--nw-space-2) var(--nw-space-3);
+  font: inherit;
+  text-align: start;
+  min-height: 44px;
+  cursor: pointer;
+}
+.nw-select--error {
+  border-color: var(--nw-danger-700);
+}

@@ -1,0 +1,15 @@
+.nw-checkbox {
+  inline-size: 17px;
+  block-size: 17px;
+  accent-color: var(--nw-action-primary);
+  cursor: pointer;
+}
+
+.nw-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--nw-font-size-small);
+  color: var(--nw-text-secondary);
+  cursor: pointer;
+}
