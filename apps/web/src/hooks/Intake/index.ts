@@ -1,4 +1,5 @@
 export { type IntakeCycle, useCycles } from "./useCycles";
+export { type IntakeCohort, useCohorts } from "./useCohorts";
 export {
   type ApplicationDetail,
   type ApplicationDocument,
