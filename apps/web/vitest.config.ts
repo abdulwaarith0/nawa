@@ -12,7 +12,9 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
-    include: ["src/**/*.test.{ts,tsx}"],
+    // middleware.ts lives at the project root (Next.js requires it as a
+    // sibling of app/, which itself isn't under src/ in this project).
+    include: ["src/**/*.test.{ts,tsx}", "*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
       // Design-system code (primitives + layout shells) held to the bar;
