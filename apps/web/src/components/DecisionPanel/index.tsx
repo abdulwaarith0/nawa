@@ -3,6 +3,7 @@
 import Button from "@/components/Button";
 import Callout from "@/components/Callout";
 import Input from "@/components/Input";
+import Select from "@/components/Select";
 import { useT } from "@/i18n/useT";
 import { useMemo, useState } from "react";
 import "./styles.css";
@@ -15,9 +16,19 @@ export interface DecisionSubmission {
   cohortId?: string;
 }
 
+export interface CohortOption {
+  id: string;
+  label: string;
+}
+
 export interface IProps {
   aiBand: "shortlist" | "waitlist" | "reject";
   isPending?: boolean;
+  // Real cohorts scoped to the application's own cycle (§6.2's cohort
+  // picker) — accept requires picking one of these, never a free-typed id
+  // the reviewer has no way of actually knowing.
+  cohorts?: CohortOption[];
+  cohortsLoading?: boolean;
   onSubmit: (input: DecisionSubmission) => void;
 }
 
@@ -34,7 +45,13 @@ function diverges(decision: DecisionChoice, aiBand: string): boolean {
 // The four-action decision panel (design-system §6.3.3, gated
 // `nawa:intake:override`). A reason becomes required — client AND server —
 // the moment the chosen decision diverges from the AI band.
-export default function DecisionPanel({ aiBand, isPending = false, onSubmit }: IProps) {
+export default function DecisionPanel({
+  aiBand,
+  isPending = false,
+  cohorts = [],
+  cohortsLoading = false,
+  onSubmit,
+}: IProps) {
   const t = useT("intake");
   const [decision, setDecision] = useState<DecisionChoice | null>(null);
   const [reason, setReason] = useState("");
@@ -46,7 +63,8 @@ export default function DecisionPanel({ aiBand, isPending = false, onSubmit }: I
     [decision, aiBand],
   );
   const reasonMissing = reasonRequired && reason.trim().length === 0;
-  const cohortMissing = decision === "accept" && cohortId.trim().length === 0;
+  const noCohortsAvailable = decision === "accept" && !cohortsLoading && cohorts.length === 0;
+  const cohortMissing = decision === "accept" && !cohortsLoading && cohortId.trim().length === 0;
   const canSubmit = decision !== null && !reasonMissing && !cohortMissing;
 
   function handleSubmit() {
@@ -77,12 +95,26 @@ export default function DecisionPanel({ aiBand, isPending = false, onSubmit }: I
         ))}
       </div>
       {decision === "accept" ? (
-        <Input
-          label={t("decision.cohortLabel")}
-          value={cohortId}
-          onChange={(event) => setCohortId(event.target.value)}
-          error={touched && cohortMissing ? t("decision.cohortRequired") : undefined}
-        />
+        noCohortsAvailable ? (
+          <Callout tone="info">{t("decision.noCohorts")}</Callout>
+        ) : (
+          <Select
+            label={t("decision.cohortLabel")}
+            value={cohortId}
+            disabled={cohortsLoading}
+            onChange={(event) => setCohortId(event.target.value)}
+            error={touched && cohortMissing ? t("decision.cohortRequired") : undefined}
+            options={[
+              {
+                value: "",
+                label: cohortsLoading
+                  ? t("decision.cohortsLoading")
+                  : t("decision.cohortPlaceholder"),
+              },
+              ...cohorts.map((cohort) => ({ value: cohort.id, label: cohort.label })),
+            ]}
+          />
+        )
       ) : null}
       {reasonRequired ? <Callout tone="info">{t("decision.reasonRequired")}</Callout> : null}
       {decision !== null ? (
