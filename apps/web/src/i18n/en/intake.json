@@ -37,6 +37,7 @@
     }
   },
   "shortlist": {
+    "eyebrow": "Intake",
     "title": "Shortlist",
     "subtitle": "Ranked by AI score against the cycle's active rubric.",
     "filters": {
@@ -74,7 +75,19 @@
       "decided": "Decided"
     },
     "empty": "No applications match these filters yet.",
-    "export": "Export shortlist"
+    "export": "Export shortlist",
+    "notScoredYet": "Not scored yet — this application can't be decided on.",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "range": "{start}–{end}"
+    },
+    "bulk": {
+      "selected": "{count} selected",
+      "reasonTooShort": "Add at least {min} characters explaining this decision.",
+      "someFailed": "{count} decision(s) failed.",
+      "someFailedWithReason": "{count} decision(s) failed: {message}"
+    }
   },
   "scorecard": {
     "title": "Application scorecard",
@@ -118,8 +131,11 @@
     "reasonLabel": "Reason",
     "reasonPlaceholder": "Why this decision?",
     "reasonRequired": "You are overriding the AI ranking — a reason is required and will be logged.",
-    "cohortLabel": "Cohort ID",
+    "cohortLabel": "Cohort",
+    "cohortPlaceholder": "Select a cohort",
+    "cohortsLoading": "Loading cohorts…",
     "cohortRequired": "A cohort is required to accept into.",
+    "noCohorts": "No cohorts exist yet for this cycle — create one before accepting applicants.",
     "submit": "Submit decision",
     "submitting": "Submitting…"
   }

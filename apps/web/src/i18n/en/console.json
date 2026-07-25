@@ -4,8 +4,12 @@
       "workspace": "Workspace",
       "administration": "Administration"
     },
+    "dashboard": "Home",
     "intake": "Intake",
     "journey": "Journey",
+    "community": "Community",
+    "reports": "Reports",
+    "admin": "Admin",
     "portfolio": "Portfolio",
     "generate": "Generate report",
     "overview": "Overview",
@@ -18,6 +22,40 @@
   "onboarding": {
     "title": "Set up your Founder Profile",
     "progress": "Step {current} of {total}"
+  },
+  "dashboard": {
+    "eyebrow": "Dashboard",
+    "welcome": "Good morning, {name}",
+    "subtitle": "Jump into the areas you have access to.",
+    "signedOutTitle": "Sign in to see your dashboard",
+    "signedOutBody": "Your dashboard adapts to what you're permitted to see once you're signed in.",
+    "signIn": "Sign in",
+    "activeCycles": "Active intake cycles",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "You don't have access to any area yet. Reach out to your program manager if that's unexpected.",
+    "newBatch": "New batch",
+    "noCycleTitle": "No intake cycle yet",
+    "noCycleBody": "Screening data will show up here once a cycle is open.",
+    "stats": {
+      "applications": "Applications received",
+      "shortlisted": "Shortlisted",
+      "hiddenGems": "Hidden gems",
+      "flagged": "Flagged for review"
+    },
+    "screeningProgress": {
+      "title": "Screening progress",
+      "badge": "AI-scored",
+      "sub": "of batch scored",
+      "scored": "Scored",
+      "inReview": "In review",
+      "flagged": "Flagged"
+    },
+    "rail": {
+      "title": "Recent applications",
+      "viewAll": "View all",
+      "aiScore": "AI score",
+      "empty": "No applications yet."
+    }
   },
   "states": {
     "deniedTitle": "No access",
@@ -74,6 +112,10 @@
     "reports": {
       "title": "Reports & KPIs",
       "subtitle": "Check-ins, KPI history, and drafted reports."
+    },
+    "admin": {
+      "title": "Administration",
+      "subtitle": "Usage, program configuration, and site settings."
     }
   }
 }
