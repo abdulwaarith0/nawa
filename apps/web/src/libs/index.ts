@@ -13,5 +13,6 @@ export { default as IntakeWrapper } from "./IntakeWrapper";
 export { default as JourneyWrapper } from "./JourneyWrapper";
 export { default as LoginWrapper } from "./LoginWrapper";
 export { default as MarketingWrapper } from "./MarketingWrapper";
+export { default as ProfileWrapper } from "./ProfileWrapper";
 export { default as ReportsWrapper } from "./ReportsWrapper";
 export { default as RequestAccessWrapper } from "./RequestAccessWrapper";
