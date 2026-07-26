@@ -86,7 +86,7 @@ export default function DecisionPanel({
         {(["shortlist", "waitlist", "reject", "accept"] as DecisionChoice[]).map((choice) => (
           <Button
             key={choice}
-            variant={decision === choice ? "primary" : "secondary"}
+            variant={decision === choice ? "primary" : "outline"}
             onClick={() => setDecision(choice)}
             disabled={isPending}
           >
