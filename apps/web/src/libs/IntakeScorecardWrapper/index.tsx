@@ -21,6 +21,7 @@ import { useLocale } from "@/i18n/LocaleProvider";
 import { useT } from "@/i18n/useT";
 import { ConsoleShell, Guard } from "@/layouts";
 import { Routes } from "@nawa/contracts";
+import { ArrowLeft, ScrollText } from "lucide-react";
 import Link from "next/link";
 import "./styles.css";
 
@@ -31,6 +32,7 @@ export interface IProps {
 // Scorecard + decision view (design-system §6.3.3, `/intake/applications/[id]`).
 export default function IntakeScorecardWrapper({ applicationId }: IProps) {
   const t = useT("intake");
+  const tAi = useT("ai");
   const locale = useLocale();
   const { has } = usePermissions();
   const { detail, error, isLoading, refresh } = useScorecard(applicationId);
@@ -66,14 +68,20 @@ export default function IntakeScorecardWrapper({ applicationId }: IProps) {
     const { application, scorecard, dedup_matches, documents, decisions, ai_band } = detail;
     body = (
       <>
-        <Link href={Routes.intake.cycle(application.cycle_id)} className="nw-scorecard-back">
-          ← {t("scorecard.backToShortlist")}
-        </Link>
         <Card className="nw-scorecard-header">
           <bdi dir="auto" className="nw-scorecard-name">
             {application.applicant_name}
           </bdi>
           <span className="nw-scorecard-email">{application.applicant_email}</span>
+          {scorecard ? (
+            <div className="nw-scorecard-overall">
+              <div className="nw-scorecard-overall-head">
+                <span className="nw-scorecard-overall-label">{t("scorecard.overallScore")}</span>
+                <AiAttribution compact>{tAi("attribution.label")}</AiAttribution>
+              </div>
+              <div className="nw-scorecard-overall-value">{scorecard.total_score}</div>
+            </div>
+          ) : null}
           <Badge tone="neutral">
             {t("scorecard.sourceLanguage")}: {application.source_language}
           </Badge>
@@ -214,8 +222,28 @@ export default function IntakeScorecardWrapper({ applicationId }: IProps) {
   }
 
   return (
-    <ConsoleShell title={t("scorecard.title")}>
-      <Guard permission="nawa:console:intake">{body}</Guard>
+    <ConsoleShell>
+      <div className="nw-shell">
+        <div className="nw-page-head">
+          <div>
+            <div className="nw-page-eyebrow">{t("console.eyebrow")}</div>
+            <h1 className="nw-page-title">{t("scorecard.title")}</h1>
+          </div>
+          <div className="nw-page-actions">
+            <Link href={Routes.intake.home} className="nw-btn nw-btn-outline">
+              <ArrowLeft size={15} aria-hidden="true" />
+              {t("scorecard.backToConsole")}
+            </Link>
+            {has("nawa:audit:read") ? (
+              <Link href={Routes.intake.audit} className="nw-btn nw-btn-secondary">
+                <ScrollText size={15} aria-hidden="true" />
+                {t("console.auditLog")}
+              </Link>
+            ) : null}
+          </div>
+        </div>
+        <Guard permission="nawa:console:intake">{body}</Guard>
+      </div>
     </ConsoleShell>
   );
 }
