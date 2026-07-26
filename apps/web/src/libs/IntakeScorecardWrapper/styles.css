@@ -17,6 +17,23 @@
 .nw-scorecard-email {
   color: var(--nw-ink-600);
 }
+.nw-scorecard-overall {
+  flex-basis: 100%;
+}
+.nw-scorecard-overall-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nw-scorecard-overall-label {
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-ink-600);
+}
+.nw-scorecard-overall-value {
+  font-size: 32px;
+  font-weight: var(--nw-font-weight-semibold);
+  color: var(--nw-text-primary);
+}
 .nw-scorecard-criteria {
   display: flex;
   flex-direction: column;
