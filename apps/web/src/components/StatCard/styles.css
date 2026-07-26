@@ -1,8 +1,8 @@
 .nw-stat {
   border: 1px solid var(--nw-border-default);
-  border-radius: var(--nw-radius-item);
+  border-radius: var(--nw-radius-card);
   background: var(--nw-surface-card);
-  padding: 16px;
+  padding: 18px 20px;
 }
 
 .nw-stat-head {
@@ -18,19 +18,18 @@
 }
 
 .nw-stat-value {
-  margin-block-start: 6px;
+  margin: 12px 0 8px;
   color: var(--nw-text-primary);
-  font-size: 28px;
-  font-weight: var(--nw-font-weight-semibold);
+  font-size: var(--nw-font-size-metric);
+  font-weight: var(--nw-font-weight-medium);
   letter-spacing: -0.02em;
 }
 
 .nw-stat-delta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-block-start: 6px;
-  font-size: var(--nw-font-size-caption);
+  gap: 6px;
+  font-size: var(--nw-font-size-meta);
 }
 
 .nw-stat-trend {
