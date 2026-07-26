@@ -1,5 +1,5 @@
 .nw-console-stat {
-  padding: 16px;
+  padding: 18px 20px;
 }
 .nw-console-stat-label {
   color: var(--nw-text-tertiary);
@@ -7,9 +7,9 @@
   font-weight: var(--nw-font-weight-medium);
 }
 .nw-console-stat-value {
-  margin-block-start: 6px;
-  font-size: 28px;
-  font-weight: var(--nw-font-weight-semibold);
+  margin: 12px 0 8px;
+  font-size: var(--nw-font-size-metric);
+  font-weight: var(--nw-font-weight-medium);
   color: var(--nw-text-primary);
 }
 .nw-console-stat-sub {
@@ -44,6 +44,9 @@
   vertical-align: middle;
 }
 .nw-console-row-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--nw-text-primary);
   font-weight: var(--nw-font-weight-medium);
   text-decoration: none;
@@ -67,8 +70,18 @@
   color: var(--nw-text-tertiary);
 }
 
-.nw-console-rail-score {
+.nw-console-rail-score-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 16px 16px 0;
+}
+.nw-console-rail-score-label {
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-tertiary);
+}
+.nw-console-rail-score {
+  padding: 4px 16px 0;
   font-size: 32px;
   font-weight: var(--nw-font-weight-semibold);
   color: var(--nw-text-primary);

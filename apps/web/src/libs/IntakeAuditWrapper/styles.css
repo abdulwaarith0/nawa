@@ -1,0 +1,21 @@
+.nw-audit-search {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-inline-size: 360px;
+  inline-size: 100%;
+  margin-block: var(--nw-space-4);
+}
+.nw-audit-search svg {
+  position: absolute;
+  inset-inline-start: 11px;
+  color: var(--nw-text-tertiary);
+  pointer-events: none;
+}
+.nw-audit-search input {
+  padding-inline-start: 34px;
+}
+.nw-audit-decision-badge {
+  margin-inline-start: var(--nw-space-2);
+  display: inline-block;
+}
