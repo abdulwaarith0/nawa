@@ -76,16 +76,25 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--nw-space-2);
-  padding: var(--nw-space-2) var(--nw-space-4);
+  gap: 7px;
+  padding-block: 9px;
+  padding-inline: 15px;
   border-radius: var(--nw-radius-control);
   border: 1px solid transparent;
-  font: inherit;
-  font-weight: var(--nw-font-weight-semibold);
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
   cursor: pointer;
+  white-space: nowrap;
   transition: background var(--nw-motion-duration-fast) var(--nw-motion-ease-standard), color
     var(--nw-motion-duration-fast) var(--nw-motion-ease-standard);
-  min-height: 44px;
+  min-height: var(--nw-control-minTarget);
+}
+.nw-btn-sm {
+  min-height: 32px;
+  padding-block: 6px;
+  padding-inline: 12px;
+  font-size: var(--nw-font-size-meta);
+  border-radius: var(--nw-radius-sm);
 }
 .nw-btn-primary {
   background: var(--nw-action-primary);
@@ -102,6 +111,21 @@ a:hover {
 .nw-btn-ghost {
   background: transparent;
   color: var(--nw-action-ghostText);
+}
+.nw-btn-ghost:hover {
+  background: #f1f5f3;
+  color: var(--nw-text-primary);
+}
+/* Neutral outline — toolbar-style buttons (Filters, Cancel, back-links
+ * styled as buttons): white surface, hairline border, ink text. Distinct
+ * from .nw-btn-secondary, which is the branded green secondary action. */
+.nw-btn-outline {
+  color: var(--nw-text-primary);
+  background: var(--nw-surface-card);
+  border-color: var(--nw-border-default);
+}
+.nw-btn-outline:hover {
+  background: var(--nw-surface-muted);
 }
 .nw-btn-danger {
   background: var(--nw-action-danger);
