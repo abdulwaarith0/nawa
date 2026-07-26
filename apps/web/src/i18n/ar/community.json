@@ -1,0 +1,16 @@
+{
+  "eyebrow": "مركز المجتمع",
+  "title": "الدليل",
+  "searchPlaceholder": "ابحث بالاسم أو المشروع أو المهارة…",
+  "stageFilter": "المرحلة",
+  "mentorsOnly": "الموجهون فقط",
+  "mentorBadge": "موجّه",
+  "empty": "لا يوجد أعضاء مطابقون لهذه الفلاتر.",
+  "stage": {
+    "idea": "فكرة",
+    "prototype": "نموذج أولي",
+    "pilot": "تجريبي",
+    "revenue": "إيرادات",
+    "growth": "نمو"
+  }
+}

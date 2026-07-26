@@ -28,6 +28,8 @@
     "title": "Intake audit log",
     "subtitle": "Scoring runs, decisions, and dedup resolutions — most recent first.",
     "empty": "No intake audit entries yet.",
+    "readOnly": "Read-only",
+    "exportCsv": "Export",
     "search": "Search action, reason, or ID…",
     "banner": {
       "title": "Immutable trail.",
