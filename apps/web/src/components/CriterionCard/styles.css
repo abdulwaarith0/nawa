@@ -25,6 +25,7 @@
 .nw-criterion-rationale {
   color: var(--nw-ink-900);
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 .nw-criterion-citations {
   list-style: none;
@@ -37,4 +38,5 @@
 .nw-criterion-citation-fallback {
   color: var(--nw-ink-600);
   font-style: italic;
+  overflow-wrap: anywhere;
 }

@@ -4,4 +4,18 @@
 .nw-citation-text {
   white-space: pre-wrap;
   line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* In-situ highlight: the compact AI marker must flow and wrap with the
+ * surrounding answer text rather than form a single-line inline-flex pill,
+ * which would overflow narrow columns (e.g. the console scorecard rail) when
+ * the cited quote is long. Scoped here so the short score/flag pills elsewhere
+ * keep their non-wrapping pill layout. */
+.nw-citation-text .nw-ai-attribution-compact {
+  display: inline;
+  overflow-wrap: anywhere;
+}
+.nw-citation-text .nw-ai-attribution-compact .nw-ai-sparkle {
+  margin-inline-end: 2px;
 }
