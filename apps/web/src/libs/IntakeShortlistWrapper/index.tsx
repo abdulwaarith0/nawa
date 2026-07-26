@@ -3,14 +3,15 @@
 import {
   AiAttribution,
   Alert,
+  Avatar,
   Badge,
   Button,
-  Card,
   Checkbox,
   EmptyState,
   ErrorState,
   Input,
   Loading,
+  Progress,
   Select,
   Table,
   type TableColumn,
@@ -21,6 +22,8 @@ import { useT } from "@/i18n/useT";
 import { ConsoleShell, Guard } from "@/layouts";
 import { getApiClient } from "@/lib/apiClient";
 import { Routes } from "@nawa/contracts";
+import { Download, Search, Upload, X } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import "./styles.css";
@@ -88,6 +91,10 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
     setPage(0);
     setBaseFilters({});
   }, []);
+
+  const hasFilters = Object.values(baseFilters).some(
+    (value) => value !== undefined && (Array.isArray(value) ? value.length > 0 : true),
+  );
 
   const toggleFlag = useCallback(
     (flag: string) => {
@@ -178,12 +185,22 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
       {
         key: "applicant",
         header: t("shortlist.columns.applicant"),
-        render: (row) => <bdi dir="auto">{row.applicant_name}</bdi>,
+        render: (row) => (
+          <span className="nw-shortlist-applicant">
+            <Avatar name={row.applicant_name} size={28} />
+            <bdi dir="auto">{row.applicant_name}</bdi>
+          </span>
+        ),
       },
       {
         key: "title",
         header: t("shortlist.columns.title"),
         render: (row) => <bdi dir="auto">{row.title ?? "—"}</bdi>,
+      },
+      {
+        key: "domain",
+        header: t("shortlist.columns.domain"),
+        render: (row) => <bdi dir="auto">{row.domain ?? "—"}</bdi>,
       },
       { key: "language", header: t("shortlist.columns.language"), render: (row) => row.language },
       {
@@ -197,7 +214,10 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
         align: "end",
         render: (row) =>
           row.total_score != null ? (
-            <AiAttribution compact>{row.total_score.toFixed(1)}</AiAttribution>
+            <span className="nw-shortlist-score">
+              <Progress value={row.total_score} max={100} label={row.applicant_name} />
+              <AiAttribution compact>{row.total_score.toFixed(1)}</AiAttribution>
+            </span>
           ) : (
             "—"
           ),
@@ -257,12 +277,20 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
             <p className="nw-page-sub">{t("shortlist.subtitle")}</p>
           </div>
           <div className="nw-page-actions">
-            <Button variant="ghost" onClick={clearFilters}>
-              {t("shortlist.filters.clear")}
-            </Button>
-            <Button variant="secondary" onClick={handleExport} loading={exportShortlist.isPending}>
+            <Link href={Routes.intake.home} className="nw-btn nw-btn-outline">
+              {t("shortlist.backToConsole")}
+            </Link>
+            <Button variant="outline" onClick={handleExport} loading={exportShortlist.isPending}>
+              <Download size={15} aria-hidden="true" />
               {t("shortlist.export")}
             </Button>
+            <Link
+              href={`${Routes.intake.upload}?cycle=${cycleId}`}
+              className="nw-btn nw-btn-primary"
+            >
+              <Upload size={15} aria-hidden="true" />
+              {t("upload.title")}
+            </Link>
           </div>
         </div>
 
@@ -297,7 +325,15 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
             ))}
           </div>
 
-          <Card className="nw-shortlist-filters">
+          <div className="nw-shortlist-filters">
+            <span className="nw-shortlist-search">
+              <Search size={15} aria-hidden="true" />
+              <Input
+                placeholder={t("shortlist.filters.search")}
+                value={baseFilters.q ?? ""}
+                onChange={(event) => updateFilters({ q: event.target.value || undefined })}
+              />
+            </span>
             <Select
               aria-label={t("shortlist.filters.scoreBand")}
               value={baseFilters.scoreBand ?? ""}
@@ -322,11 +358,6 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
               value={baseFilters.country ?? ""}
               onChange={(event) => updateFilters({ country: event.target.value || undefined })}
             />
-            <Input
-              placeholder={t("shortlist.filters.search")}
-              value={baseFilters.q ?? ""}
-              onChange={(event) => updateFilters({ q: event.target.value || undefined })}
-            />
             <Checkbox
               checked={(baseFilters.flags ?? []).includes("hidden_gem")}
               onChange={() => toggleFlag("hidden_gem")}
@@ -342,7 +373,13 @@ export default function IntakeShortlistWrapper({ cycleId }: IProps) {
               onChange={() => toggleFlag("normalize_failed")}
               label={t("shortlist.filters.flags.normalizeFailed")}
             />
-          </Card>
+            {hasFilters ? (
+              <Button variant="ghost" onClick={clearFilters}>
+                <X size={14} aria-hidden="true" />
+                {t("shortlist.filters.clear")}
+              </Button>
+            ) : null}
+          </div>
 
           {body}
 
