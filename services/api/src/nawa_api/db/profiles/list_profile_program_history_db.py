@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from nawa_api.db.profiles.program_history_join import join_cohort_membership_chain
 from nawa_api.db.utils import use_session
 from nawa_api.metrics.db import observe_db
 from nawa_api.models.programs import Cohort, CohortMember, Program, ProgramCycle
@@ -18,14 +19,9 @@ async def list_profile_program_history_db(
         operation="read", table="cohort_members", method="list_profile_program_history_db"
     ) as obs:
         try:
-            stmt = (
+            stmt = join_cohort_membership_chain(
                 select(CohortMember, Cohort, ProgramCycle, Program)
-                .join(Cohort, Cohort.id == CohortMember.cohort_id)
-                .join(ProgramCycle, ProgramCycle.id == Cohort.cycle_id)
-                .join(Program, Program.id == ProgramCycle.program_id)
-                .where(CohortMember.profile_id == profile_id)
-                .order_by(Cohort.starts_at.desc())
-            )
+            ).where(CohortMember.profile_id == profile_id).order_by(Cohort.starts_at.desc())
             async with use_session(session) as s:
                 rows = (await s.execute(stmt)).all()
             obs.success = True
