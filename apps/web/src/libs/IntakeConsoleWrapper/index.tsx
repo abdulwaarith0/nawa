@@ -2,6 +2,7 @@
 
 import {
   AiAttribution,
+  Avatar,
   Badge,
   Card,
   CriterionCard,
@@ -16,6 +17,7 @@ import { useLocale } from "@/i18n/LocaleProvider";
 import { useT } from "@/i18n/useT";
 import { ConsoleShell, Guard } from "@/layouts";
 import { Routes } from "@nawa/contracts";
+import { ScrollText, SlidersHorizontal, Upload } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import "./styles.css";
@@ -38,11 +40,12 @@ const DECISION_TONE: Record<string, "neutral" | "success" | "warning" | "danger"
 // shortlist listing has no cross-cycle "all programs" view, so — unlike the
 // approved design's mixed-program mock table — every number and row here
 // comes from that one cycle's real shortlist rows. There's no real "Program"
-// or "Domain" field on an application, so those mock columns are dropped
-// rather than fabricated; the cycle's own program/season already names the
-// context in the subtitle.
+// column (every row in a single-cycle view shares the same program, already
+// named in the subtitle, so repeating it per row would be redundant, not
+// missing) — but Domain is real (application.normalized.field) and shown.
 export default function IntakeConsoleWrapper() {
   const t = useT("intake");
+  const tAi = useT("ai");
   const locale = useLocale();
   const { has } = usePermissions();
   const { cycles, isLoading: cyclesLoading } = useCycles();
@@ -65,7 +68,15 @@ export default function IntakeConsoleWrapper() {
       scored.length > 0
         ? scored.reduce((sum, r) => sum + (r.total_score ?? 0), 0) / scored.length
         : 0;
-    return { scored: scored.length, total: rows.length, shortlisted, inReview, avg };
+    const shortlistedPct = rows.length > 0 ? Math.round((shortlisted / rows.length) * 100) : 0;
+    return {
+      scored: scored.length,
+      total: rows.length,
+      shortlisted,
+      shortlistedPct,
+      inReview,
+      avg,
+    };
   }, [rows]);
 
   const previewRows = useMemo(() => {
@@ -102,6 +113,9 @@ export default function IntakeConsoleWrapper() {
           <Card className="nw-console-stat">
             <span className="nw-console-stat-label">{t("console.stats.shortlisted")}</span>
             <div className="nw-console-stat-value">{formatNumber(stats.shortlisted, locale)}</div>
+            <div className="nw-console-stat-sub">
+              {t("console.stats.pctOfBatch", { pct: formatNumber(stats.shortlistedPct, locale) })}
+            </div>
           </Card>
           <Card className="nw-console-stat">
             <span className="nw-console-stat-label">{t("console.stats.inReview")}</span>
@@ -126,6 +140,7 @@ export default function IntakeConsoleWrapper() {
                   <thead>
                     <tr>
                       <th>{t("shortlist.columns.applicant")}</th>
+                      <th>{t("shortlist.columns.domain")}</th>
                       <th>{t("console.table.score")}</th>
                       <th>{t("console.table.flags")}</th>
                       <th>{t("shortlist.columns.decision")}</th>
@@ -139,15 +154,19 @@ export default function IntakeConsoleWrapper() {
                             href={Routes.intake.application(row.application_id)}
                             className="nw-console-row-link"
                           >
+                            <Avatar name={row.applicant_name} size={28} />
                             <bdi dir="auto">{row.applicant_name}</bdi>
                           </Link>
+                        </td>
+                        <td>
+                          <bdi dir="auto">{row.domain ?? "—"}</bdi>
                         </td>
                         <td>
                           {row.total_score !== null ? (
                             <div className="nw-console-score">
                               <Progress
                                 value={row.total_score}
-                                max={10}
+                                max={100}
                                 label={row.applicant_name}
                               />
                               <AiAttribution compact>{row.total_score.toFixed(1)}</AiAttribution>
@@ -193,6 +212,10 @@ export default function IntakeConsoleWrapper() {
               {featuredDetail.scorecard.hidden_gem ? (
                 <AiAttribution compact>{t("scorecard.hiddenGem.title")}</AiAttribution>
               ) : null}
+              <div className="nw-console-rail-score-head">
+                <span className="nw-console-rail-score-label">{t("scorecard.overallScore")}</span>
+                <AiAttribution compact>{tAi("attribution.label")}</AiAttribution>
+              </div>
               <div className="nw-console-rail-score">{featuredDetail.scorecard.total_score}</div>
               <p className="nw-console-rail-name">
                 <bdi dir="auto">{featuredDetail.application.applicant_name}</bdi> · {cycleLabel}
@@ -234,6 +257,7 @@ export default function IntakeConsoleWrapper() {
     topRow,
     locale,
     t,
+    tAi,
   ]);
 
   return (
@@ -243,19 +267,20 @@ export default function IntakeConsoleWrapper() {
           <div>
             <div className="nw-page-eyebrow">{t("console.eyebrow")}</div>
             <h1 className="nw-page-title">{t("console.title")}</h1>
-            <p className="nw-page-sub">{cycleLabel ?? t("console.subtitle")}</p>
+            <p className="nw-page-sub">
+              {cycleLabel ? `${cycleLabel} — ${t("console.subtitle")}` : t("console.subtitle")}
+            </p>
           </div>
           <div className="nw-page-actions">
             {featuredCycle ? (
-              <Link
-                href={Routes.intake.cycle(featuredCycle.id)}
-                className="nw-btn nw-btn-secondary"
-              >
+              <Link href={Routes.intake.cycle(featuredCycle.id)} className="nw-btn nw-btn-outline">
+                <SlidersHorizontal size={15} aria-hidden="true" />
                 {t("console.filters")}
               </Link>
             ) : null}
             {has("nawa:audit:read") ? (
-              <Link href={Routes.intake.audit} className="nw-btn nw-btn-secondary">
+              <Link href={Routes.intake.audit} className="nw-btn nw-btn-ghost">
+                <ScrollText size={15} aria-hidden="true" />
                 {t("console.auditLog")}
               </Link>
             ) : null}
@@ -267,6 +292,7 @@ export default function IntakeConsoleWrapper() {
               }
               className="nw-btn nw-btn-primary"
             >
+              <Upload size={15} aria-hidden="true" />
               {t("upload.title")}
             </Link>
           </div>
