@@ -16,6 +16,7 @@ export interface ShortlistRow {
   title: string | null;
   language: string;
   country: string | null;
+  domain: string | null;
   total_score: number | null;
   criteria: ShortlistCriterionScore[];
   hidden_gem: boolean;
