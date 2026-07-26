@@ -91,13 +91,16 @@
   margin-block-end: 12px;
   font-size: var(--nw-font-size-caption);
   color: var(--nw-text-tertiary);
+  overflow-wrap: anywhere;
 }
 .nw-console-rail-criteria {
   display: grid;
   gap: 10px;
   padding: 0 16px;
+  min-block-size: 0;
   max-block-size: 420px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 .nw-console-rail-link {
   display: block;
