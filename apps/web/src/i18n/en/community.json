@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Community Hub",
+  "title": "Directory",
+  "searchPlaceholder": "Search by name, venture, or skill…",
+  "stageFilter": "Stage",
+  "mentorsOnly": "Mentors only",
+  "mentorBadge": "Mentor",
+  "empty": "No members match these filters.",
+  "stage": {
+    "idea": "Idea",
+    "prototype": "Prototype",
+    "pilot": "Pilot",
+    "revenue": "Revenue",
+    "growth": "Growth"
+  }
+}

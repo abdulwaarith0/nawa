@@ -1,0 +1,52 @@
+{
+  "eyebrow": "Journey Copilot",
+  "title": "Journey",
+  "subtitle": "Milestone tracking for your cohorts.",
+  "noAccess": "You don't have access to any Journey view yet.",
+  "tabs": {
+    "board": "Board",
+    "timeline": "My timeline"
+  },
+  "status": {
+    "not_started": "Not started",
+    "in_progress": "In progress",
+    "submitted": "Submitted",
+    "done": "Done",
+    "blocked": "Blocked",
+    "waived": "Waived"
+  },
+  "board": {
+    "noCohort": "No cohort to track yet",
+    "noCohortBody": "Once a cycle has an admitted cohort, its milestone board appears here.",
+    "noMembers": "This cohort has no members yet.",
+    "columns": {
+      "member": "Member"
+    },
+    "atRisk": {
+      "title": "At risk",
+      "empty": "Nothing at risk right now."
+    },
+    "drawer": {
+      "title": "Review progress",
+      "close": "Close",
+      "evidence": "Evidence",
+      "noEvidence": "No evidence submitted yet.",
+      "noteLabel": "Note",
+      "noteRequired": "A note is required for this action.",
+      "accept": "Accept",
+      "block": "Block",
+      "waive": "Waive"
+    }
+  },
+  "timeline": {
+    "due": "Due {date}",
+    "start": "Start",
+    "submit": "Submit",
+    "evidenceUrl": "Evidence URL",
+    "evidenceLabel": "Label",
+    "addEvidence": "Add evidence",
+    "noProfile": "No Founder Profile yet",
+    "noProfileBody": "Your timeline appears once you're accepted into a cohort.",
+    "empty": "This cohort has no milestones instantiated yet."
+  }
+}
