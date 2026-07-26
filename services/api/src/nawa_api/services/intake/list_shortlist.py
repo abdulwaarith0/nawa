@@ -170,6 +170,7 @@ async def _build_items(rows, *, offset: int) -> list[dict]:
                 "title": application.title,
                 "language": application.source_language,
                 "country": application.normalized.get("country"),
+                "domain": application.normalized.get("field"),
                 "total_score": application.ai_total_score,
                 "criteria": criteria_by_scorecard.get(scorecard.id, []) if scorecard else [],
                 "hidden_gem": scorecard.hidden_gem if scorecard else False,
