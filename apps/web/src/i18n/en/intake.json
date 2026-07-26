@@ -146,6 +146,7 @@
       "rank": "Rank",
       "applicant": "Applicant",
       "title": "Title",
+      "domain": "Domain",
       "language": "Language",
       "country": "Country",
       "score": "Score",
