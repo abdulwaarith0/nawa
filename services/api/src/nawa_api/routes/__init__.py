@@ -10,6 +10,7 @@ def register_routers(app: FastAPI) -> None:
         ai,
         audit,
         auth,
+        community,
         events,
         iam,
         intake,
@@ -29,3 +30,4 @@ def register_routers(app: FastAPI) -> None:
     app.include_router(intake.router, prefix=_API_PREFIX)
     app.include_router(journey.router, prefix=_API_PREFIX)
     app.include_router(profiles.router, prefix=_API_PREFIX)
+    app.include_router(community.router, prefix=_API_PREFIX)
