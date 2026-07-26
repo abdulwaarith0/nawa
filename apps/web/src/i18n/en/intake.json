@@ -13,6 +13,7 @@
       "inReview": "In review",
       "avgScore": "Avg AI score",
       "ofReceived": "of {count} received",
+      "pctOfBatch": "{pct}% of batch",
       "awaitingDecision": "awaiting decision"
     },
     "table": {
@@ -27,11 +28,33 @@
     "title": "Intake audit log",
     "subtitle": "Scoring runs, decisions, and dedup resolutions — most recent first.",
     "empty": "No intake audit entries yet.",
+    "search": "Search action, reason, or ID…",
+    "banner": {
+      "title": "Immutable trail.",
+      "body": "Every intake action is appended here with actor, timestamp, and reason. Entries cannot be edited or deleted — only added."
+    },
+    "tabs": {
+      "all": "All entries",
+      "scoring": "Scoring & dedup",
+      "decisions": "Decisions"
+    },
     "columns": {
       "actor": "Actor",
       "action": "Action",
       "target": "Target",
+      "reason": "Reason",
       "date": "When"
+    },
+    "actionLabels": {
+      "decisionCreate": "Recorded decision",
+      "decisionOverride": "Overrode AI ranking",
+      "decisionAccept": "Accepted into cohort",
+      "scoreRun": "Triggered scoring run",
+      "dedupResolve": "Resolved duplicate match",
+      "uploadCreate": "Uploaded batch",
+      "applicationCreate": "Added application",
+      "documentAttach": "Attached document",
+      "exportCreate": "Exported shortlist"
     }
   },
   "upload": {
@@ -97,6 +120,7 @@
     "eyebrow": "Intake",
     "title": "Shortlist",
     "subtitle": "Ranked by AI score against the cycle's active rubric.",
+    "backToConsole": "Back to console",
     "filters": {
       "scoreBand": "Score band",
       "criterion": "Criterion",
@@ -150,7 +174,8 @@
   },
   "scorecard": {
     "title": "Application scorecard",
-    "backToShortlist": "Back to shortlist",
+    "backToConsole": "Back to console",
+    "overallScore": "Overall score",
     "rubricVersion": "Scored against v{version}",
     "sourceLanguage": "Source language",
     "noScorecard": "This application has not been scored yet.",
