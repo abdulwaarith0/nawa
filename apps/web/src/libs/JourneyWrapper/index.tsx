@@ -1,34 +1,48 @@
 "use client";
 
-import { ComingSoon } from "@/components";
+import { EmptyState, Tabs } from "@/components";
+import { usePermissions } from "@/hooks/Auth";
 import { useT } from "@/i18n/useT";
-import { TopNav } from "@/layouts";
+import { ConsoleShell, Guard } from "@/layouts";
+import { useMemo } from "react";
+import BoardTab from "./BoardTab";
+import TimelineTab from "./TimelineTab";
+import "./styles.css";
 
-// Cohort journey home (surface map §8, `/journey`, member view — TopNav).
-// Milestone boards land in slice 07; placeholder state for now.
+// Journey home (07-journey-copilot.md §5, `/journey`). Deliverable A only —
+// milestone tracking. The Assistant (RAG chat) and Digests tabs the design
+// mock shows have no backend yet (no routes/services exist for either);
+// building them now would mean fabricating a chat interface with nothing
+// real behind it, so they're left out until that backend ships.
 export default function JourneyWrapper() {
-  const t = useT("console");
+  const t = useT("journey");
+  const { has } = usePermissions();
+  const canManage = has("nawa:journey:manage");
+  const canTrack = has("nawa:journey:progress");
+
+  const items = useMemo(() => {
+    const list = [];
+    if (canManage) list.push({ id: "board", label: t("tabs.board"), content: <BoardTab /> });
+    if (canTrack)
+      list.push({ id: "timeline", label: t("tabs.timeline"), content: <TimelineTab /> });
+    return list;
+  }, [canManage, canTrack, t]);
 
   return (
-    <>
-      <TopNav />
-      <main
-        style={{
-          maxWidth: 960,
-          marginInline: "auto",
-          padding: "var(--nw-space-8) var(--nw-space-6)",
-        }}
-      >
-        <h1 className="nw-display" style={{ fontSize: "var(--nw-text-3xl)" }}>
-          {t("modules.journey.title")}
-        </h1>
-        <p
-          style={{ color: "var(--nw-ink-600)", marginBlock: "var(--nw-space-2) var(--nw-space-6)" }}
-        >
-          {t("modules.journey.subtitle")}
-        </p>
-        <ComingSoon />
-      </main>
-    </>
+    <ConsoleShell>
+      <div className="nw-shell">
+        <div className="nw-page-head">
+          <div>
+            <div className="nw-page-eyebrow">{t("eyebrow")}</div>
+            <h1 className="nw-page-title">{t("title")}</h1>
+            <p className="nw-page-sub">{t("subtitle")}</p>
+          </div>
+        </div>
+
+        <Guard permission="nawa:console:journey">
+          {items.length === 0 ? <EmptyState headline={t("noAccess")} /> : <Tabs items={items} />}
+        </Guard>
+      </div>
+    </ConsoleShell>
   );
 }
