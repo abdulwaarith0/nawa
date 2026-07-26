@@ -1,0 +1,20 @@
+{
+  "notFound": "Profile not found",
+  "about": "About",
+  "kpis": "KPIs",
+  "kpisEmpty": "No KPI data yet.",
+  "programHistory": "Program history",
+  "programHistoryEmpty": "No program history yet.",
+  "skills": "Skills",
+  "domains": "Domains",
+  "asks": "Current asks",
+  "asksEmpty": "No open asks right now.",
+  "mentorBadge": "Mentor",
+  "stage": {
+    "idea": "Idea",
+    "prototype": "Prototype",
+    "pilot": "Pilot",
+    "revenue": "Revenue",
+    "growth": "Growth"
+  }
+}
