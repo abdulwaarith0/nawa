@@ -208,7 +208,7 @@ export default function IntakeWrapper() {
             <p className="nw-page-sub">{cycleLabel ?? t("upload.subtitle")}</p>
           </div>
           <div className="nw-page-actions">
-            <Link href={Routes.intake.home} className="nw-btn nw-btn-secondary">
+            <Link href={Routes.intake.home} className="nw-btn nw-btn-outline">
               {t("upload.cancel")}
             </Link>
           </div>
@@ -355,7 +355,7 @@ export default function IntakeWrapper() {
                       )}
                     </span>
                     <div className="nw-intake-mapping-actions">
-                      <Button variant="secondary" onClick={reset}>
+                      <Button variant="outline" onClick={reset}>
                         {t("upload.back")}
                       </Button>
                       <Button
@@ -475,8 +475,8 @@ export default function IntakeWrapper() {
                       {t("upload.done.viewShortlist")}
                       <ArrowRight size={15} aria-hidden="true" />
                     </Link>
-                    {has("nawa:iam:manage") ? (
-                      <Link href={Routes.admin.audit} className="nw-btn nw-btn-secondary">
+                    {has("nawa:audit:read") ? (
+                      <Link href={Routes.intake.audit} className="nw-btn nw-btn-outline">
                         {t("upload.done.viewAudit")}
                       </Link>
                     ) : null}
