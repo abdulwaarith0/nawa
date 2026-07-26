@@ -3,7 +3,7 @@
 import Spinner from "@/components/Spinner";
 import { type ButtonHTMLAttributes, useMemo } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "outline";
 
 export interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
