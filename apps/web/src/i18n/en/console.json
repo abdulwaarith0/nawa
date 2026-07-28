@@ -19,6 +19,23 @@
     "menu": "Menu",
     "close": "Close menu"
   },
+  "notifications": {
+    "label": "Notifications",
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "You're all caught up.",
+    "unread": "{count} unread"
+  },
+  "quickCreate": {
+    "label": "New",
+    "heading": "Create",
+    "uploadBatch": "Upload application batch",
+    "uploadBatchDetail": "Score a new set of applicants",
+    "generateReport": "Generate report",
+    "generateReportDetail": "Portfolio or venture KPIs",
+    "communityRequest": "Post a community request",
+    "communityRequestDetail": "Ask the network for help"
+  },
   "onboarding": {
     "title": "Set up your Founder Profile",
     "progress": "Step {current} of {total}"
@@ -55,6 +72,27 @@
       "viewAll": "View all",
       "aiScore": "AI score",
       "empty": "No applications yet."
+    },
+    "chart": {
+      "title": "Applications by month",
+      "year": "This year",
+      "ytd": "Last 6 mo",
+      "empty": "No monthly data yet."
+    },
+    "capacity": {
+      "title": "Program capacity",
+      "viewAll": "View all",
+      "filling": "Filling",
+      "nearFull": "Near full",
+      "full": "Full",
+      "empty": "No program data yet."
+    },
+    "calendar": {
+      "title": "Calendar",
+      "screening": "Screening",
+      "interviews": "Interviews",
+      "deadlines": "Deadlines",
+      "empty": "No events yet."
     }
   },
   "states": {
