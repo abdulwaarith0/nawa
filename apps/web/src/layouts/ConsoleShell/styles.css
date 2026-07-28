@@ -131,6 +131,208 @@
   }
 }
 
+/* Notification bell — design AppShell: icon button + unread dot + feed. */
+.nw-notif {
+  position: relative;
+  display: inline-flex;
+}
+.nw-notif-trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 38px;
+  block-size: 38px;
+  border: 1px solid transparent;
+  border-radius: var(--nw-radius-control);
+  background: transparent;
+  color: var(--nw-text-secondary);
+  cursor: pointer;
+}
+.nw-notif-trigger:hover {
+  background: var(--nw-surface-muted);
+}
+.nw-notif-dot {
+  position: absolute;
+  inset-block-start: 7px;
+  inset-inline-end: 8px;
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: var(--nw-action-danger);
+  border: 1.5px solid var(--nw-surface-card);
+}
+.nw-notif-menu {
+  position: absolute;
+  inset-block-start: calc(100% + 8px);
+  inset-inline-end: 0;
+  z-index: var(--nw-z-nav);
+  inline-size: 360px;
+  max-inline-size: calc(100vw - 40px);
+  padding: 6px;
+  background: var(--nw-surface-card);
+  border: 1px solid var(--nw-border-default);
+  border-radius: var(--nw-radius-item);
+  box-shadow: var(--nw-shadow-elevated);
+}
+.nw-notif-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px 10px;
+}
+.nw-notif-title {
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-semibold);
+}
+.nw-notif-markall {
+  border: 0;
+  background: transparent;
+  color: var(--nw-text-link);
+  font-size: var(--nw-font-size-caption);
+  font-weight: var(--nw-font-weight-medium);
+  cursor: pointer;
+}
+.nw-notif-markall:hover {
+  color: var(--nw-color-green-800);
+}
+.nw-notif-empty {
+  padding: 18px 12px 22px;
+  text-align: center;
+  color: var(--nw-text-tertiary);
+  font-size: var(--nw-font-size-small);
+}
+.nw-notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-block-size: 60vh;
+  overflow-y: auto;
+}
+.nw-notif-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  inline-size: 100%;
+  text-align: start;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: var(--nw-radius-sm);
+  color: inherit;
+}
+.nw-notif-item:hover {
+  background: var(--nw-surface-subtle);
+  text-decoration: none;
+}
+.nw-notif-list li[data-unread] .nw-notif-item {
+  background: var(--nw-color-green-50);
+}
+.nw-notif-list li[data-unread] .nw-notif-item:hover {
+  background: var(--nw-color-green-100);
+}
+.nw-notif-unread-dot {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: var(--nw-action-primary);
+  margin-block-start: 6px;
+  flex: 0 0 auto;
+}
+.nw-notif-item-txt {
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+.nw-notif-item-title {
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-primary);
+}
+.nw-notif-item-body {
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-tertiary);
+  overflow-wrap: anywhere;
+}
+.nw-notif-item-time {
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-quaternary);
+  margin-block-start: 2px;
+}
+
+/* Quick-create ("＋ New") menu — design AppShell popover. */
+.nw-quick-create {
+  position: relative;
+}
+.nw-quick-create-trigger {
+  gap: 7px;
+}
+.nw-quick-create-menu {
+  position: absolute;
+  inset-block-start: calc(100% + 8px);
+  inset-inline-end: 0;
+  z-index: var(--nw-z-nav);
+  inline-size: 300px;
+  max-inline-size: calc(100vw - 40px);
+  padding: 6px;
+  background: var(--nw-surface-card);
+  border: 1px solid var(--nw-border-default);
+  border-radius: var(--nw-radius-item);
+  box-shadow: var(--nw-shadow-elevated);
+}
+.nw-quick-create-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 10px;
+  font-size: var(--nw-font-size-caption);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-tertiary);
+}
+.nw-quick-create-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--nw-radius-sm);
+  color: var(--nw-text-primary);
+}
+.nw-quick-create-item:hover {
+  background: var(--nw-color-green-50);
+  text-decoration: none;
+}
+.nw-quick-create-item-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  background: var(--nw-color-green-100);
+  color: var(--nw-action-primaryHover);
+}
+.nw-quick-create-item-txt {
+  display: grid;
+  min-inline-size: 0;
+}
+.nw-quick-create-item-title {
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-medium);
+}
+.nw-quick-create-item-detail {
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-tertiary);
+  margin-block-start: 2px;
+}
+
+@media (max-width: 768px) {
+  .nw-quick-create-menu {
+    inset-inline-end: auto;
+    inset-inline-start: 0;
+  }
+}
+
 .nw-console-main {
   min-block-size: calc(100vh - var(--nw-layout-topbarHeight));
 }
