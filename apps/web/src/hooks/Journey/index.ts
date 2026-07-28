@@ -10,6 +10,12 @@ export {
   useCohortBoard,
 } from "./useCohortBoard";
 export { type TimelineItem, useMyTimeline } from "./useMyTimeline";
+export { type JourneyCohort, useJourneyCohorts } from "./useJourneyCohorts";
+export {
+  type AssistantCitation,
+  type AssistantMessage,
+  useJourneyAssistant,
+} from "./useJourneyAssistant";
 export {
   type FounderProgressStatus,
   type ProgressResult,
