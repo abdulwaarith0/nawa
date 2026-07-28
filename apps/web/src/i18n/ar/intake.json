@@ -57,7 +57,20 @@
       "applicationCreate": "إضافة طلب",
       "documentAttach": "إرفاق مستند",
       "exportCreate": "تصدير القائمة المختصرة"
-    }
+    },
+    "actor": {
+      "copilot": "مساعد الاستقبال",
+      "automated": "آلي",
+      "member": "عضو الفريق"
+    },
+    "legend": {
+      "aiAction": "إجراء ذكاء اصطناعي",
+      "human": "قرار بشري"
+    },
+    "appendOnly": "إضافة فقط",
+    "showing": "عرض {from}–{to} من {total} إدخالاً",
+    "prev": "الصفحة السابقة",
+    "next": "الصفحة التالية"
   },
   "upload": {
     "eyebrow": "مساعد الاستقبال",
