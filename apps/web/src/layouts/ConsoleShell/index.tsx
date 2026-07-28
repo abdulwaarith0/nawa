@@ -3,6 +3,8 @@
 import { Avatar } from "@/components";
 import { usePermissions, useSession } from "@/hooks/Auth";
 import { useT } from "@/i18n/useT";
+import NotificationBell from "@/layouts/ConsoleShell/NotificationBell";
+import QuickCreate from "@/layouts/ConsoleShell/QuickCreate";
 import LocaleSwitcher from "@/layouts/LocaleSwitcher";
 import { getApiClient } from "@/lib/apiClient";
 import { Routes } from "@nawa/contracts";
@@ -98,6 +100,7 @@ export default function ConsoleShell({ title, children }: IProps) {
             <LocaleSwitcher />
             {isSignedIn && user ? (
               <>
+                <NotificationBell />
                 <a
                   href={Routes.profile(user.username)}
                   className="nw-topbar-avatar-link"
@@ -108,6 +111,7 @@ export default function ConsoleShell({ title, children }: IProps) {
                 <button type="button" className="nw-btn nw-btn-ghost" onClick={onSignOut}>
                   {tCommon("actions.signOut")}
                 </button>
+                <QuickCreate />
               </>
             ) : null}
           </div>
