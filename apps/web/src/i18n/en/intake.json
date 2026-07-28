@@ -57,7 +57,20 @@
       "applicationCreate": "Added application",
       "documentAttach": "Attached document",
       "exportCreate": "Exported shortlist"
-    }
+    },
+    "actor": {
+      "copilot": "Intake Copilot",
+      "automated": "Automated",
+      "member": "Team member"
+    },
+    "legend": {
+      "aiAction": "AI action",
+      "human": "Human decision"
+    },
+    "appendOnly": "Append-only",
+    "showing": "Showing {from}–{to} of {total} entries",
+    "prev": "Previous page",
+    "next": "Next page"
   },
   "upload": {
     "eyebrow": "Intake Copilot",
