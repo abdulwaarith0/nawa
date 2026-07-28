@@ -4,8 +4,31 @@
   "subtitle": "Milestone tracking for your cohorts.",
   "noAccess": "You don't have access to any Journey view yet.",
   "tabs": {
+    "overview": "Overview",
     "board": "Board",
     "timeline": "My timeline"
+  },
+  "overview": {
+    "milestones": "Milestones",
+    "memberProgress": "Member progress",
+    "noCohorts": "No cohorts to track yet",
+    "noCohortsBody": "Once a cycle admits a cohort, it appears here.",
+    "noMilestones": "No milestones instantiated for this cohort yet.",
+    "noMembers": "No members enrolled yet.",
+    "complete": "Complete",
+    "current": "In progress",
+    "upcoming": "Upcoming",
+    "pctComplete": "{pct}% complete"
+  },
+  "assistant": {
+    "title": "Journey assistant",
+    "badge": "AI · RAG",
+    "placeholder": "Ask the assistant…",
+    "send": "Send",
+    "aria": "Ask the Journey assistant",
+    "empty": "Ask about labs, mentors, deadlines, or program resources.",
+    "thinking": "Thinking…",
+    "error": "Couldn't reach the assistant. Try again in a moment."
   },
   "status": {
     "not_started": "Not started",
