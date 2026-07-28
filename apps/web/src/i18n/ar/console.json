@@ -19,6 +19,23 @@
     "menu": "القائمة",
     "close": "إغلاق القائمة"
   },
+  "notifications": {
+    "label": "الإشعارات",
+    "title": "الإشعارات",
+    "markAllRead": "تعليم الكل كمقروء",
+    "empty": "لا جديد لديك.",
+    "unread": "{count} غير مقروء"
+  },
+  "quickCreate": {
+    "label": "جديد",
+    "heading": "إنشاء",
+    "uploadBatch": "رفع دفعة طلبات",
+    "uploadBatchDetail": "قيّم مجموعة جديدة من المتقدمين",
+    "generateReport": "إنشاء تقرير",
+    "generateReportDetail": "مؤشرات المحفظة أو المشروع",
+    "communityRequest": "نشر طلب في المجتمع",
+    "communityRequestDetail": "اطلب المساعدة من الشبكة"
+  },
   "onboarding": {
     "title": "أنشئ ملفك التعريفي كمؤسس",
     "progress": "الخطوة {current} من {total}"
@@ -55,6 +72,27 @@
       "viewAll": "عرض الكل",
       "aiScore": "تقييم الذكاء الاصطناعي",
       "empty": "لا توجد طلبات بعد."
+    },
+    "chart": {
+      "title": "الطلبات حسب الشهر",
+      "year": "هذا العام",
+      "ytd": "آخر 6 أشهر",
+      "empty": "لا توجد بيانات شهرية بعد."
+    },
+    "capacity": {
+      "title": "سعة البرامج",
+      "viewAll": "عرض الكل",
+      "filling": "قيد الامتلاء",
+      "nearFull": "شبه ممتلئ",
+      "full": "ممتلئ",
+      "empty": "لا توجد بيانات برامج بعد."
+    },
+    "calendar": {
+      "title": "التقويم",
+      "screening": "الفرز",
+      "interviews": "المقابلات",
+      "deadlines": "المواعيد النهائية",
+      "empty": "لا توجد أحداث بعد."
     }
   },
   "states": {
