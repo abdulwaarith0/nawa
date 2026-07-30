@@ -25,6 +25,7 @@ const s = vi.hoisted(() => ({
     refresh: () => void;
   },
   atRisk: { atRisk: [] as Array<Record<string, unknown>>, refresh: vi.fn() },
+  journeyCohorts: { cohorts: [] as Array<Record<string, unknown>>, error: undefined, isLoading: false },
   history: { history: undefined, error: undefined, isLoading: false } as {
     history: Array<Record<string, unknown>> | undefined;
     error: unknown;
@@ -64,6 +65,8 @@ vi.mock("@/hooks/Journey", () => ({
   useMyTimeline: () => s.timeline,
   useReviewProgress: () => ({ run: s.review, isPending: false, error: undefined }),
   useUpdateProgress: () => ({ run: s.updateProgress, isPending: false, error: undefined }),
+  useJourneyCohorts: () => s.journeyCohorts,
+  useJourneyAssistant: () => ({ messages: [], isSending: false, send: vi.fn(), reset: vi.fn() }),
 }));
 vi.mock("@/hooks/Profiles", () => ({
   useProgramHistory: () => s.history,
@@ -76,6 +79,7 @@ beforeEach(() => {
   s.cohorts = { cohorts: undefined, error: undefined, isLoading: false };
   s.board = { board: undefined, error: undefined, isLoading: false, refresh: vi.fn() };
   s.atRisk = { atRisk: [], refresh: vi.fn() };
+  s.journeyCohorts = { cohorts: [], error: undefined, isLoading: false };
   s.history = { history: undefined, error: undefined, isLoading: false };
   s.timeline = { items: undefined, error: undefined, isLoading: false, refresh: vi.fn() };
   s.review.mockReset();
@@ -88,9 +92,10 @@ describe("JourneyWrapper", () => {
     expect(screen.getByText("You don't have access to any Journey view yet.")).toBeInTheDocument();
   });
 
-  it("shows only the Board tab for a manager without progress access", () => {
+  it("shows the Overview + Board tabs for a manager without progress access", () => {
     perm.manage = true;
     renderWithLocale(<JourneyWrapper />, "en");
+    expect(screen.getByRole("tab", { name: "Overview" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "Board" })).toBeInTheDocument();
     expect(screen.queryByRole("tab", { name: "My timeline" })).not.toBeInTheDocument();
   });
@@ -102,11 +107,12 @@ describe("JourneyWrapper", () => {
     expect(screen.getByRole("tab", { name: "My timeline" })).toBeInTheDocument();
   });
 
-  it("board: renders an empty state when no cohort has been admitted yet", () => {
+  it("board: renders an empty state when no cohort has been admitted yet", async () => {
     perm.manage = true;
     s.cycles.cycles = [{ id: "cycle-1", status: "active" }];
     s.cohorts.cohorts = [];
     renderWithLocale(<JourneyWrapper />, "en");
+    await userEvent.click(screen.getByRole("tab", { name: "Board" }));
     expect(screen.getByText("No cohort to track yet")).toBeInTheDocument();
   });
 
@@ -137,6 +143,7 @@ describe("JourneyWrapper", () => {
       ],
     };
     renderWithLocale(<JourneyWrapper />, "en");
+    await userEvent.click(screen.getByRole("tab", { name: "Board" }));
 
     expect(screen.getByText("Prototype")).toBeInTheDocument();
     expect(screen.getByText("Sara Al-Mansoori")).toBeInTheDocument();
@@ -174,6 +181,7 @@ describe("JourneyWrapper", () => {
       ],
     };
     renderWithLocale(<JourneyWrapper />, "en");
+    await userEvent.click(screen.getByRole("tab", { name: "Board" }));
     await userEvent.click(screen.getByText("Submitted"));
     await userEvent.click(screen.getByRole("button", { name: "Block" }));
 
