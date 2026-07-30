@@ -152,3 +152,254 @@
   gap: var(--nw-space-2);
   flex-wrap: wrap;
 }
+
+/* ============================================================
+   Journey Overview (design "Cohort tracker") — chips + milestone
+   timeline + member progress + RAG assistant rail.
+   ============================================================ */
+
+/* Cohort filter chips */
+.nw-journey-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nw-journey-chip {
+  cursor: pointer;
+  border-radius: var(--nw-radius-pill);
+  padding: 7px 14px;
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-medium);
+  background: var(--nw-surface-card);
+  color: var(--nw-text-tertiary);
+  border: 1px solid var(--nw-border-default);
+}
+.nw-journey-chip:hover {
+  border-color: var(--nw-border-strong);
+}
+.nw-journey-chip[data-active] {
+  background: var(--nw-color-green-100);
+  color: var(--nw-status-success);
+  border-color: var(--nw-color-green-200);
+}
+
+.nw-journey-overview-main {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+.nw-journey-card {
+  padding: 20px 22px;
+}
+.nw-journey-card-title {
+  font-size: var(--nw-font-size-cardTitle);
+  font-weight: var(--nw-font-weight-medium);
+  margin-block-end: 16px;
+}
+.nw-journey-card-sub {
+  color: var(--nw-text-tertiary);
+  font-weight: var(--nw-font-weight-regular);
+}
+
+/* Milestone timeline */
+.nw-jtimeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nw-jtimeline-item {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 14px;
+}
+.nw-jtimeline-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nw-jtimeline-node {
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  margin-block-start: 2px;
+}
+.nw-jtimeline-node--complete {
+  background: var(--nw-action-primary);
+}
+.nw-jtimeline-node--current {
+  background: var(--nw-surface-card);
+  border: 4px solid var(--nw-action-primary);
+  box-shadow: 0 0 0 3px var(--nw-action-primarySoft);
+}
+.nw-jtimeline-node--upcoming {
+  background: var(--nw-surface-card);
+  border: 2px solid var(--nw-border-strong);
+}
+.nw-jtimeline-line {
+  flex: 1;
+  inline-size: 2px;
+  min-block-size: 22px;
+  background: var(--nw-border-subtle);
+  margin-block-start: 4px;
+}
+.nw-jtimeline-body {
+  padding-block-end: 22px;
+  min-inline-size: 0;
+}
+.nw-jtimeline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.nw-jtimeline-title {
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
+  overflow-wrap: anywhere;
+}
+.nw-jtimeline-date {
+  display: block;
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-quaternary);
+  margin-block-start: 4px;
+}
+
+/* Member progress */
+.nw-journey-members {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.nw-journey-member-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-end: 8px;
+}
+.nw-journey-member-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
+  min-inline-size: 0;
+}
+.nw-journey-member-pct {
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-secondary);
+  flex: 0 0 auto;
+}
+
+/* Assistant rail */
+.nw-journey-assistant {
+  padding: 0;
+  overflow: hidden;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+}
+.nw-journey-assistant-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 16px;
+  border-block-end: 1px solid var(--nw-border-default);
+}
+.nw-journey-assistant-title {
+  font-size: var(--nw-font-size-small);
+  font-weight: var(--nw-font-weight-medium);
+}
+.nw-journey-assistant-body {
+  padding: 16px;
+  min-block-size: 120px;
+}
+.nw-journey-assistant-empty {
+  color: var(--nw-text-tertiary);
+  font-size: var(--nw-font-size-caption);
+  line-height: var(--nw-font-line-relaxed);
+}
+.nw-journey-assistant-error {
+  color: var(--nw-action-danger);
+  font-size: var(--nw-font-size-meta);
+}
+.nw-journey-assistant-thinking {
+  color: var(--nw-text-tertiary);
+  font-style: italic;
+}
+.nw-journey-cites {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nw-journey-cites li {
+  background: var(--nw-ai-chip);
+  color: var(--nw-ai-textDeep);
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-size: var(--nw-font-size-micro);
+  font-weight: var(--nw-font-weight-medium);
+}
+.nw-journey-assistant-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+  border-block-start: 1px solid var(--nw-border-default);
+}
+.nw-journey-assistant-form .nw-input {
+  flex: 1;
+}
+.nw-journey-assistant-send {
+  inline-size: 38px;
+  block-size: 38px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 9px;
+  background: var(--nw-action-primary);
+  color: var(--nw-text-inverse);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.nw-journey-assistant-send:hover:not(:disabled) {
+  background: var(--nw-action-primaryHover);
+}
+.nw-journey-assistant-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Chat bubbles (not in base — assistant-local) */
+.nw-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.nw-chat__user {
+  align-self: flex-end;
+  max-inline-size: 85%;
+  background: var(--nw-color-green-100);
+  color: var(--nw-color-green-900);
+  border-radius: 14px 14px 4px 14px;
+  padding: 10px 13px;
+  font-size: var(--nw-font-size-meta);
+  line-height: var(--nw-font-line-relaxed);
+}
+[dir="rtl"] .nw-chat__user {
+  border-radius: 14px 14px 14px 4px;
+}
+.nw-chat__ai {
+  align-self: flex-start;
+  max-inline-size: 92%;
+  font-size: var(--nw-font-size-meta);
+  line-height: var(--nw-font-line-relaxed);
+}
