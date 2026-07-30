@@ -5,7 +5,6 @@ import {
   Avatar,
   Badge,
   Card,
-  ComingSoon,
   EmptyState,
   GaugeRing,
   Loading,
@@ -20,6 +19,9 @@ import { ConsoleShell } from "@/layouts";
 import { Routes } from "@nawa/contracts";
 import Link from "next/link";
 import { useMemo } from "react";
+import ApplicationsChart from "./ApplicationsChart";
+import CalendarPanel from "./CalendarPanel";
+import ProgramCapacityPanel from "./ProgramCapacityPanel";
 import "./styles.css";
 
 const DECISION_TONE: Record<string, "neutral" | "success" | "warning" | "danger" | "info"> = {
@@ -172,11 +174,11 @@ export default function DashboardWrapper() {
                 </div>
               </Card>
 
-              <ComingSoon />
+              <CalendarPanel />
             </div>
 
             <div className="nw-section-gap">
-              <ComingSoon />
+              <ApplicationsChart />
             </div>
           </div>
 
@@ -224,7 +226,7 @@ export default function DashboardWrapper() {
             </Card>
 
             <div className="nw-section-gap">
-              <ComingSoon />
+              <ProgramCapacityPanel />
             </div>
           </div>
         </div>
