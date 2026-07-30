@@ -6,6 +6,7 @@ import { useT } from "@/i18n/useT";
 import { ConsoleShell, Guard } from "@/layouts";
 import { useMemo } from "react";
 import BoardTab from "./BoardTab";
+import OverviewTab from "./OverviewTab";
 import TimelineTab from "./TimelineTab";
 import "./styles.css";
 
@@ -22,7 +23,12 @@ export default function JourneyWrapper() {
 
   const items = useMemo(() => {
     const list = [];
-    if (canManage) list.push({ id: "board", label: t("tabs.board"), content: <BoardTab /> });
+    // Overview (design "Cohort tracker") is the manager's read view; the Board
+    // keeps the interactive milestone review. Founders get their own timeline.
+    if (canManage) {
+      list.push({ id: "overview", label: t("tabs.overview"), content: <OverviewTab /> });
+      list.push({ id: "board", label: t("tabs.board"), content: <BoardTab /> });
+    }
     if (canTrack)
       list.push({ id: "timeline", label: t("tabs.timeline"), content: <TimelineTab /> });
     return list;
