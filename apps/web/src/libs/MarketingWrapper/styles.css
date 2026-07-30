@@ -1,0 +1,97 @@
+/* Marketing landing (public, bilingual). Built on the shared design system so
+ * it reads as the same product as the signed-in console. RTL-safe throughout. */
+.nw-mkt {
+  max-inline-size: 1080px;
+  margin-inline: auto;
+  padding: var(--nw-space-16) var(--nw-space-6) var(--nw-space-12);
+}
+
+.nw-mkt-hero {
+  max-inline-size: 760px;
+}
+.nw-mkt-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--nw-radius-pill);
+  background: var(--nw-color-green-100);
+  color: var(--nw-action-primaryHover);
+  font-size: var(--nw-font-size-micro);
+  font-weight: var(--nw-font-weight-medium);
+  letter-spacing: var(--nw-font-letter-caps);
+}
+.nw-mkt-title {
+  margin-block: var(--nw-space-5) var(--nw-space-4);
+  font-size: var(--nw-font-size-display);
+  font-weight: var(--nw-font-weight-semibold);
+  line-height: var(--nw-font-line-tight);
+  letter-spacing: var(--nw-font-letter-tight);
+  color: var(--nw-text-primary);
+}
+.nw-mkt-lede {
+  max-inline-size: 640px;
+  color: var(--nw-text-secondary);
+  font-size: var(--nw-font-size-section);
+  line-height: var(--nw-font-line-relaxed);
+}
+.nw-mkt-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nw-space-3);
+  margin-block-start: var(--nw-space-8);
+}
+.nw-mkt-cta .nw-btn {
+  min-block-size: 44px;
+  padding-inline: 20px;
+}
+
+/* Product pillars — the four modules, as design-system cards. */
+.nw-mkt-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--nw-space-4);
+  margin-block-start: var(--nw-space-16);
+}
+.nw-mkt-pillar {
+  padding: var(--nw-space-6);
+}
+.nw-mkt-pillar-icon {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--nw-radius-item);
+  background: var(--nw-action-primarySoft);
+  color: var(--nw-action-primaryHover);
+}
+.nw-mkt-pillar-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: var(--nw-space-4) var(--nw-space-2);
+  font-size: var(--nw-font-size-cardTitle);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-primary);
+}
+.nw-mkt-pillar-title-ar {
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-regular);
+  color: var(--nw-text-tertiary);
+}
+.nw-mkt-pillar-body {
+  color: var(--nw-text-secondary);
+  font-size: var(--nw-font-size-small);
+  line-height: var(--nw-font-line-relaxed);
+}
+
+@media (max-width: 720px) {
+  .nw-mkt {
+    padding-block-start: var(--nw-space-10);
+  }
+  .nw-mkt-pillars {
+    grid-template-columns: 1fr;
+    margin-block-start: var(--nw-space-10);
+  }
+}
