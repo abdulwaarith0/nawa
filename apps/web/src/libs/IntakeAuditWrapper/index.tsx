@@ -1,18 +1,38 @@
 "use client";
 
-import { Badge, Button, Callout, ErrorState, Input, Loading, Tabs } from "@/components";
+import {
+  AiAttribution,
+  Badge,
+  Button,
+  Callout,
+  Card,
+  ErrorState,
+  Input,
+  Loading,
+  Tabs,
+} from "@/components";
 import { EmptyState } from "@/components/States";
 import { formatDate } from "@/helpers/format";
 import type { AuditLog } from "@/hooks/Audit";
 import { useIntakeAuditLogs } from "@/hooks/Audit";
 import { useLocale } from "@/i18n/LocaleProvider";
+import type { TFunction } from "@/i18n/lookup";
 import { useT } from "@/i18n/useT";
 import { ConsoleShell, Guard } from "@/layouts";
+import type { TLocale } from "@nawa/contracts";
 import { Routes } from "@nawa/contracts";
-import { ArrowLeft, Download, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Lock,
+  Search,
+  Sparkles,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import "../AuditWrapper/styles.css";
 import "./styles.css";
 
 // Actions this app actually audits under the three intake target types
@@ -90,6 +110,172 @@ function downloadAuditCsv(rows: AuditLog[]): void {
   URL.revokeObjectURL(url);
 }
 
+// actor_type is CHECK-constrained to ('user','system','ai') at write time
+// (models/identity.py). Both non-user kinds are the automated Copilot as far
+// as the reader is concerned, so they share the amber sparkle treatment.
+function isAutomated(log: AuditLog): boolean {
+  return log.actor_type === "ai" || log.actor_type === "system";
+}
+
+// A short, stable handle for an un-resolved actor/target UUID — enough to
+// distinguish rows without dumping a full 36-char id (names aren't resolvable
+// here; see the wrapper comment). The full id stays available via `title`.
+function shortId(id: string | null): string {
+  if (!id) return "—";
+  return id.length > 8 ? id.slice(0, 8) : id;
+}
+
+const PAGE_SIZE = 25;
+
+// One tab's worth of rows: the design's card table (§ audit) with an
+// AI/human-distinguished actor cell, plus client-side pagination so the full
+// seed stream doesn't render as one unbounded dump.
+function AuditTable({
+  rows,
+  t,
+  locale,
+}: {
+  rows: AuditLog[];
+  t: TFunction;
+  locale: TLocale;
+}) {
+  const [page, setPage] = useState(0);
+  const total = rows.length;
+
+  if (total === 0) {
+    return <EmptyState headline={t("audit.empty")} />;
+  }
+
+  const pageCount = Math.ceil(total / PAGE_SIZE);
+  const current = Math.min(page, pageCount - 1);
+  const start = current * PAGE_SIZE;
+  const pageRows = rows.slice(start, start + PAGE_SIZE);
+
+  return (
+    <Card className="nw-audit-card">
+      <div className="nw-audit-scroll">
+        <table className="nw-audit-table">
+          <thead>
+            <tr>
+              <th>{t("audit.columns.actor")}</th>
+              <th>{t("audit.columns.action")}</th>
+              <th>{t("audit.columns.target")}</th>
+              <th>{t("audit.columns.reason")}</th>
+              <th>{t("audit.columns.date")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pageRows.map((log) => {
+              const { reason, decision } = extractBody(log);
+              const labelKey = ACTION_LABEL_KEY[log.action];
+              const actionLabel = labelKey ? t(`audit.actionLabels.${labelKey}`) : log.action;
+              const ai = isAutomated(log);
+              return (
+                <tr key={log.id}>
+                  <td>
+                    <span className="nw-audit-actor">
+                      {ai ? (
+                        <span
+                          className="nw-audit-actor-mark nw-audit-actor-mark--ai"
+                          aria-hidden="true"
+                        >
+                          <Sparkles size={13} />
+                        </span>
+                      ) : (
+                        <span className="nw-audit-actor-mark" aria-hidden="true">
+                          <User size={14} />
+                        </span>
+                      )}
+                      <span className="nw-audit-actor-txt">
+                        <b>
+                          {ai ? (
+                            t("audit.actor.copilot")
+                          ) : (
+                            <bdi title={log.actor_id ?? undefined}>{shortId(log.actor_id)}</bdi>
+                          )}
+                        </b>
+                        <small>{ai ? t("audit.actor.automated") : t("audit.actor.member")}</small>
+                      </span>
+                    </span>
+                  </td>
+                  <td>
+                    {ai ? (
+                      <AiAttribution compact>{actionLabel}</AiAttribution>
+                    ) : (
+                      <span className="nw-audit-action-human">{actionLabel}</span>
+                    )}
+                    {decision ? (
+                      <span className="nw-audit-decision-badge">
+                        <Badge tone="neutral">{t(`shortlist.decisionStates.${decision}`)}</Badge>
+                      </span>
+                    ) : null}
+                  </td>
+                  <td className="nw-audit-target">
+                    <bdi title={log.target_id ?? undefined}>
+                      {log.target_type ?? "—"}
+                      {log.target_id ? ` · ${shortId(log.target_id)}` : ""}
+                    </bdi>
+                  </td>
+                  <td className="nw-audit-reason">{reason ?? "—"}</td>
+                  <td className="nw-audit-date">
+                    {formatDate(log.created_at, locale, {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: false,
+                    })}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="nw-audit-foot">
+        <span className="nw-audit-showing">
+          {t("audit.showing", {
+            from: start + 1,
+            to: start + pageRows.length,
+            total,
+          })}
+        </span>
+        <span className="nw-audit-legend">
+          <AiAttribution compact>{t("audit.legend.aiAction")}</AiAttribution>
+          <span className="nw-audit-legend-human">
+            <i />
+            {t("audit.legend.human")}
+          </span>
+        </span>
+        {pageCount > 1 ? (
+          <span className="nw-audit-pager">
+            <button
+              type="button"
+              className="nw-icon-button"
+              aria-label={t("audit.prev")}
+              disabled={current === 0}
+              onClick={() => setPage(current - 1)}
+            >
+              <ChevronLeft className="nw-icon-dir" size={16} aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="nw-icon-button"
+              aria-label={t("audit.next")}
+              disabled={current >= pageCount - 1}
+              onClick={() => setPage(current + 1)}
+            >
+              <ChevronRight className="nw-icon-dir" size={16} aria-hidden="true" />
+            </button>
+          </span>
+        ) : null}
+      </div>
+    </Card>
+  );
+}
+
 // Intake-scoped audit browser (`/intake/audit`, gate `nawa:audit:read`, same
 // gate `/admin/audit` uses — this isn't an admin surface, it's the same
 // audit stream pre-filtered to intake activity). Actor/applicant display
@@ -110,65 +296,6 @@ export default function IntakeAuditWrapper() {
     return logs.filter((log) => matchesSearch(log, query));
   }, [logs, query]);
 
-  const renderTable = (rows: AuditLog[]) => {
-    if (rows.length === 0) {
-      return <EmptyState headline={t("audit.empty")} />;
-    }
-    return (
-      <div style={{ overflowX: "auto" }}>
-        <table className="nw-adm-table">
-          <thead>
-            <tr>
-              <th>{t("audit.columns.actor")}</th>
-              <th>{t("audit.columns.action")}</th>
-              <th>{t("audit.columns.target")}</th>
-              <th>{t("audit.columns.reason")}</th>
-              <th>{t("audit.columns.date")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((log) => {
-              const { reason, decision } = extractBody(log);
-              const labelKey = ACTION_LABEL_KEY[log.action];
-              return (
-                <tr key={log.id}>
-                  <td>
-                    <bdi>{log.actor_id ?? log.actor_type}</bdi>
-                  </td>
-                  <td>
-                    {labelKey ? t(`audit.actionLabels.${labelKey}`) : log.action}
-                    {decision ? (
-                      <span className="nw-audit-decision-badge">
-                        <Badge tone="neutral">{t(`shortlist.decisionStates.${decision}`)}</Badge>
-                      </span>
-                    ) : null}
-                  </td>
-                  <td>
-                    <bdi>
-                      {log.target_type ?? "—"}
-                      {log.target_id ? ` · ${log.target_id}` : ""}
-                    </bdi>
-                  </td>
-                  <td>{reason ?? "—"}</td>
-                  <td className="nw-adm-num">
-                    {formatDate(log.created_at, locale, {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
   let body: React.ReactNode;
   if (isLoading) {
     body = <Loading />;
@@ -182,9 +309,21 @@ export default function IntakeAuditWrapper() {
     body = (
       <Tabs
         items={[
-          { id: "all", label: t("audit.tabs.all"), content: renderTable(filtered) },
-          { id: "scoring", label: t("audit.tabs.scoring"), content: renderTable(scoring) },
-          { id: "decisions", label: t("audit.tabs.decisions"), content: renderTable(decisions) },
+          {
+            id: "all",
+            label: t("audit.tabs.all"),
+            content: <AuditTable rows={filtered} t={t} locale={locale} />,
+          },
+          {
+            id: "scoring",
+            label: t("audit.tabs.scoring"),
+            content: <AuditTable rows={scoring} t={t} locale={locale} />,
+          },
+          {
+            id: "decisions",
+            label: t("audit.tabs.decisions"),
+            content: <AuditTable rows={decisions} t={t} locale={locale} />,
+          },
         ]}
       />
     );
@@ -217,7 +356,15 @@ export default function IntakeAuditWrapper() {
 
         <Guard permission="nawa:audit:read">
           <Callout tone="success">
-            <strong>{t("audit.banner.title")}</strong> {t("audit.banner.body")}
+            <span className="nw-audit-banner">
+              <span>
+                <strong>{t("audit.banner.title")}</strong> {t("audit.banner.body")}
+              </span>
+              <span className="nw-audit-append-only">
+                <Lock size={12} aria-hidden="true" />
+                {t("audit.appendOnly")}
+              </span>
+            </span>
           </Callout>
           <span className="nw-audit-search">
             <Search size={15} aria-hidden="true" />
