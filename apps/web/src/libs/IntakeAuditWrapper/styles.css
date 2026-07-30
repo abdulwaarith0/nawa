@@ -19,3 +19,169 @@
   margin-inline-start: var(--nw-space-2);
   display: inline-block;
 }
+
+/* Immutable-trail banner: keep the assurance copy and the append-only marker
+ * on one baseline, wrapping gracefully on narrow widths. */
+.nw-audit-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  inline-size: 100%;
+}
+.nw-audit-append-only {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-tertiary);
+}
+
+/* ---- Audit table (design § audit): card-wrapped, hairline rows ---- */
+.nw-audit-card {
+  padding: 0;
+  overflow: hidden;
+}
+.nw-audit-scroll {
+  overflow-x: auto;
+}
+.nw-audit-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+.nw-audit-table thead th {
+  text-align: start;
+  padding: 12px 18px;
+  background: var(--nw-surface-muted);
+  border-block-end: 1px solid var(--nw-border-default);
+  font-size: var(--nw-font-size-micro);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.nw-audit-table td {
+  padding: 14px 18px;
+  border-block-end: 1px solid var(--nw-border-subtle);
+  font-size: var(--nw-font-size-meta);
+  color: var(--nw-text-primary);
+  vertical-align: middle;
+}
+.nw-audit-table tbody tr:last-child td {
+  border-block-end: 0;
+}
+.nw-audit-table tbody tr:hover {
+  background: var(--nw-surface-subtle);
+}
+
+/* Actor cell: sparkle chip (AI/automated) or neutral avatar (human) + label */
+.nw-audit-actor {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-inline-size: 0;
+}
+.nw-audit-actor-mark {
+  display: grid;
+  place-items: center;
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: 8px;
+  flex: 0 0 auto;
+  background: var(--nw-surface-muted);
+  border: 1px solid var(--nw-border-default);
+  color: var(--nw-text-tertiary);
+}
+.nw-audit-actor-mark--ai {
+  background: var(--nw-ai-chip);
+  border-color: var(--nw-ai-border);
+  color: var(--nw-ai-mark);
+}
+.nw-audit-actor-txt {
+  display: grid;
+  min-inline-size: 0;
+}
+.nw-audit-actor-txt b {
+  font-weight: var(--nw-font-weight-medium);
+  overflow-wrap: anywhere;
+}
+.nw-audit-actor-txt small {
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-tertiary);
+}
+
+.nw-audit-action-human {
+  font-weight: var(--nw-font-weight-medium);
+}
+.nw-audit-target {
+  color: var(--nw-text-secondary);
+  overflow-wrap: anywhere;
+}
+.nw-audit-reason {
+  color: var(--nw-text-secondary);
+  font-size: var(--nw-font-size-caption);
+  line-height: var(--nw-font-line-relaxed);
+  max-inline-size: 42ch;
+}
+.nw-audit-date {
+  color: var(--nw-text-tertiary);
+  font-size: var(--nw-font-size-caption);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Footer: showing-count · legend · pager */
+.nw-audit-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  border-block-start: 1px solid var(--nw-border-default);
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-tertiary);
+}
+.nw-audit-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.nw-audit-legend-human {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--nw-text-tertiary);
+}
+.nw-audit-legend-human i {
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: 50%;
+  background: var(--nw-status-success);
+}
+.nw-audit-pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nw-audit-pager .nw-icon-button {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border: 1px solid var(--nw-border-default);
+  border-radius: var(--nw-radius-sm);
+  background: var(--nw-surface-card);
+  color: var(--nw-text-secondary);
+  cursor: pointer;
+}
+.nw-audit-pager .nw-icon-button:hover:not(:disabled) {
+  background: var(--nw-surface-muted);
+}
+.nw-audit-pager .nw-icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
