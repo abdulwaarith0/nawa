@@ -133,3 +133,197 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   Dashboard data panels — calendar, applications-by-month
+   chart, program capacity (design dashboard).
+   ============================================================ */
+.nw-dash-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 16px;
+}
+.nw-dash-panel-title {
+  font-size: var(--nw-font-size-cardTitle);
+  font-weight: var(--nw-font-weight-medium);
+}
+
+/* Applications-by-month bar chart */
+.nw-dash-chart {
+  padding: 20px;
+}
+.nw-dash-bars {
+  display: grid;
+  align-items: end;
+  gap: 8px;
+  block-size: 220px;
+  padding-block-start: 8px;
+}
+.nw-dash-bar-col {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 8px;
+  block-size: 100%;
+  min-inline-size: 0;
+}
+.nw-dash-bar-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  block-size: 100%;
+}
+.nw-dash-bar-fill {
+  inline-size: 60%;
+  max-inline-size: 26px;
+  min-block-size: 2px;
+  border-radius: 6px 6px 0 0;
+  background: var(--nw-color-green-400);
+  transition: block-size var(--nw-motion-duration-slow, 0.4s) ease;
+}
+.nw-dash-bar-fill[data-peak] {
+  background: var(--nw-action-primary);
+}
+.nw-dash-bar-label {
+  text-align: center;
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Program capacity */
+.nw-dash-capacity {
+  padding: 18px 20px;
+}
+.nw-dash-capacity-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-block: 4px 8px;
+}
+.nw-dash-capacity-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-tertiary);
+}
+.nw-dash-cap-dot {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.nw-dash-cap-dot--filling {
+  background: var(--nw-action-primary);
+}
+.nw-dash-cap-dot--nearFull {
+  background: var(--nw-capacity-nearFull, #d9a441);
+}
+.nw-dash-cap-dot--full {
+  background: var(--nw-action-danger);
+}
+.nw-dash-capacity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nw-dash-capacity-row {
+  padding: 13px 0;
+  border-block-start: 1px solid var(--nw-border-subtle);
+}
+.nw-dash-capacity-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-block-end: 9px;
+}
+.nw-dash-capacity-name {
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-medium);
+}
+.nw-dash-capacity-count {
+  font-size: var(--nw-font-size-meta);
+  font-weight: var(--nw-font-weight-medium);
+  color: var(--nw-text-primary);
+}
+.nw-dash-cap-meter[data-level="nearFull"] .nw-progress__bar {
+  background: var(--nw-capacity-nearFull, #d9a441);
+}
+.nw-dash-cap-meter[data-level="full"] .nw-progress__bar {
+  background: var(--nw-action-danger);
+}
+
+/* Calendar */
+.nw-dash-calendar {
+  padding: 18px 20px;
+}
+.nw-dash-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.nw-dash-cal-weekday {
+  text-align: center;
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-tertiary);
+  padding-block-end: 6px;
+}
+.nw-dash-cal-day {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 3px;
+  min-block-size: 42px;
+  padding-block-start: 6px;
+  border-radius: var(--nw-radius-sm);
+  font-size: var(--nw-font-size-caption);
+  color: var(--nw-text-secondary);
+}
+.nw-dash-cal-day[data-empty] {
+  visibility: hidden;
+}
+.nw-dash-cal-day[data-today] {
+  background: var(--nw-action-primary);
+  color: var(--nw-text-inverse);
+  font-weight: var(--nw-font-weight-semibold);
+}
+.nw-dash-cal-dots {
+  display: inline-flex;
+  gap: 3px;
+  min-block-size: 5px;
+}
+.nw-dash-cal-dot {
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+}
+.nw-dash-cal-dot--screening {
+  background: var(--nw-action-primary);
+}
+.nw-dash-cal-dot--interview {
+  background: var(--nw-chart-comparison, #d9a441);
+}
+.nw-dash-cal-dot--deadline {
+  background: var(--nw-status-info, #3b82f6);
+}
+.nw-dash-cal-day[data-today] .nw-dash-cal-dot {
+  background: var(--nw-surface-card);
+}
+.nw-dash-cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-block-start: 14px;
+  padding-block-start: 12px;
+  border-block-start: 1px solid var(--nw-border-subtle);
+}
+.nw-dash-cal-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--nw-font-size-micro);
+  color: var(--nw-text-tertiary);
+}
