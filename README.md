@@ -1,10 +1,10 @@
-# NAWA — The AI Operating System for Program's Ecosystem
+# NAWA — The AI Operating System for Innovation Ecosystems
 
 > *Nawa* means "nucleus / seed" in Arabic — the core from which everything grows.
 
-NAWA is one AI platform running the shared lifecycle behind every Program innovation program
-(Innovation Fellowship, Velocity, the Incubation Center, Research to Startup, Startup in Residence,
-and the internship program): intelligent **intake** screening, cohort **journey** tracking, a
+NAWA is one AI platform running the shared lifecycle behind every innovation program
+(accelerators, incubators, research-to-startup tracks, startup-in-residence, and internship
+programs): intelligent **intake** screening, cohort **journey** tracking, a
 **community** hub, and automated **reporting** — all built on one data spine, the *Founder Profile*.
 
 **Stack:** Next.js 15 (web) · FastAPI + Python 3.12 (API) · PostgreSQL 16 + pgvector · Redis ·
