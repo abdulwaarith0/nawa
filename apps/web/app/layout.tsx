@@ -7,7 +7,7 @@ import "@/styles/base.css";
 
 export const metadata: Metadata = {
   title: "NAWA",
-  description: "The AI Operating System for Program's innovation-program ecosystem.",
+  description: "The AI Operating System for innovation-program ecosystems.",
 };
 
 // Locale resolution: nw_locale cookie -> ar (the default for anonymous

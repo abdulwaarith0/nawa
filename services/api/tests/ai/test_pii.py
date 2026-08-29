@@ -7,9 +7,9 @@ def _roundtrip(text: str, known: KnownEntities) -> None:
 
 
 def test_roundtrip_english():
-    text = "Amina El-Sayed (amina@example.org, +974 3333 4444) leads Nawa Robotics."
+    text = "Amina El-Sayed (amina@example.qa, +974 3333 4444) leads Nawa Robotics."
     known = KnownEntities(
-        persons=["Amina El-Sayed"], emails=["amina@example.org"], orgs=["Nawa Robotics"]
+        persons=["Amina El-Sayed"], emails=["amina@example.qa"], orgs=["Nawa Robotics"]
     )
     _roundtrip(text, known)
 
