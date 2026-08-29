@@ -15,6 +15,7 @@ import DecisionPanel, {
   type CohortOption,
   type DecisionSubmission,
 } from "@/components/DecisionPanel";
+import EligibilityProofPanel from "@/components/EligibilityProofPanel";
 import { usePermissions } from "@/hooks/Auth";
 import { useCohorts, useDecision, useResolveDedupMatch, useScorecard } from "@/hooks/Intake";
 import { useLocale } from "@/i18n/LocaleProvider";
@@ -199,6 +200,13 @@ export default function IntakeScorecardWrapper({ applicationId }: IProps) {
               cohortsLoading={cohortsLoading}
               onSubmit={handleDecision}
             />
+          </Card>
+        ) : null}
+
+        {has("nawa:intake:ingest") ? (
+          <Card className="nw-scorecard-eligibility">
+            <h3>{t("eligibility.title")}</h3>
+            <EligibilityProofPanel applicationId={applicationId} onRecorded={refresh} />
           </Card>
         ) : null}
 
