@@ -56,7 +56,8 @@
       "uploadCreate": "رفع دفعة",
       "applicationCreate": "إضافة طلب",
       "documentAttach": "إرفاق مستند",
-      "exportCreate": "تصدير القائمة المختصرة"
+      "exportCreate": "تصدير القائمة المختصرة",
+      "eligibilityProof": "تسجيل إثبات الأهلية"
     },
     "actor": {
       "copilot": "مساعد الاستقبال",
