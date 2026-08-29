@@ -238,5 +238,22 @@
     "noCohorts": "No cohorts exist yet for this cycle — create one before accepting applicants.",
     "submit": "Submit decision",
     "submitting": "Submitting…"
+  },
+  "eligibility": {
+    "title": "Eligibility proof",
+    "description": "Attach a Midnight zero-knowledge proof. The applicant's age and prior funding stay private — only the on-chain reference and the verdict are recorded in the audit log.",
+    "contractAddress": "Contract address",
+    "txId": "Proof transaction id",
+    "verdict": "Verdict",
+    "verdictEligible": "Eligible",
+    "verdictIneligible": "Ineligible",
+    "minAge": "Minimum age (criteria)",
+    "maxFunding": "Prior-funding cap (criteria)",
+    "networkLabel": "Network",
+    "submit": "Record proof",
+    "submitting": "Recording…",
+    "recorded": "Proof recorded in the audit log: {ref}",
+    "error": "Could not record the proof.",
+    "required": "Contract address and transaction id are required."
   }
 }
