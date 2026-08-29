@@ -40,6 +40,7 @@ from nawa_api.services.intake.list_cohorts_for_picker import list_cohorts_for_pi
 from nawa_api.services.intake.list_cycles_for_picker import list_cycles_for_picker
 from nawa_api.services.intake.list_shortlist import list_shortlist
 from nawa_api.services.intake.parse_upload import ParsedApplication
+from nawa_api.services.intake.record_eligibility_proof import record_eligibility_proof
 from nawa_api.services.intake.resolve_dedup_match import resolve_dedup_match
 from nawa_api.services.rate_limit.consume import RateLimitResult, consume
 from nawa_api.utils.envelope import accepted, created, ok
@@ -318,6 +319,40 @@ async def create_decision_route(id: uuid.UUID, body: CreateDecisionInput):
                 request_id=request_id_var.get(),
                 body=body.model_dump(),
             )
+
+
+class RecordEligibilityProofInput(BaseModel):
+    contract_address: str
+    tx_id: str
+    verdict: str  # "eligible" | "ineligible"
+    network: str = "undeployed"
+    min_age: int | None = None
+    max_prior_funding: int | None = None
+
+
+@router.post("/intake/applications/{id}/eligibility-proof", status_code=201)
+async def record_eligibility_proof_route(id: uuid.UUID, body: RecordEligibilityProofInput):
+    # Attaches a Midnight ZK eligibility proof reference to an application. The
+    # proof is generated client-side (see /midnight-eligibility) and only its
+    # verifiable reference — contract address + tx id — plus the verdict is sent
+    # here; the applicant's age/funding never reach NAWA. The service writes the
+    # reference to the immutable audit log.
+    session = await require_permission(Permission.INTAKE_INGEST)
+    result = await consume(scope="intake_eligibility_proof", identifier=session.sub, limit=60)
+    if not result.allowed:
+        _raise_rate_limited(result)
+    return created(
+        await record_eligibility_proof(
+            application_id=id,
+            contract_address=body.contract_address,
+            tx_id=body.tx_id,
+            verdict=body.verdict,
+            network=body.network,
+            min_age=body.min_age,
+            max_prior_funding=body.max_prior_funding,
+            recorded_by=uuid.UUID(session.sub),
+        )
+    )
 
 
 class ResolveDedupMatchInput(BaseModel):
