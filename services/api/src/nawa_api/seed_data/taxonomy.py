@@ -118,7 +118,7 @@ FR_TEMPLATE = (
 )
 
 RESOURCE_TOPICS = [
-    ("Program Program Handbook", "دليل برامج مركز قطر لعلوم وتكنولوجيا"),
+    ("Program Handbook", "دليل البرامج"),
     ("Fab Lab Capabilities", "قدرات مختبر التصنيع"),
     ("Chemistry Lab Safety Guide", "دليل سلامة مختبر الكيمياء"),
     ("Rapid Prototyping Services", "خدمات النمذجة السريعة"),
