@@ -24,10 +24,10 @@ _REQUEST_TITLES_EN = [
     "Seeking a co-founder with data science background",
 ]
 _OPPORTUNITY_TITLES_EN = [
-    "Summer internship at program-based startup",
+    "Summer internship at a partner startup",
     "Grant: early-stage water-tech ventures",
     "Pilot program: agri-tech in the Gulf",
-    "Speaking slot: demo day",
+    "Speaking slot: program demo day",
 ]
 
 
@@ -83,7 +83,7 @@ async def seed_community_data(session: AsyncSession, *, profiles: ProfilesSeedRe
             kind=rng.choice(["internship", "job", "grant", "pilot", "speaking"]),
             title_en=rng.choice(_OPPORTUNITY_TITLES_EN),
             org_name="Partner Co.",
-            tags=["program"],
+            tags=["partner"],
             skills=rng.sample(SKILLS, k=2),
             deadline_at=deadline,
             status=status,
