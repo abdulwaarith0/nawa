@@ -44,6 +44,8 @@ Only the nullifier (a one-way hash that reveals nothing about the secret) is
 written on-chain. Producing the proof requires knowing private inputs that
 satisfy every rule; verification never sees those inputs.
 
+![Eligibility demo — all four cases](docs/demo.gif)
+
 ## Run the demo
 
 **Prerequisites:** Node 20+, Docker (Compose v2), and the Compact compiler
