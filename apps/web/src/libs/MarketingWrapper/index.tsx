@@ -59,7 +59,7 @@ export default function MarketingWrapper() {
             منصة ذكاء اصطناعي واحدة لكل برامج واحة قطر للعلوم والتكنولوجيا
           </h1>
           <p className="nw-mkt-lede">
-            One AI platform running the shared lifecycle behind every program — intelligent
+            One AI platform running the shared lifecycle behind every innovation program — intelligent
             intake, cohort journey tracking, a community hub, and automated reporting, all on one
             Founder Profile spine.
           </p>
