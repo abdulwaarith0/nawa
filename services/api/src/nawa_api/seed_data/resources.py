@@ -28,7 +28,7 @@ _KIND_BY_TOPIC_INDEX = [
 
 _CHUNK_TEMPLATES_EN = [
     "Section {n}: overview of {topic} covering scope, eligibility, and process steps relevant "
-    "to founders applying to Program programs.",
+    "to founders applying to the programs.",
     "Section {n}: detailed guidance on {topic}, including timelines, required documentation, "
     "and points of contact for follow-up questions.",
     "Section {n}: frequently encountered issues related to {topic} and how program staff "
