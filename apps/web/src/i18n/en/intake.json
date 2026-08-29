@@ -56,7 +56,8 @@
       "uploadCreate": "Uploaded batch",
       "applicationCreate": "Added application",
       "documentAttach": "Attached document",
-      "exportCreate": "Exported shortlist"
+      "exportCreate": "Exported shortlist",
+      "eligibilityProof": "Recorded eligibility proof"
     },
     "actor": {
       "copilot": "Intake Copilot",

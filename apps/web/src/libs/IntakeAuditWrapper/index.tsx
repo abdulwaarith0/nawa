@@ -49,6 +49,7 @@ const ACTION_LABEL_KEY: Record<string, string> = {
   "intake.application.create": "applicationCreate",
   "intake.document.attach": "documentAttach",
   "intake.export.create": "exportCreate",
+  "intake.eligibility.proof": "eligibilityProof",
 };
 
 const SCORING_ACTIONS = new Set(["intake.score.run", "intake.dedup.resolve"]);
