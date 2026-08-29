@@ -1,208 +1,159 @@
-# midnight-eligibility
+# NAWA × Midnight — private, provable eligibility screening
 
-A Midnight Network smart contract scaffolded with create-mn-app.
+A zero-knowledge eligibility check for [NAWA](../README.md)'s intake, built on
+[Midnight](https://midnight.network) with the Compact language.
 
-## Quick start
+An applicant can prove they **meet a program's eligibility criteria** — old
+enough, under a prior-funding cap — **without revealing their actual age or
+funding history**. The criteria live in public on-chain state so anyone can
+audit what applicants are held to; the applicant's real numbers stay on their
+own device and never touch the chain. A valid proof means only *"I know values
+that satisfy the rules"* — nothing more leaks.
 
-Requirements: Node 22, Docker (with Compose v2), and the Compact compiler at the version pinned in `.compact-version` at the create-mn-app repo root (the version this project was scaffolded against).
+This fits NAWA's "AI never rejects, humans decide" ethos and its immutable
+audit log: intake can record *that* an applicant cleared the bar, with a proof
+reference, without ever storing the sensitive inputs behind that decision.
+
+## Why this matters
+
+Intake screening normally means handing over raw personal data — date of
+birth, past grant amounts — to a platform that stores it. That is a privacy and
+liability burden, and it is often more than a yes/no decision actually needs.
+Here the decision is computed **client-side inside a ZK proof**. The platform
+receives a verifiable "eligible / not eligible", plus a one-time reference it
+can drop in the audit log. The raw inputs never leave the applicant.
+
+## How it works
+
+The contract (`contracts/eligibility.compact`) splits state into public and
+private:
+
+- **Public ledger** (auditable on-chain): `minAge`, `maxPriorFunding`, and a set
+  of spent `usedNullifiers`. Set once at deploy time — these are the rules.
+- **Private witnesses** (supplied client-side at proving time, never disclosed):
+  the applicant's `age`, `priorFunding`, and a per-applicant `secret`.
+
+The `proveEligibility` circuit asserts:
+
+1. `age >= minAge`
+2. `priorFunding <= maxPriorFunding`
+3. the applicant hasn't already proven eligibility — it derives a
+   domain-separated **nullifier** from the private secret and rejects a repeat.
+
+Only the nullifier (a one-way hash that reveals nothing about the secret) is
+written on-chain. Producing the proof requires knowing private inputs that
+satisfy every rule; verification never sees those inputs.
+
+## Run the demo
+
+**Prerequisites:** Node 20+, Docker (Compose v2), and the Compact compiler
+pinned in `.compact-version`. On Windows the Compact toolchain runs under WSL2
+Ubuntu — run every command there.
 
 ```bash
 npm install
-npm run setup
-npm run test:e2e
+npm run compile:eligibility     # -> contracts/managed/eligibility/
+docker compose up -d proof-server   # local ZK proof server on :6300
 ```
 
-`npm run setup` runs end-to-end with no prompts:
-
-1. `docker compose up -d --wait` — starts a local Midnight devnet (node, indexer, proof-server) and blocks until all three pass their healthchecks.
-2. `npm run compile` — compiles `contracts/hello-world.compact` to `contracts/managed/hello-world/`.
-3. `npm run deploy` — derives the genesis-seed wallet (NIGHT pre-minted), registers UTXOs for DUST generation, deploys the contract, writes `.midnight-state.json`.
-
-`npm run test:e2e` reconnects to the deployed contract and reads its ledger state. Exits 0 if the contract is live and indexable.
-
-## Local devnet
-
-The project ships its own devnet via `docker-compose.yml`:
-
-| Service        | Port | Purpose                                         |
-| -------------- | ---- | ----------------------------------------------- |
-| `node`         | 9944 | Midnight node, `dev` chain preset               |
-| `indexer`      | 8088 | GraphQL indexer for chain state                 |
-| `proof-server` | 6300 | Generates ZK proofs for contract transactions   |
-
-State lives in container-managed volumes. Tear everything down with:
+The driver deploys a fresh contract and proves against it. Inputs are passed as
+env vars — the public criteria (`MIN_AGE`, `MAX_FUNDING`) and the private
+witnesses (`AGE`, `FUNDING`):
 
 ```bash
-docker compose down -v
+# 1) eligible: age 20 clears minAge 18, funding 0 under the cap
+MIN_AGE=18 MAX_FUNDING=100000 AGE=20 FUNDING=0 npm run prove -- --network undeployed
+
+# 2) replay guard: deploy once, prove twice with the same secret — 2nd is rejected
+MIN_AGE=18 MAX_FUNDING=100000 AGE=20 FUNDING=0 REPLAY=1 npm run prove -- --network undeployed
+
+# 3) underage: age 16 fails minAge 18
+MIN_AGE=18 MAX_FUNDING=100000 AGE=16 FUNDING=0 npm run prove -- --network undeployed
+
+# 4) over the cap: prior funding 200000 exceeds 100000
+MIN_AGE=18 MAX_FUNDING=100000 AGE=20 FUNDING=200000 npm run prove -- --network undeployed
 ```
 
-That removes all containers, networks, and volumes. The next `npm run setup` starts from a clean slate.
+### Verified output
 
-## ⚠️ LOCAL DEVNET ONLY
+All four cases pass end-to-end on the local devnet:
 
-The deploy script uses a well-known genesis seed (`0000…0001`) so the
-pre-minted NIGHT in the `dev` chain preset is immediately available. **Do
-not use this seed against Preprod, mainnet, or any environment that
-handles real value** — anyone running this devnet has full access to
-funds at this seed.
+| Case | Inputs | Result |
+| --- | --- | --- |
+| Eligible | age 20, fund 0 | ✅ **ELIGIBLE — proof verified** |
+| Replay | same secret, twice | ✅ **REPLAY BLOCKED** on the nullifier |
+| Underage | age 16 | ⛔ **INELIGIBLE** — "applicant below minimum age" |
+| Over cap | fund 200000 | ⛔ **INELIGIBLE** — "applicant exceeds prior-funding cap" |
 
-## Networks
+The eligible run prints a proof reference for the audit log, e.g.
+`460870b0…a568a2d5@005aa3a8…024ba5` (`<contractAddress>@<txId>`).
 
-This DApp supports three networks:
+## Testnet status
 
-| Network | When to use | Default? |
-|---|---|---|
-| `undeployed` | Local devnet bundled in `docker-compose.yml`. Genesis seed is hardcoded; no funding needed. | yes |
-| `preview` | Public preview testnet. Faucet at `https://midnight-tmnight-preview.nethermind.dev`. |  |
-| `preprod` | Public preprod testnet. Faucet at `https://midnight-tmnight-preprod.nethermind.dev`. |  |
+The circuit and driver are verified end-to-end on the **local devnet**
+(node + indexer + proof-server via `docker-compose.yml`). A deploy to the
+public **preview** testnet was attempted — the wallet funds and generates DUST
+fine — but the preview indexer is currently unstable for the deploy path (its
+GraphQL responses close mid-stream), so on-chain deploys don't complete
+reliably right now. The preview wallet stays funded and persisted, so a retry
+once that indexer stabilizes is a one-command re-run:
 
-The active network is **sticky**: whichever network you last interacted
-with stays active until you switch. Any command run with `--network <name>`
-also sets that network active for subsequent commands. The default on a
-fresh project is `undeployed` (local devnet).
-
-```sh
-npm run setup -- --network preview   # runs on preview AND makes it active
-npm run cli                          # still uses preview
-npm run check-balance                # still uses preview
+```bash
+MIN_AGE=18 MAX_FUNDING=100000 AGE=20 FUNDING=0 npm run prove -- --network preview
 ```
 
-You can also switch without running anything else:
-
-```sh
-npm run network preview         # active network is now preview
-npm run network                 # prints current active network
-npm run network undeployed      # switch back to local devnet
-```
-
-### How wallets work across networks
-
-- `undeployed` uses a hardcoded genesis seed. Local devnet pre-funds it.
-- `preview` and `preprod` generate a fresh wallet on first use: a 24-word
-  BIP-39 recovery phrase (printed once) plus its derived seed, both stored
-  in `.midnight-state.json` (gitignored). The wallet survives switching
-  networks — switch back later and your funded wallet returns.
-- **Back up your recovery phrase** if you fund a public-network wallet you
-  care about. It is printed when the wallet is created and kept in
-  `.midnight-state.json` under `wallets.<network>.mnemonic`. Anyone holding
-  the phrase controls the wallet.
-- Wallets created before mnemonic support keep working from their stored
-  `seed`; they just have no phrase to import into Lace.
-
-### Using the same wallet as Lace
-
-Seeds are derived with the standard BIP-39 `mnemonicToSeed` step — the same
-convention Lace uses — so identity is portable in both directions:
-
-- **Bring your Lace wallet here**: pass your recovery phrase via the
-  `MIDNIGHT_WALLET_MNEMONIC` env var — the derived addresses match Lace.
-  To keep the phrase out of your shell history, enter it with a hidden
-  prompt instead of typing it inline:
-
-  ```bash
-  read -s MIDNIGHT_WALLET_MNEMONIC && export MIDNIGHT_WALLET_MNEMONIC
-  npm run deploy
-  ```
-- **Take a scaffold wallet to Lace**: restore Lace from the 24-word phrase
-  in `.midnight-state.json`.
-
-### Funding a public-network wallet
-
-On the first run with `--network preview` (or `preprod`):
-
-1. `setup` will print your wallet address and the faucet URL.
-2. Open the faucet URL, paste the address, request tNIGHT.
-3. `setup` polls the wallet balance every 10 s and continues automatically
-   once funds arrive.
-4. The default poll budget is 10 minutes. Override with
-   `MIDNIGHT_FAUCET_TIMEOUT_MS=1800000` (30 min) for unattended runs.
-
-If the faucet is slow or the script times out, your seed is preserved.
-Re-run `npm run setup -- --network preview` once the funds land.
-
-### Environment overrides
-
-These env vars override the active network's config (no per-network
-suffix — they apply to whichever network is active for the run):
-
-| Variable | Effect |
-|---|---|
-| `MIDNIGHT_WALLET_SEED` | Use this hex seed (32-128 hex chars; a Lace-compatible BIP-39 seed is 128) instead of generating/persisting one. Useful for CI with a pre-funded wallet. |
-| `MIDNIGHT_WALLET_MNEMONIC` | Use this BIP-39 recovery phrase instead of generating a wallet — e.g. your Lace phrase, for the same addresses as Lace. Not persisted. Set only one of seed/mnemonic. |
-| `MIDNIGHT_INDEXER_URL` | Override the indexer GraphQL URL. |
-| `MIDNIGHT_INDEXER_WS_URL` | Override the indexer WS URL. |
-| `MIDNIGHT_NODE_URL` | Override the node RPC URL. |
-| `MIDNIGHT_FAUCET_URL` | Override the faucet URL printed during setup. |
-| `MIDNIGHT_PROOF_SERVER_URL` | Override the proof server URL — set to a public proof server (e.g. `https://lace-proof-pub.preview.midnight.network`) to skip running one locally. |
-| `MIDNIGHT_FAUCET_TIMEOUT_MS` | Faucet poll budget in milliseconds (default 600000 = 10 min). |
-
-By default all networks use the **local** proof server. Public proof
-servers exist (see the env override above) but the local default keeps
-your witness data on your machine and avoids depending on a remote
-service for the deploy hot path.
-
-### Switching back to local devnet
-
-```sh
-npm run network undeployed     # or: npm run setup -- --network undeployed
-```
-
-Your preview/preprod wallet seeds and deploy addresses stay in
-`.midnight-state.json`. Switch back later, and they're still there.
-
-### Wallet sync cache
-
-After each `deploy`, `cli`, or `check-balance` run, the scripts serialize the
-wallet's synced state to `.midnight-wallet-state/<network>/` (gitignored).
-The next run on the same network restores from that snapshot and only catches
-up to the latest block instead of replaying from genesis — meaningful on
-`preview` / `preprod` where a from-seed sync takes minutes.
-
-If the cache is stale or corrupt (e.g. after an SDK upgrade with an
-incompatible state format) the wallet falls back to a fresh from-seed sync
-with a one-line warning. `npm run clean` removes the cache along with other
-generated state.
-
-## Available scripts
-
-| Script                  | Description                                                    |
-| ----------------------- | -------------------------------------------------------------- |
-| `npm run setup`         | One-shot: start devnet, compile, deploy.                       |
-| `npm run compile`       | Compile the Compact contract.                                  |
-| `npm run deploy`        | Deploy the compiled contract (requires devnet up + compiled).  |
-| `npm run cli`           | Interactive CLI to call circuits on the deployed contract.     |
-| `npm run check-balance` | Print the genesis-seed wallet's NIGHT and DUST balances.       |
-| `npm run test:e2e`      | Smoke + read-back check against the deployed contract.         |
-| `npm run clean`         | Remove `contracts/managed/`, `.midnight-state.json`, and `.midnight-wallet-state/`. |
-| `npm run proof-server:start` / `:stop` | Compose lifecycle for just the proof-server service. |
-
-## Project structure
+## Project layout
 
 ```
 midnight-eligibility/
 ├── contracts/
-│   └── hello-world.compact     # Compact source
-├── scripts/
-│   └── e2e-check.ts            # smoke + read-back
+│   ├── eligibility.compact     # the ZK eligibility circuit
+│   └── hello-world.compact     # create-mn-app starter, kept as a syntax reference
 ├── src/
+│   ├── prove-eligibility.ts    # deploy eligibility + prove the four cases
 │   ├── network.ts              # network selection + state file management
 │   ├── wallet.ts               # wallet construction + sync-state cache
-│   ├── setup.ts                # orchestrator for `npm run setup`
-│   ├── deploy.ts               # deploy the contract
-│   ├── cli.ts                  # interact with deployed contract
+│   ├── deploy.ts               # generic contract deploy
+│   ├── cli.ts                  # interact with a deployed contract
 │   └── check-balance.ts        # NIGHT / DUST balance
-├── docker-compose.yml          # node + indexer + proof-server
-├── .midnight-state.json        # written by deploy (gitignored)
-├── .midnight-wallet-state/     # serialized sync state per network (gitignored)
-├── package.json
-└── tsconfig.json
+├── scripts/e2e-check.ts        # smoke + read-back
+└── docker-compose.yml          # node + indexer + proof-server
 ```
 
-## Compact compiler version
+## Networks
 
-`.compact-version` at the create-mn-app repo root pinned the compiler
-version this project was scaffolded against. To upgrade your local
-compiler to that version:
+| Network | Use | Faucet |
+| --- | --- | --- |
+| `undeployed` | Local devnet in `docker-compose.yml`; genesis seed, no funding needed | — |
+| `preview` | Public preview testnet | `https://midnight-tmnight-preview.nethermind.dev` |
+| `preprod` | Public preprod testnet | `https://midnight-tmnight-preprod.nethermind.dev` |
+
+The active network is **sticky** — the last `--network <name>` you used stays
+active for later commands. Public networks generate a fresh 24-word wallet on
+first use, stored in `.midnight-state.json` (gitignored). Fund it from the
+faucet; the driver polls the balance and continues once tNIGHT lands.
+`.midnight-wallet-state/<network>/` caches synced state so later runs catch up
+from the last block instead of replaying from genesis.
+
+> **Local devnet uses a well-known genesis seed** (`0000…0001`) so pre-minted
+> NIGHT is available immediately. Never use that seed against a network that
+> handles real value.
+
+## Scripts
+
+| Script | Description |
+| --- | --- |
+| `npm run compile:eligibility` | Compile the eligibility circuit. |
+| `npm run prove` | Deploy the eligibility contract and prove (env-driven; see the demo). |
+| `npm run setup` | One-shot: start devnet, compile, deploy. |
+| `npm run cli` | Interactive CLI against a deployed contract. |
+| `npm run check-balance` | Print the active wallet's NIGHT / DUST balances. |
+| `npm run test:e2e` | Reconnect to a deployed contract and read its ledger state. |
+| `npm run clean` | Remove compiled artifacts and generated wallet/devnet state. |
+
+## Compact compiler
+
+Pin the compiler to the version in `.compact-version`:
 
 ```bash
 compact update <version>
