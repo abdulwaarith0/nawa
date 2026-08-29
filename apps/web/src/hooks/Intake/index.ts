@@ -31,5 +31,11 @@ export {
   useUploadProgress,
 } from "./useProgressStream";
 export { type DedupResolution, useResolveDedupMatch } from "./useResolveDedupMatch";
+export {
+  type EligibilityProofInput,
+  type EligibilityProofResult,
+  type EligibilityVerdict,
+  useRecordEligibilityProof,
+} from "./useRecordEligibilityProof";
 export { useTriggerScore } from "./useTriggerScore";
 export { type UploadResult, useUpload } from "./useUpload";
