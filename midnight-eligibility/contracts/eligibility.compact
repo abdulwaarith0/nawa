@@ -1,0 +1,50 @@
+pragma language_version >= 0.23;
+
+import CompactStandardLibrary;
+
+// NAWA × Midnight — private, provable eligibility screening.
+//
+// The program's eligibility rule (a minimum age) lives in public ledger
+// state, so anyone can audit what an applicant is being held to. The
+// applicant's actual age is a private witness supplied by their own driver
+// at proving time and is never disclosed. A valid proof of proveEligibility()
+// means only "I know an age >= minAge" — the raw age never leaves the client.
+
+// --- PUBLIC state (ledger): the program's on-chain eligibility criteria ---
+export ledger minAge: Uint<8>;              // minimum age, e.g. 18
+export ledger maxPriorFunding: Uint<64>;    // prior-funding cap, e.g. 100000
+
+// Replay protection: nullifiers already spent. One applicant (identified by a
+// private secret) can prove eligibility only once — a second attempt with the
+// same secret derives the same nullifier and is rejected.
+export ledger usedNullifiers: Set<Bytes<32>>;
+
+// Set the on-chain criteria once, at deploy time. The rules themselves are
+// public, so we explicitly disclose them into ledger state (Compact treats
+// all inputs as private-by-default until disclosed).
+constructor(initialMinAge: Uint<8>, initialMaxPriorFunding: Uint<64>) {
+  minAge = disclose(initialMinAge);
+  maxPriorFunding = disclose(initialMaxPriorFunding);
+}
+
+// --- PRIVATE inputs (witness): supplied client-side, never disclosed ---
+witness applicantAge(): Uint<8>;
+witness applicantPriorFunding(): Uint<64>;
+witness applicantSecret(): Bytes<32>;   // per-applicant secret; derives the nullifier
+
+// --- CIRCUIT: a valid proof exists iff the private data meets every rule ---
+export circuit proveEligibility(): [] {
+  const age = applicantAge();
+  const funding = applicantPriorFunding();
+  assert(age >= minAge, "applicant below minimum age");
+  assert(funding <= maxPriorFunding, "applicant exceeds prior-funding cap");
+
+  // Derive a one-way nullifier from the private secret (domain-separated so it
+  // can't collide with nullifiers from other circuits). The hash reveals
+  // nothing about the secret, so it's safe to disclose and record on-chain.
+  const nullifier = disclose(persistentHash<Vector<2, Bytes<32>>>(
+    [pad(32, "nawa:eligibility:nullifier"), applicantSecret()]
+  ));
+  assert(!usedNullifiers.member(nullifier), "eligibility already proven for this applicant");
+  usedNullifiers.insert(nullifier);
+}
