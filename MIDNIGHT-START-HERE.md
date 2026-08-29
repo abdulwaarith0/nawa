@@ -5,7 +5,7 @@ You are a fresh Claude Code session dedicated to a weekend hackathon build. This
 ## Who / what
 - User: **Abdulwaarith** (GitHub `abdulwaarith0`). Strong Rust/backend + TypeScript/Next.js.
 - Project: **NAWA** — the user's **OWN** project. Repo `github.com/abdulwaarith0/nawa`, on disk `D:\Abdulwaarith\Desktop\nawa` (main app; `Documents\Nawa` is a design-system offshoot).
-- NAWA = "The AI Operating System for Program's ecosystem": AI **intake screening**, **founder profiles**, cohort **journey** tracking, community, automated **reporting**. Stack: **Next.js 15 (web) + FastAPI/Python 3.12 (API) + Postgres 16 + pgvector + Redis + MinIO + LLM gateway (Claude)**. Arabic-first, RTL, bilingual. Has an **immutable audit log** + "AI never rejects, humans decide" ethos.
+- NAWA = "The AI Operating System for innovation ecosystems": AI **intake screening**, **founder profiles**, cohort **journey** tracking, community, automated **reporting**. Stack: **Next.js 15 (web) + FastAPI/Python 3.12 (API) + Postgres 16 + pgvector + Redis + MinIO + LLM gateway (Claude)**. Arabic-first, RTL, bilingual. Has an **immutable audit log** + "AI never rejects, humans decide" ethos.
 - Env: Windows 11, PowerShell primary + Git Bash. **Docker Desktop installed.**
 
 ## The hackathon
