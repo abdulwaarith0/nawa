@@ -5,6 +5,8 @@ Captured from a live run on the local Midnight devnet
 real output from `prove-eligibility.ts`, which deploys a fresh eligibility
 contract and then proves against it.
 
+![Eligibility demo — all four cases](docs/demo.gif)
+
 Reproduce with:
 
 ```bash
